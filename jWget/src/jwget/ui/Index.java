@@ -4,6 +4,15 @@
  */
 package jwget.ui;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.net.URISyntaxException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import jwget.Downloader;
+
 /**
  *
  * @author Joao
@@ -14,6 +23,14 @@ public class Index extends javax.swing.JFrame {
      * Creates new form Index
      */
     public Index() {
+        // Center window
+        Dimension screenSize = new Dimension(Toolkit.getDefaultToolkit().getScreenSize());
+        int wdwLeft = screenSize.width / 2 - 269;
+        int wdwTop = screenSize.height / 2 - 90;
+        pack();
+        setLocation(wdwLeft, wdwTop);
+        
+        // Initialize components
         initComponents();
     }
 
@@ -26,21 +43,96 @@ public class Index extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        btnDownload = new javax.swing.JButton();
+        lblUrl = new javax.swing.JLabel();
+        txtUrl = new javax.swing.JTextField();
+        cbDeepness = new javax.swing.JComboBox();
+        lblDeepness = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        btnDownload.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        btnDownload.setForeground(new java.awt.Color(102, 102, 102));
+        btnDownload.setText("Download");
+        btnDownload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDownloadActionPerformed(evt);
+            }
+        });
+
+        lblUrl.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblUrl.setText("URL");
+
+        txtUrl.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+
+        cbDeepness.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        cbDeepness.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
+
+        lblDeepness.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblDeepness.setText("levels deep");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 665, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(49, 49, 49)
+                        .addComponent(lblUrl)
+                        .addGap(5, 5, 5)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                            .addComponent(btnDownload)
+                            .addComponent(txtUrl, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(82, 82, 82)
+                        .addComponent(cbDeepness, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblDeepness)))
+                .addGap(57, 57, 57))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(lblUrl)
+                    .addComponent(txtUrl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbDeepness, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblDeepness))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                .addComponent(btnDownload)
+                .addGap(40, 40, 40))
         );
+
+        lblUrl.getAccessibleContext().setAccessibleDescription("");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
+        Downloader d = new Downloader();
+        String websitePath = "\\";
+        d.setUrl(txtUrl.getText());
+        try {
+            d.setFileName(d.getDomain() + ".html");
+        } catch (URISyntaxException ex) {
+            Logger.getLogger(Index.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            System.out.println("getCurrentDirectory(): " + fileChooser.getCurrentDirectory());
+            websitePath = fileChooser.getCurrentDirectory().toString() + "\\";
+            d.setFilePath(websitePath);
+            d.start();
+            JOptionPane.showMessageDialog(this, "Your file as been downloaded successfully.", "Success!", JOptionPane.PLAIN_MESSAGE);
+        } else {
+            System.out.println("No directory selected...");
+        }
+    }//GEN-LAST:event_btnDownloadActionPerformed
 
     /**
      * @param args the command line arguments
@@ -77,5 +169,10 @@ public class Index extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnDownload;
+    private javax.swing.JComboBox cbDeepness;
+    private javax.swing.JLabel lblDeepness;
+    private javax.swing.JLabel lblUrl;
+    private javax.swing.JTextField txtUrl;
     // End of variables declaration//GEN-END:variables
 }

@@ -10,7 +10,4 @@ package jwget;
  */
 public class JWget {
 
-    public static void main(String[] args) {
-
-    }
 }
