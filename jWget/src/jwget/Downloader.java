@@ -27,6 +27,13 @@ public class Downloader extends Thread {
     public Downloader() {
     }
 
+    /**
+     * Constructor
+     * 
+     * @param url
+     * @param filePath
+     * @param fileName 
+     */
     public Downloader(String url, String filePath, String fileName) {
         this.url = url;
         this.filePath = filePath;
