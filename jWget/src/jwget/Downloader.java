@@ -64,21 +64,11 @@ public class Downloader extends Thread {
         this.fileName = fileName;
     }
     
-    public String getDomain() throws URISyntaxException {
-        if(this.getUrl().isEmpty())
-            return null;
-        else {
-            URI uri = new URI(this.getUrl());
-            String domain = uri.getHost();
-            return domain.startsWith("www.") ? domain.substring(4) : domain;
-        }
-    }
-    
     @Override
     public void run() {
         URL website;
         try {
-            website = new URL(url);
+            website = new URL(this.url);
             ReadableByteChannel rbc = Channels.newChannel(website.openStream());
             FileOutputStream fos = new FileOutputStream(filePath + fileName);
             fos.getChannel().transferFrom(rbc, 0, 1 << 24);            

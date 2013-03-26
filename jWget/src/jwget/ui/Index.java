@@ -11,7 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import jwget.Downloader;
+import jwget.jWget;
 
 /**
  *
@@ -52,7 +52,6 @@ public class Index extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         btnDownload.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
-        btnDownload.setForeground(new java.awt.Color(102, 102, 102));
         btnDownload.setText("Download");
         btnDownload.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -112,23 +111,28 @@ public class Index extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * onClick method - starts the download
+     * 
+     * @param evt 
+     */
     private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
-        Downloader d = new Downloader();
         String websitePath = "\\";
-        d.setUrl(txtUrl.getText());
-        try {
-            d.setFileName(d.getDomain() + ".html");
-        } catch (URISyntaxException ex) {
-            Logger.getLogger(Index.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        int deepLevel = 1;
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            System.out.println("getCurrentDirectory(): " + fileChooser.getCurrentDirectory());
             websitePath = fileChooser.getCurrentDirectory().toString() + "\\";
-            d.setFilePath(websitePath);
-            d.start();
-            JOptionPane.showMessageDialog(this, "Your file as been downloaded successfully.", "Success!", JOptionPane.PLAIN_MESSAGE);
+            deepLevel = Integer.parseInt(cbDeepness.getSelectedItem().toString());
+            jWget main = new jWget(txtUrl.getText(), websitePath, deepLevel);
+            try {
+                if(main.execute())
+                    JOptionPane.showMessageDialog(this, "Your file as been downloaded successfully.", "Success!", JOptionPane.PLAIN_MESSAGE);
+                else
+                    JOptionPane.showMessageDialog(this, "Something went wrong...please try again.", "Error!", JOptionPane.ERROR_MESSAGE);
+            } catch (URISyntaxException ex) {
+                Logger.getLogger(Index.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else {
             System.out.println("No directory selected...");
         }
