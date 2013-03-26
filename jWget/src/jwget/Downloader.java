@@ -28,7 +28,7 @@ public class Downloader extends Thread {
     }
 
     /**
-     * Constructor
+     * Class constructor
      * 
      * @param url
      * @param filePath
