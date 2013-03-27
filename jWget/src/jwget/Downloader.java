@@ -7,13 +7,13 @@ package jwget;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 /**
  * Downloader - This class extends the Thread class nad is responsible for the webpage download
@@ -68,6 +68,8 @@ public class Downloader extends Thread {
     public void run() {
         URL website;
         try {
+            Document doc = Jsoup.connect(this.url).get();
+            
             website = new URL(this.url);
             ReadableByteChannel rbc = Channels.newChannel(website.openStream());
             FileOutputStream fos = new FileOutputStream(filePath + fileName);

@@ -18,7 +18,6 @@ import jwget.jWget;
  * @author Joao
  */
 public class Index extends javax.swing.JFrame {
-
     /**
      * Creates new form Index
      */
@@ -48,8 +47,11 @@ public class Index extends javax.swing.JFrame {
         txtUrl = new javax.swing.JTextField();
         cbDeepness = new javax.swing.JComboBox();
         lblDeepness = new javax.swing.JLabel();
+        btnHistory = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Simple wget");
+        setResizable(false);
 
         btnDownload.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
         btnDownload.setText("Download");
@@ -70,6 +72,14 @@ public class Index extends javax.swing.JFrame {
         lblDeepness.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblDeepness.setText("levels deep");
 
+        btnHistory.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        btnHistory.setText("View history");
+        btnHistory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHistoryActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -80,9 +90,13 @@ public class Index extends javax.swing.JFrame {
                         .addGap(49, 49, 49)
                         .addComponent(lblUrl)
                         .addGap(5, 5, 5)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                            .addComponent(btnDownload)
-                            .addComponent(txtUrl, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtUrl, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(58, 58, 58)
+                                .addComponent(btnDownload)
+                                .addGap(33, 33, 33)
+                                .addComponent(btnHistory))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(82, 82, 82)
                         .addComponent(cbDeepness, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -101,9 +115,11 @@ public class Index extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cbDeepness, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblDeepness))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
-                .addComponent(btnDownload)
-                .addGap(40, 40, 40))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnDownload)
+                    .addComponent(btnHistory))
+                .addContainerGap(45, Short.MAX_VALUE))
         );
 
         lblUrl.getAccessibleContext().setAccessibleDescription("");
@@ -117,13 +133,11 @@ public class Index extends javax.swing.JFrame {
      * @param evt 
      */
     private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
-        String websitePath = "\\";
-        int deepLevel = 1;
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            websitePath = fileChooser.getCurrentDirectory().toString() + "\\";
-            deepLevel = Integer.parseInt(cbDeepness.getSelectedItem().toString());
+            String websitePath = fileChooser.getSelectedFile().toString() + "\\";
+            int deepLevel = Integer.parseInt(cbDeepness.getSelectedItem().toString());
             jWget main = new jWget(txtUrl.getText(), websitePath, deepLevel);
             try {
                 if(main.execute())
@@ -137,6 +151,10 @@ public class Index extends javax.swing.JFrame {
             System.out.println("No directory selected...");
         }
     }//GEN-LAST:event_btnDownloadActionPerformed
+
+    private void btnHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistoryActionPerformed
+        History.main(null);
+    }//GEN-LAST:event_btnHistoryActionPerformed
 
     /**
      * @param args the command line arguments
@@ -167,6 +185,7 @@ public class Index extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new Index().setVisible(true);
             }
@@ -174,6 +193,7 @@ public class Index extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnDownload;
+    private javax.swing.JButton btnHistory;
     private javax.swing.JComboBox cbDeepness;
     private javax.swing.JLabel lblDeepness;
     private javax.swing.JLabel lblUrl;
