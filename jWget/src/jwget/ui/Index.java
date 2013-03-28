@@ -48,6 +48,8 @@ public class Index extends javax.swing.JFrame {
         cbDeepness = new javax.swing.JComboBox();
         lblDeepness = new javax.swing.JLabel();
         btnHistory = new javax.swing.JButton();
+        txtFolderName = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Simple wget");
@@ -80,6 +82,12 @@ public class Index extends javax.swing.JFrame {
             }
         });
 
+        txtFolderName.setMinimumSize(new java.awt.Dimension(6, 23));
+        txtFolderName.setPreferredSize(new java.awt.Dimension(6, 23));
+
+        jLabel1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel1.setText("Folder name");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -89,19 +97,23 @@ public class Index extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(49, 49, 49)
                         .addComponent(lblUrl)
-                        .addGap(5, 5, 5)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtUrl, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(58, 58, 58)
-                                .addComponent(btnDownload)
-                                .addGap(33, 33, 33)
-                                .addComponent(btnHistory))))
+                        .addGap(5, 5, 5))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(82, 82, 82)
+                        .addGap(57, 57, 57)
+                        .addComponent(btnDownload)
+                        .addGap(33, 33, 33)
+                        .addComponent(btnHistory))
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(cbDeepness, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblDeepness)))
+                        .addComponent(lblDeepness))
+                    .addComponent(txtUrl, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+                    .addComponent(txtFolderName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(57, 57, 57))
         );
         layout.setVerticalGroup(
@@ -111,6 +123,10 @@ public class Index extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(lblUrl)
                     .addComponent(txtUrl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtFolderName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cbDeepness, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -119,7 +135,7 @@ public class Index extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnDownload)
                     .addComponent(btnHistory))
-                .addContainerGap(45, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         lblUrl.getAccessibleContext().setAccessibleDescription("");
@@ -138,7 +154,7 @@ public class Index extends javax.swing.JFrame {
         if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             String websitePath = fileChooser.getSelectedFile().toString() + "\\";
             int deepLevel = Integer.parseInt(cbDeepness.getSelectedItem().toString());
-            jWget main = new jWget(txtUrl.getText(), websitePath, deepLevel);
+            jWget main = new jWget(txtUrl.getText(), txtFolderName.getText(), websitePath, deepLevel);
             try {
                 if(main.execute())
                     JOptionPane.showMessageDialog(this, "Your file as been downloaded successfully.", "Success!", JOptionPane.PLAIN_MESSAGE);
@@ -195,8 +211,10 @@ public class Index extends javax.swing.JFrame {
     private javax.swing.JButton btnDownload;
     private javax.swing.JButton btnHistory;
     private javax.swing.JComboBox cbDeepness;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblDeepness;
     private javax.swing.JLabel lblUrl;
+    private javax.swing.JTextField txtFolderName;
     private javax.swing.JTextField txtUrl;
     // End of variables declaration//GEN-END:variables
 }

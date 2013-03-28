@@ -141,7 +141,7 @@ public class History extends javax.swing.JFrame {
         while ((strLine = br.readLine()) != null) {
             try {
                 lineValues = strLine.split(";");
-                listData.add(lineValues[0] + " - " + lineValues[1]  + " (" + lineValues[2] + ") " + lineValues[3] + "levels deep");
+                listData.add(lineValues[0] + " - " + lineValues[1]  + " (" + lineValues[2] + ") -> " + lineValues[3] + " levels deep");
             } catch(ArrayIndexOutOfBoundsException ex) {
                 
             }

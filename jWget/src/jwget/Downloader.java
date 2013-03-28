@@ -4,12 +4,14 @@
  */
 package jwget;
 
-import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.channels.Channels;
-import java.nio.channels.ReadableByteChannel;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.jsoup.Jsoup;
@@ -20,60 +22,88 @@ import org.jsoup.nodes.Document;
  * @author Joao
  */
 public class Downloader extends Thread {
-    private String url;                  // URL to download
-    private String filePath;             // Path to save the download file
-    private String fileName;             // Name of the downloaded file
-
+    private String folderPath;          //Folder to save the files
+    private ConcurrentLinkedQueue<Webfile> websiteQueue = new ConcurrentLinkedQueue();   // Concurrent queue for websites (on hold to get downloaded)
+    private ConcurrentLinkedQueue<Webfile> controlQueue = new ConcurrentLinkedQueue();   // Concurrent queue for websites (already downloaded, control dups)
+    
     public Downloader() {
     }
 
     /**
      * Class constructor
      * 
-     * @param url
-     * @param filePath
-     * @param fileName 
+     * @param folderPath
+     * @param websiteQueue
+     * @param controlQueue
      */
-    public Downloader(String url, String filePath, String fileName) {
-        this.url = url;
-        this.filePath = filePath;
-        this.fileName = fileName;
+    public Downloader(String folderPath, ConcurrentLinkedQueue<Webfile> websiteQueue, ConcurrentLinkedQueue<Webfile> controlQueue) {
+        this.folderPath = folderPath;
+        this.websiteQueue = websiteQueue;
+        this.controlQueue = controlQueue;
     }
 
-    public String getUrl() {
-        return url;
+    
+    /**
+     * 
+     * GETTERS AND SETTERS - BEGIN
+     * 
+     */
+    public String getFolderPath() {
+        return folderPath;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setFolderPath(String folderPath) {
+        this.folderPath = folderPath;
     }
 
-    public String getFilePath() {
-        return filePath;
+    
+    public ConcurrentLinkedQueue<Webfile> getWebsiteQueue() {
+        return websiteQueue;
     }
 
-    public void setFilePath(String filePath) {
-        this.filePath = filePath;
+    public void setWebsiteQueue(ConcurrentLinkedQueue<Webfile> websiteQueue) {
+        this.websiteQueue = websiteQueue;
     }
 
-    public String getFileName() {
-        return fileName;
+    public ConcurrentLinkedQueue<Webfile> getControlQueue() {
+        return controlQueue;
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+    public void setControlQueue(ConcurrentLinkedQueue<Webfile> controlQueue) {
+        this.controlQueue = controlQueue;
     }
+    /**
+     * 
+     * GETTERS AND SETTERS - END
+     * 
+     */
+    
+    /**
+     * Parses a given URL to extract to domain
+     *
+     * @return String url
+     * @throws URISyntaxException
+     */
+    public String getDomain(String url) throws URISyntaxException {
+        if (url.isEmpty()) {
+            return null;
+        } else {
+            URI uri = new URI(url);
+            String domain = uri.getHost();
+            return domain.startsWith("www.") ? domain.substring(4) : domain;
+        }
+    }    
     
     @Override
     public void run() {
-        URL website;
         try {
-            Document doc = Jsoup.connect(this.url).get();
-            
-            website = new URL(this.url);
-            ReadableByteChannel rbc = Channels.newChannel(website.openStream());
-            FileOutputStream fos = new FileOutputStream(filePath + fileName);
-            fos.getChannel().transferFrom(rbc, 0, 1 << 24);            
+            Document doc = Jsoup.connect("<websiteUrl>").get();
+
+            FileWriter fstream = new FileWriter(this.folderPath + "\\<fileName>");
+            PrintWriter out = new PrintWriter(fstream);
+            out.println(doc.toString());
+            System.out.println(doc.toString());
+            out.close();
         } catch (MalformedURLException ex) {
             Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
