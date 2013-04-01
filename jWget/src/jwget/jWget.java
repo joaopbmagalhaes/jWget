@@ -4,10 +4,8 @@
  */
 package jwget;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -15,6 +13,7 @@ import java.util.Date;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import jwget.ui.DownloadProgress;
 
 /**
  *
@@ -22,10 +21,13 @@ import java.util.concurrent.Executors;
  */
 public class jWget {
     private String url;                   // URL to download
-    private String folderName;            // Folder name to sotre the files
-    private String websitePath;           // Path to save all files
+    private String folderPath;            // Path to save all files
+    private boolean dlImages;             // Download images
+    private boolean dlVideos;             // Download videos
+    private boolean dlCss;                // Download stylesheets
+    private boolean dlJs;                 // Download javascript
     private int deepLevel;                // Level of deepness to crawl for websites
-    private String dateTime;              // Date and time of the download
+    private String dateTime;              // Date and time of the request
     private ConcurrentLinkedQueue<Webfile> websiteQueue = new ConcurrentLinkedQueue();   // Concurrent queue for websites (on hold to get downloaded)
     private ConcurrentLinkedQueue<Webfile> controlQueue = new ConcurrentLinkedQueue();   // Concurrent queue for websites (already downloaded, control dups)
     private static final Executor executor = Executors.newCachedThreadPool();           // Thread pool
@@ -35,15 +37,25 @@ public class jWget {
 
     /**
      * Class constructor
-     *
+     * 
      * @param url
+     * @param folderName
      * @param websitePath
+     * @param dlImages
+     * @param dlVideos
+     * @param dlCss
+     * @param dlJs
      * @param deepLevel
+     * @param date
+     * @param time 
      */
-    public jWget(String url, String folderName, String websitePath, int deepLevel) {
+    public jWget(String url, String folderPath, boolean dlImages, boolean dlVideos, boolean dlCss, boolean dlJs, int deepLevel) {
         this.url = url;
-        this.folderName = folderName;
-        this.websitePath = websitePath;
+        this.folderPath = folderPath;
+        this.dlImages = dlImages;
+        this.dlVideos = dlVideos;
+        this.dlCss = dlCss;
+        this.dlJs = dlJs;
         this.deepLevel = deepLevel;
     }
 
@@ -60,20 +72,44 @@ public class jWget {
         this.url = url;
     }
 
-    public String getFolderName() {
-        return folderName;
+    public String getFolderPath() {
+        return folderPath;
     }
 
-    public void setFolderName(String folderName) {
-        this.folderName = folderName;
+    public void setFolderPath(String folderPath) {
+        this.folderPath = folderPath;
     }
 
-    public String getWebsitePath() {
-        return websitePath;
+    public boolean isDlImages() {
+        return dlImages;
     }
 
-    public void setWebsitePath(String websitePath) {
-        this.websitePath = websitePath;
+    public void setDlImages(boolean dlImages) {
+        this.dlImages = dlImages;
+    }
+
+    public boolean isDlVideos() {
+        return dlVideos;
+    }
+
+    public void setDlVideos(boolean dlVideos) {
+        this.dlVideos = dlVideos;
+    }
+
+    public boolean isDlCss() {
+        return dlCss;
+    }
+
+    public void setDlCss(boolean dlCss) {
+        this.dlCss = dlCss;
+    }
+
+    public boolean isDlJs() {
+        return dlJs;
+    }
+
+    public void setDlJs(boolean dlJs) {
+        this.dlJs = dlJs;
     }
 
     public int getDeepLevel() {
@@ -130,7 +166,7 @@ public class jWget {
             // Create file
             FileWriter fstream = new FileWriter("history.csv", true);
             PrintWriter out = new PrintWriter(fstream);
-            out.println(this.dateTime + ";" + this.url + ";" + this.websitePath + ";" + this.deepLevel);
+            out.println(this.dateTime + ";" + this.url + ";" + this.folderPath + ";" + this.deepLevel);
             //Close the output stream
             out.close();
         } catch (Exception e) { //Catch exception if any
@@ -144,32 +180,22 @@ public class jWget {
     public void updateDate() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
-        setDateTime(dateFormat.format(date));
+        this.dateTime = dateFormat.format(date);
     }
 
-    /**
-     * Creates if does not exist the new folder for the website
-     */
-    public void createSiteFolder(String fullFolderPath) {
-        File dir = new File(fullFolderPath);
-
-        // If the directory does not exist, create it
-        if (!dir.exists()) {
-            System.out.println("Creating directory: " + fullFolderPath);
-            boolean result = dir.mkdir();
-            if (result) {
-                System.out.println("DIR created!");
-            }
-        }
+    public void createWebfile() {
+        Webfile wf = new Webfile(this.url, this.deepLevel, Webfile.FileType.HTML);
+        this.websiteQueue.add(wf);
+        this.controlQueue.add(wf);
     }
-
+    
     /**
      * Main method to coordinate the download and parse threads
      *
      * @return boolean
      * @throws URISyntaxException
      */
-    public boolean execute() throws URISyntaxException {
+    public void execute() throws URISyntaxException {
         // Update date and time
         updateDate();
 
@@ -179,7 +205,7 @@ public class jWget {
                 + "\nStarting new download for: "
                 + this.url
                 + "\nExtracting files to: "
-                + this.websitePath
+                + this.folderPath
                 + "\nLevel of deepness: "
                 + this.deepLevel);
 
@@ -189,16 +215,12 @@ public class jWget {
         // Update the hisory file
         updateHistory();
 
-        // Creates the new folder
-        String fullFolderPath = this.websitePath + this.folderName;
-        createSiteFolder(fullFolderPath);
-
+        // Create the first webfile to download and add to queue
+        createWebfile();
+        
         // Begin the downloads
-        for (int i = 0; i < this.deepLevel; i++) {
-            Downloader d = new Downloader(fullFolderPath, websiteQueue, controlQueue);
-            executor.execute(d);
-        }
-
-        return true;
+        DownloadProgress.main(null);
+        Downloader d = new Downloader(this.folderPath, this.dlImages, this.dlVideos, this.dlCss, this.dlJs, this.deepLevel, this.websiteQueue, this.controlQueue);
+        executor.execute(d);
     }
 }

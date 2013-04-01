@@ -10,19 +10,25 @@ import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static jwget.Webfile.FileType.HTML;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 /**
- * Downloader - This class extends the Thread class nad is responsible for the webpage download
+ * Downloader - This class extends the Thread class
+ * and is responsible for the webfiles download
  * @author Joao
  */
 public class Downloader extends Thread {
     private String folderPath;          //Folder to save the files
+    private boolean dlImages;             // Download images
+    private boolean dlVideos;             // Download videos
+    private boolean dlCss;                // Download stylesheets
+    private boolean dlJs;                 // Download javascript
+    private int deepLevel;                // Level of deepness to crawl for websites    
     private ConcurrentLinkedQueue<Webfile> websiteQueue = new ConcurrentLinkedQueue();   // Concurrent queue for websites (on hold to get downloaded)
     private ConcurrentLinkedQueue<Webfile> controlQueue = new ConcurrentLinkedQueue();   // Concurrent queue for websites (already downloaded, control dups)
     
@@ -33,16 +39,25 @@ public class Downloader extends Thread {
      * Class constructor
      * 
      * @param folderPath
+     * @param dlImages
+     * @param dlVideos
+     * @param dlCss
+     * @param dlJs
+     * @param deepLevel
      * @param websiteQueue
-     * @param controlQueue
+     * @param controlQueue 
      */
-    public Downloader(String folderPath, ConcurrentLinkedQueue<Webfile> websiteQueue, ConcurrentLinkedQueue<Webfile> controlQueue) {
+    public Downloader(String folderPath, boolean dlImages, boolean dlVideos, boolean dlCss, boolean dlJs, int deepLevel, ConcurrentLinkedQueue<Webfile> websiteQueue, ConcurrentLinkedQueue<Webfile> controlQueue) {
         this.folderPath = folderPath;
+        this.dlImages = dlImages;
+        this.dlVideos = dlVideos;
+        this.dlCss = dlCss;
+        this.dlJs = dlJs;
+        this.deepLevel = deepLevel;
         this.websiteQueue = websiteQueue;
         this.controlQueue = controlQueue;
     }
 
-    
     /**
      * 
      * GETTERS AND SETTERS - BEGIN
@@ -55,7 +70,6 @@ public class Downloader extends Thread {
     public void setFolderPath(String folderPath) {
         this.folderPath = folderPath;
     }
-
     
     public ConcurrentLinkedQueue<Webfile> getWebsiteQueue() {
         return websiteQueue;
@@ -96,18 +110,45 @@ public class Downloader extends Thread {
     
     @Override
     public void run() {
-        try {
-            Document doc = Jsoup.connect("<websiteUrl>").get();
+        boolean crawl = true;
+        while(crawl) {
+            try {
+                // Retrieve webfile from queue
+                Webfile wf = this.websiteQueue.poll();
 
-            FileWriter fstream = new FileWriter(this.folderPath + "\\<fileName>");
-            PrintWriter out = new PrintWriter(fstream);
-            out.println(doc.toString());
-            System.out.println(doc.toString());
-            out.close();
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
+                // Check if reached last level
+                if(wf.getLevel() >= this.deepLevel)
+                    this.interrupt();
+                
+                // Connect to server
+                Document doc = Jsoup.connect(wf.getUrl()).get();
+
+                // Name of the file
+                String fileName = "index.html";
+                
+                // Parse the file
+                switch(wf.getType()) {
+                    case HTML:  
+                                break;
+                    case CSS:   
+                                break;
+                    case JS:    
+                                break;
+                    default:    
+                                break;
+                }
+
+                // Save to file
+                FileWriter fstream = new FileWriter(this.folderPath + "\\"+ fileName);
+                PrintWriter out = new PrintWriter(fstream);
+                out.println(doc.toString());
+                out.close();
+                System.out.println(doc.toString());
+            } catch (MalformedURLException ex) {
+                Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 }

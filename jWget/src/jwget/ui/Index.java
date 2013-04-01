@@ -6,11 +6,11 @@ package jwget.ui;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 import jwget.jWget;
 
 /**
@@ -24,8 +24,8 @@ public class Index extends javax.swing.JFrame {
     public Index() {
         // Center window
         Dimension screenSize = new Dimension(Toolkit.getDefaultToolkit().getScreenSize());
-        int wdwLeft = screenSize.width / 2 - 269;
-        int wdwTop = screenSize.height / 2 - 90;
+        int wdwLeft = screenSize.width / 2 - 420;
+        int wdwTop = screenSize.height / 2 - 170;
         pack();
         setLocation(wdwLeft, wdwTop);
         
@@ -48,15 +48,25 @@ public class Index extends javax.swing.JFrame {
         cbDeepness = new javax.swing.JComboBox();
         lblDeepness = new javax.swing.JLabel();
         btnHistory = new javax.swing.JButton();
-        txtFolderName = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
+        lblFolderPath = new javax.swing.JLabel();
+        txtFolderPath = new javax.swing.JTextField();
+        cbImages = new javax.swing.JCheckBox();
+        lblDownloads = new javax.swing.JLabel();
+        cbCss = new javax.swing.JCheckBox();
+        cbJavascript = new javax.swing.JCheckBox();
+        cbVideos = new javax.swing.JCheckBox();
+        btnChooseFolder = new javax.swing.JButton();
+        btnPaste = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Simple wget");
+        setPreferredSize(new java.awt.Dimension(840, 340));
         setResizable(false);
 
         btnDownload.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        btnDownload.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jwget/img/download.png"))); // NOI18N
         btnDownload.setText("Download");
+        btnDownload.setPreferredSize(new java.awt.Dimension(173, 43));
         btnDownload.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDownloadActionPerformed(evt);
@@ -72,69 +82,131 @@ public class Index extends javax.swing.JFrame {
         cbDeepness.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
 
         lblDeepness.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblDeepness.setText("levels deep");
+        lblDeepness.setText("Levels deep");
 
         btnHistory.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        btnHistory.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jwget/img/history.png"))); // NOI18N
         btnHistory.setText("View history");
+        btnHistory.setPreferredSize(new java.awt.Dimension(173, 43));
         btnHistory.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnHistoryActionPerformed(evt);
             }
         });
 
-        txtFolderName.setMinimumSize(new java.awt.Dimension(6, 23));
-        txtFolderName.setPreferredSize(new java.awt.Dimension(6, 23));
+        lblFolderPath.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblFolderPath.setText("Folder");
 
-        jLabel1.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        jLabel1.setText("Folder name");
+        txtFolderPath.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        txtFolderPath.setEnabled(false);
+
+        cbImages.setText("Images");
+
+        lblDownloads.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblDownloads.setText("Download files");
+
+        cbCss.setText("Stylesheets");
+
+        cbJavascript.setText("Javascript");
+
+        cbVideos.setText("Videos");
+
+        btnChooseFolder.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnChooseFolder.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jwget/img/folder.png"))); // NOI18N
+        btnChooseFolder.setText("Choose folder...");
+        btnChooseFolder.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnChooseFolder.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnChooseFolderActionPerformed(evt);
+            }
+        });
+
+        btnPaste.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        btnPaste.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jwget/img/paste.png"))); // NOI18N
+        btnPaste.setText("Paste");
+        btnPaste.setBorderPainted(false);
+        btnPaste.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btnPaste.setPreferredSize(new java.awt.Dimension(173, 43));
+        btnPaste.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPasteActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(49, 49, 49)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblUrl)
+                    .addComponent(lblDownloads)
+                    .addComponent(lblFolderPath)
+                    .addComponent(lblDeepness))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(49, 49, 49)
-                        .addComponent(lblUrl)
-                        .addGap(5, 5, 5))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cbDeepness, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtUrl)
+                                    .addComponent(txtFolderPath))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(btnChooseFolder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnPaste, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(297, 297, 297))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(57, 57, 57)
-                        .addComponent(btnDownload)
-                        .addGap(33, 33, 33)
-                        .addComponent(btnHistory))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(cbDeepness, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblDeepness))
-                    .addComponent(txtUrl, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
-                    .addComponent(txtFolderName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(57, 57, 57))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(btnDownload, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(cbImages, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(cbVideos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(cbCss, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(cbJavascript, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(644, 644, 644))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(35, 35, 35)
+                                .addComponent(btnHistory, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(23, 23, 23)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                    .addComponent(lblUrl)
-                    .addComponent(txtUrl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtFolderName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1))
+                    .addComponent(txtUrl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblUrl)
+                    .addComponent(btnPaste, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(24, 24, 24)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblFolderPath)
+                    .addComponent(txtFolderPath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnChooseFolder))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbImages)
+                    .addComponent(cbVideos)
+                    .addComponent(cbCss)
+                    .addComponent(cbJavascript)
+                    .addComponent(lblDownloads))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cbDeepness, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblDeepness))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 110, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnDownload)
-                    .addComponent(btnHistory))
+                    .addComponent(btnDownload, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnHistory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -149,28 +221,43 @@ public class Index extends javax.swing.JFrame {
      * @param evt 
      */
     private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            String websitePath = fileChooser.getSelectedFile().toString() + "\\";
+        if(!txtUrl.getText().isEmpty()) {
+            String folderPath = txtFolderPath.getText() + "\\";
+            boolean dlImages = cbImages.isSelected();
+            boolean dlVideos = cbImages.isSelected();
+            boolean dlCss = cbImages.isSelected();
+            boolean dlJs = cbImages.isSelected();
             int deepLevel = Integer.parseInt(cbDeepness.getSelectedItem().toString());
-            jWget main = new jWget(txtUrl.getText(), txtFolderName.getText(), websitePath, deepLevel);
+            jWget main = new jWget(txtUrl.getText(), folderPath, dlImages, dlVideos, dlCss, dlJs, deepLevel);
             try {
-                if(main.execute())
-                    JOptionPane.showMessageDialog(this, "Your file as been downloaded successfully.", "Success!", JOptionPane.PLAIN_MESSAGE);
-                else
-                    JOptionPane.showMessageDialog(this, "Something went wrong...please try again.", "Error!", JOptionPane.ERROR_MESSAGE);
+                main.execute();
             } catch (URISyntaxException ex) {
-                Logger.getLogger(Index.class.getName()).log(Level.SEVERE, null, ex);
+
             }
-        } else {
-            System.out.println("No directory selected...");
         }
     }//GEN-LAST:event_btnDownloadActionPerformed
 
     private void btnHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHistoryActionPerformed
         History.main(null);
     }//GEN-LAST:event_btnHistoryActionPerformed
+
+    private void btnChooseFolderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChooseFolderActionPerformed
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            txtFolderPath.setText(fileChooser.getSelectedFile().toString());
+        } else {
+            System.out.println("No directory selected...");
+        }        
+    }//GEN-LAST:event_btnChooseFolderActionPerformed
+
+    private void btnPasteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPasteActionPerformed
+        try {
+            txtUrl.setText(Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor).toString());
+        } catch (UnsupportedFlavorException | IOException ex) {
+            
+        }
+    }//GEN-LAST:event_btnPasteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -208,13 +295,20 @@ public class Index extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnChooseFolder;
     private javax.swing.JButton btnDownload;
     private javax.swing.JButton btnHistory;
+    private javax.swing.JButton btnPaste;
+    private javax.swing.JCheckBox cbCss;
     private javax.swing.JComboBox cbDeepness;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JCheckBox cbImages;
+    private javax.swing.JCheckBox cbJavascript;
+    private javax.swing.JCheckBox cbVideos;
     private javax.swing.JLabel lblDeepness;
+    private javax.swing.JLabel lblDownloads;
+    private javax.swing.JLabel lblFolderPath;
     private javax.swing.JLabel lblUrl;
-    private javax.swing.JTextField txtFolderName;
+    private javax.swing.JTextField txtFolderPath;
     private javax.swing.JTextField txtUrl;
     // End of variables declaration//GEN-END:variables
 }
