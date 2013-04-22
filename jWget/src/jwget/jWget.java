@@ -31,7 +31,8 @@ public class jWget {
     private ConcurrentLinkedQueue<Webfile> websiteQueue = new ConcurrentLinkedQueue();   // Concurrent queue for websites (on hold to get downloaded)
     private ConcurrentLinkedQueue<Webfile> controlQueue = new ConcurrentLinkedQueue();   // Concurrent queue for websites (already downloaded, control dups)
     private static final Executor executor = Executors.newCachedThreadPool();           // Thread pool
-
+    private static final int cores = Runtime.getRuntime().availableProcessors();        // Number of cores the current computer has
+    
     public jWget() {
     }
 
