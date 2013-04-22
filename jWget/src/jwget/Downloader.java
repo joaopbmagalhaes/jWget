@@ -11,10 +11,12 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import static jwget.Webfile.FileType.HTML;
+import static jwget.Webfile.FileType.*;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -28,70 +30,35 @@ import org.jsoup.select.Elements;
  */
 public class Downloader extends Thread {
 
-    private String folderPath;          //Folder to save the files
-    private boolean dlImages;             // Download images
-    private boolean dlVideos;             // Download videos
-    private boolean dlCss;                // Download stylesheets
-    private boolean dlJs;                 // Download javascript
-    private int deepLevel;                // Level of deepness to crawl for websites    
-    private ConcurrentLinkedQueue<Webfile> websiteQueue = new ConcurrentLinkedQueue();   // Concurrent queue for websites (on hold to get downloaded)
+    private Config jConfig;                                                   // Main class with all the info
+    private ExecutorService executor = Executors.newCachedThreadPool(); // Thread pool
     private ConcurrentLinkedQueue<Webfile> controlQueue = new ConcurrentLinkedQueue();   // Concurrent queue for websites (already downloaded, control dups)
-
+    private Webfile wf;
+    
     public Downloader() {
     }
 
-    /**
-     * Class constructor
-     *
-     * @param folderPath
-     * @param dlImages
-     * @param dlVideos
-     * @param dlCss
-     * @param dlJs
-     * @param deepLevel
-     * @param websiteQueue
-     * @param controlQueue
-     */
-    public Downloader(String folderPath, boolean dlImages, boolean dlVideos, boolean dlCss, boolean dlJs, int deepLevel, ConcurrentLinkedQueue<Webfile> websiteQueue, ConcurrentLinkedQueue<Webfile> controlQueue) {
-        this.folderPath = folderPath;
-        this.dlImages = dlImages;
-        this.dlVideos = dlVideos;
-        this.dlCss = dlCss;
-        this.dlJs = dlJs;
-        this.deepLevel = deepLevel;
-        this.websiteQueue = websiteQueue;
+    public Downloader(Config jConfig, ExecutorService executor, ConcurrentLinkedQueue<Webfile> controlQueue, Webfile wf) {
+        this.jConfig = jConfig;
+        this.executor = executor;
         this.controlQueue = controlQueue;
+        this.wf = wf;
     }
+
+    
 
     /**
      *
      * GETTERS AND SETTERS - BEGIN
      *
      */
-    public String getFolderPath() {
-        return folderPath;
+    public Config getFolderPath() {
+        return jConfig;
     }
 
-    public void setFolderPath(String folderPath) {
-        this.folderPath = folderPath;
+    public void setFolderPath(Config config) {
+        this.jConfig = config;
     }
-
-    public ConcurrentLinkedQueue<Webfile> getWebsiteQueue() {
-        return websiteQueue;
-    }
-
-    public void setWebsiteQueue(ConcurrentLinkedQueue<Webfile> websiteQueue) {
-        this.websiteQueue = websiteQueue;
-    }
-
-    public ConcurrentLinkedQueue<Webfile> getControlQueue() {
-        return controlQueue;
-    }
-
-    public void setControlQueue(ConcurrentLinkedQueue<Webfile> controlQueue) {
-        this.controlQueue = controlQueue;
-    }
-
     /**
      *
      * GETTERS AND SETTERS - END
@@ -115,16 +82,9 @@ public class Downloader extends Thread {
 
     @Override
     public void run() {
-        boolean crawl = true;
-        while (crawl) {
-
+        while (true) {
             // Retrieve webfile from queue
-            Webfile wf = this.websiteQueue.poll();
-
-            // Check if reached last level
-            if (wf.getLevel() >= this.deepLevel) {
-                this.interrupt();
-            }
+//            Webfile wf = this.websiteQueue.poll();
 
             // Parse the file
             switch (wf.getType()) {
@@ -144,7 +104,6 @@ public class Downloader extends Thread {
     }
 
     private void parseHtml(Webfile wf) {
-
         // Name of the file
         String fileName = "index.html";
 
@@ -158,7 +117,7 @@ public class Downloader extends Thread {
             }
 
             // Save to file
-            FileWriter fstream = new FileWriter(this.folderPath + "\\" + fileName);
+            FileWriter fstream = new FileWriter(this.jConfig.getFolderPath() + "\\" + fileName);
             PrintWriter out = new PrintWriter(fstream);
             out.println(doc.toString());
             out.close();

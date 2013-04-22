@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import javax.swing.JFileChooser;
 import javax.swing.UIManager;
+import jwget.Config;
 import jwget.jWget;
 
 /**
@@ -231,7 +232,8 @@ public class Index extends javax.swing.JFrame {
             boolean dlCss = cbImages.isSelected();
             boolean dlJs = cbImages.isSelected();
             int deepLevel = Integer.parseInt(cbDeepness.getSelectedItem().toString());
-            jWget main = new jWget(txtUrl.getText(), folderPath, dlImages, dlVideos, dlCss, dlJs, deepLevel);
+            Config config = new Config(txtUrl.getText(), folderPath, dlImages, dlVideos, dlCss, dlJs, deepLevel, folderPath);
+            jWget main = new jWget(config);
             try {
                 main.execute();
             } catch (URISyntaxException ex) {
