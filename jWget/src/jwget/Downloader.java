@@ -13,16 +13,21 @@ import java.net.URISyntaxException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import static jwget.Webfile.FileType.HTML;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 /**
- * Downloader - This class extends the Thread class
- * and is responsible for the webfiles download
+ * Downloader - This class extends the Thread class and is responsible for the
+ * webfiles download
+ *
  * @author Joao
  */
 public class Downloader extends Thread {
+
     private String folderPath;          //Folder to save the files
     private boolean dlImages;             // Download images
     private boolean dlVideos;             // Download videos
@@ -31,13 +36,13 @@ public class Downloader extends Thread {
     private int deepLevel;                // Level of deepness to crawl for websites    
     private ConcurrentLinkedQueue<Webfile> websiteQueue = new ConcurrentLinkedQueue();   // Concurrent queue for websites (on hold to get downloaded)
     private ConcurrentLinkedQueue<Webfile> controlQueue = new ConcurrentLinkedQueue();   // Concurrent queue for websites (already downloaded, control dups)
-    
+
     public Downloader() {
     }
 
     /**
      * Class constructor
-     * 
+     *
      * @param folderPath
      * @param dlImages
      * @param dlVideos
@@ -45,7 +50,7 @@ public class Downloader extends Thread {
      * @param dlJs
      * @param deepLevel
      * @param websiteQueue
-     * @param controlQueue 
+     * @param controlQueue
      */
     public Downloader(String folderPath, boolean dlImages, boolean dlVideos, boolean dlCss, boolean dlJs, int deepLevel, ConcurrentLinkedQueue<Webfile> websiteQueue, ConcurrentLinkedQueue<Webfile> controlQueue) {
         this.folderPath = folderPath;
@@ -59,9 +64,9 @@ public class Downloader extends Thread {
     }
 
     /**
-     * 
+     *
      * GETTERS AND SETTERS - BEGIN
-     * 
+     *
      */
     public String getFolderPath() {
         return folderPath;
@@ -70,7 +75,7 @@ public class Downloader extends Thread {
     public void setFolderPath(String folderPath) {
         this.folderPath = folderPath;
     }
-    
+
     public ConcurrentLinkedQueue<Webfile> getWebsiteQueue() {
         return websiteQueue;
     }
@@ -86,12 +91,12 @@ public class Downloader extends Thread {
     public void setControlQueue(ConcurrentLinkedQueue<Webfile> controlQueue) {
         this.controlQueue = controlQueue;
     }
+
     /**
-     * 
+     *
      * GETTERS AND SETTERS - END
-     * 
+     *
      */
-    
     /**
      * Parses a given URL to extract to domain
      *
@@ -106,49 +111,68 @@ public class Downloader extends Thread {
             String domain = uri.getHost();
             return domain.startsWith("www.") ? domain.substring(4) : domain;
         }
-    }    
-    
+    }
+
     @Override
     public void run() {
         boolean crawl = true;
-        while(crawl) {
-            try {
-                // Retrieve webfile from queue
-                Webfile wf = this.websiteQueue.poll();
+        while (crawl) {
 
-                // Check if reached last level
-                if(wf.getLevel() >= this.deepLevel)
-                    this.interrupt();
-                
-                // Connect to server
-                Document doc = Jsoup.connect(wf.getUrl()).get();
+            // Retrieve webfile from queue
+            Webfile wf = this.websiteQueue.poll();
 
-                // Name of the file
-                String fileName = "index.html";
-                
-                // Parse the file
-                switch(wf.getType()) {
-                    case HTML:  
-                                break;
-                    case CSS:   
-                                break;
-                    case JS:    
-                                break;
-                    default:    
-                                break;
-                }
+            // Check if reached last level
+            if (wf.getLevel() >= this.deepLevel) {
+                this.interrupt();
+            }
 
-                // Save to file
-                FileWriter fstream = new FileWriter(this.folderPath + "\\"+ fileName);
-                PrintWriter out = new PrintWriter(fstream);
-                out.println(doc.toString());
-                out.close();
-                System.out.println(doc.toString());
-            } catch (MalformedURLException ex) {
-                Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex) {
-                Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
+            // Parse the file
+            switch (wf.getType()) {
+                case HTML:
+                    parseHtml(wf);
+                    break;
+                case CSS:
+                    parseCSS(wf);
+                    break;
+                case JS:
+                    parseJS(wf);
+                    break;
+                default:
+                    break;
             }
         }
+    }
+
+    private void parseHtml(Webfile wf) {
+
+        // Name of the file
+        String fileName = "index.html";
+
+        try {
+            // Connect to server
+            Document doc = Jsoup.connect(wf.getUrl()).get();
+
+            Elements links = doc.select("a[href]"); // a with href
+            for (Element element : links) {
+                
+            }
+
+            // Save to file
+            FileWriter fstream = new FileWriter(this.folderPath + "\\" + fileName);
+            PrintWriter out = new PrintWriter(fstream);
+            out.println(doc.toString());
+            out.close();
+            System.out.println(doc.toString());
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private void parseCSS(Webfile wf) {
+    }
+
+    private void parseJS(Webfile wf) {
     }
 }

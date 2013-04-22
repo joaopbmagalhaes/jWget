@@ -11,6 +11,7 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import javax.swing.JFileChooser;
+import javax.swing.UIManager;
 import jwget.jWget;
 
 /**
@@ -18,6 +19,7 @@ import jwget.jWget;
  * @author Joao
  */
 public class Index extends javax.swing.JFrame {
+
     /**
      * Creates new form Index
      */
@@ -28,7 +30,7 @@ public class Index extends javax.swing.JFrame {
         int wdwTop = screenSize.height / 2 - 170;
         pack();
         setLocation(wdwLeft, wdwTop);
-        
+
         // Initialize components
         initComponents();
     }
@@ -183,10 +185,11 @@ public class Index extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(23, 23, 23)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtUrl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblUrl)
-                    .addComponent(btnPaste, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnPaste, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(txtUrl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblUrl)))
                 .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblFolderPath)
@@ -217,11 +220,11 @@ public class Index extends javax.swing.JFrame {
 
     /**
      * onClick method - starts the download
-     * 
-     * @param evt 
+     *
+     * @param evt
      */
     private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
-        if(!txtUrl.getText().isEmpty()) {
+        if (!txtUrl.getText().isEmpty()) {
             String folderPath = txtFolderPath.getText() + "\\";
             boolean dlImages = cbImages.isSelected();
             boolean dlVideos = cbImages.isSelected();
@@ -232,7 +235,6 @@ public class Index extends javax.swing.JFrame {
             try {
                 main.execute();
             } catch (URISyntaxException ex) {
-
             }
         }
     }//GEN-LAST:event_btnDownloadActionPerformed
@@ -248,14 +250,13 @@ public class Index extends javax.swing.JFrame {
             txtFolderPath.setText(fileChooser.getSelectedFile().toString());
         } else {
             System.out.println("No directory selected...");
-        }        
+        }
     }//GEN-LAST:event_btnChooseFolderActionPerformed
 
     private void btnPasteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPasteActionPerformed
         try {
             txtUrl.setText(Toolkit.getDefaultToolkit().getSystemClipboard().getData(DataFlavor.stringFlavor).toString());
         } catch (UnsupportedFlavorException | IOException ex) {
-            
         }
     }//GEN-LAST:event_btnPasteActionPerformed
 
@@ -264,27 +265,10 @@ public class Index extends javax.swing.JFrame {
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Index.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Index.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Index.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Index.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
         }
-        //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
