@@ -128,13 +128,13 @@ public class jWget {
                 + this.jConfig.getDeepLevel());
 
         // Format URL
-        formatUrl();
+        //formatUrl();
 
         // Update the hisory file
         updateHistory();
 
         // Create the first webfile to download and add to queue
-        Webfile wf = new Webfile(this.jConfig.getUrl(), this.jConfig.getDeepLevel(), Webfile.FileType.HTML);
+        Webfile wf = new Webfile(this.jConfig.getUrl(), 0, Webfile.FileType.HTML);
         this.controlQueue.add(wf);
         
         // Begin the downloads

@@ -82,15 +82,15 @@ public class Downloader extends Thread {
 
     @Override
     public void run() {
-        while (true) {
+//        while (true) {
             // Retrieve webfile from queue
 //            Webfile wf = this.websiteQueue.poll();
 
             // Parse the file
             switch (wf.getType()) {
                 case HTML:
-                    parseHtml(wf);
-                    break;
+                        parseHtml(wf);
+                        break;
                 case CSS:
                     parseCSS(wf);
                     break;
@@ -100,12 +100,16 @@ public class Downloader extends Thread {
                 default:
                     break;
             }
-        }
+//        }
     }
 
     private void parseHtml(Webfile wf) {
         // Name of the file
-        String fileName = "index.html";
+        String fileName;
+        if(wf.getLevel()==0)
+            fileName = "index.html";
+        else
+            fileName = "2.html";
 
         try {
             // Connect to server
@@ -122,6 +126,11 @@ public class Downloader extends Thread {
             out.println(doc.toString());
             out.close();
             System.out.println(doc.toString());
+            
+            if(wf.getLevel()<2) {                
+                Downloader dl = new Downloader(jConfig, executor, controlQueue, new Webfile("http://www.iana.org/protocols", wf.getLevel()+1, HTML));
+                executor.execute(dl);
+            }
         } catch (MalformedURLException ex) {
             Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
