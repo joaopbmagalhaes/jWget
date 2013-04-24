@@ -10,22 +10,14 @@ import java.net.URISyntaxException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import jwget.ui.DownloadProgress;
 
 /**
  *
  * @author Joao
  */
 public class jWget {
-    private Config jConfig;                                                              // Configuration file
-    //private ConcurrentLinkedQueue<Webfile> websiteQueue = new ConcurrentLinkedQueue();   // Concurrent queue for websites (on hold to get downloaded)
-    private ConcurrentLinkedQueue<Webfile> controlQueue = new ConcurrentLinkedQueue();   // Concurrent queue for websites (already downloaded, control dups)
-    private static final ExecutorService executor = Executors.newCachedThreadPool();            // Thread pool
-    private static final int NCORES = Runtime.getRuntime().availableProcessors();       // Number of cores the current computer has
+    private String root;            // Root url
+    private Config jConfig;         // Configuration file
     
     public jWget() {
     }
@@ -35,7 +27,8 @@ public class jWget {
      * 
      * @param config
      */
-    public jWget(Config config) {
+    public jWget(String root, Config config) {
+        this.root = root;
         this.jConfig = config;
     }
 
@@ -52,35 +45,18 @@ public class jWget {
         this.jConfig = config;
     }
 
-//    public ConcurrentLinkedQueue<Webfile> getWebsiteQueue() {
-//        return websiteQueue;
-//    }
-//
-//    public void setWebsiteQueue(ConcurrentLinkedQueue<Webfile> websiteQueue) {
-//        this.websiteQueue = websiteQueue;
-//    }
-
-    public ConcurrentLinkedQueue<Webfile> getControlQueue() {
-        return controlQueue;
+    public String getRoot() {
+        return root;
     }
 
-    public void setControlQueue(ConcurrentLinkedQueue<Webfile> controlQueue) {
-        this.controlQueue = controlQueue;
+    public void setRoot(String root) {
+        this.root = root;
     }
     /**
      * 
      * GETTERS AND SETTERS - END
      * 
      */
-
-    /**
-     * Formats the class URL for missing protocol
-     */
-    public void formatUrl() {
-        if (!this.jConfig.getUrl().startsWith("http://") || !this.jConfig.getUrl().startsWith("https://")) {
-            this.jConfig.setUrl("http://" + this.jConfig.getUrl());
-        }
-    }
 
     /**
      * Updates the history file
@@ -90,7 +66,7 @@ public class jWget {
             // Create file
             FileWriter fstream = new FileWriter("history.csv", true);
             PrintWriter out = new PrintWriter(fstream);
-            out.println(this.jConfig.getDateTime() + ";" + this.jConfig.getUrl() + ";" + this.jConfig.getFolderPath() + ";" + this.jConfig.getDeepLevel());
+            out.println(this.jConfig.getDateTime() + ";" + this.jConfig.getDomain() + ";" + this.jConfig.getFolderPath() + ";" + this.jConfig.getDeepLevel());
             //Close the output stream
             out.close();
         } catch (Exception e) { //Catch exception if any
@@ -121,25 +97,22 @@ public class jWget {
         System.out.println(
                 this.jConfig.getDateTime()
                 + "\nStarting new download for: "
-                + this.jConfig.getUrl()
+                + this.jConfig.getDomain()
                 + "\nExtracting files to: "
                 + this.jConfig.getFolderPath()
                 + "\nLevel of deepness: "
                 + this.jConfig.getDeepLevel());
 
-        // Format URL
-        //formatUrl();
-
         // Update the hisory file
         updateHistory();
 
         // Create the first webfile to download and add to queue
-        Webfile wf = new Webfile(this.jConfig.getUrl(), 0, Webfile.FileType.HTML);
-        this.controlQueue.add(wf);
+        Webfile wf = new Webfile(this.root, 0, Webfile.FileType.HTML);
+        this.jConfig.getControlQueue().add(wf);
         
         // Begin the downloads
         // DownloadProgress.main(null);
-        Downloader d = new Downloader(this.jConfig,executor,controlQueue,wf);
-        executor.execute(d);
+        Downloader d = new Downloader(this.jConfig,wf);
+        this.jConfig.getExecutor().execute(d);
     }
 }

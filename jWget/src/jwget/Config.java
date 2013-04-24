@@ -4,13 +4,19 @@
  */
 package jwget;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 /**
  * Configuration file with location of the HTML files and other resources
  * 
  * @author Joao
  */
 public class Config {
-    private String url;                   // URL to download
+    private String domain;                // Domain
     private String folderPath;            // Path to save all files
     private boolean dlImages;             // Download images
     private boolean dlVideos;             // Download videos
@@ -18,12 +24,27 @@ public class Config {
     private boolean dlJs;                 // Download javascript
     private int deepLevel;                // Level of deepness to crawl for websites
     private String dateTime;              // Date and time of the request
+    private static final int NCORES = Runtime.getRuntime().availableProcessors();           // Number of cores the current computer has
+    private ConcurrentLinkedQueue<Webfile> controlQueue = new ConcurrentLinkedQueue();      // Concurrent queue for websites (already downloaded, control dups)
+    private final ExecutorService executor = Executors.newFixedThreadPool(NCORES+1); // Thread pool
 
     public Config() {
     }
 
-    public Config(String url, String folderPath, boolean dlImages, boolean dlVideos, boolean dlCss, boolean dlJs, int deepLevel, String dateTime) {
-        this.url = url;
+    /**
+     * Class constructor
+     * 
+     * @param domain
+     * @param folderPath
+     * @param dlImages
+     * @param dlVideos
+     * @param dlCss
+     * @param dlJs
+     * @param deepLevel
+     * @param dateTime 
+     */
+    public Config(String domain, String folderPath, boolean dlImages, boolean dlVideos, boolean dlCss, boolean dlJs, int deepLevel, String dateTime) {
+        this.domain = domain;
         this.folderPath = folderPath;
         this.dlImages = dlImages;
         this.dlVideos = dlVideos;
@@ -33,12 +54,17 @@ public class Config {
         this.dateTime = dateTime;
     }
 
-    public String getUrl() {
-        return url;
+    /**
+     *
+     * GETTERS AND SETTERS - BEGIN
+     *
+     */
+    public String getDomain() {
+        return domain;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public void setDomain(String domain) {
+        this.domain = domain;
     }
 
     public String getFolderPath() {
@@ -95,5 +121,68 @@ public class Config {
 
     public void setDateTime(String dateTime) {
         this.dateTime = dateTime;
+    }
+
+    public ConcurrentLinkedQueue<Webfile> getControlQueue() {
+        return controlQueue;
+    }
+
+    public void setControlQueue(ConcurrentLinkedQueue<Webfile> controlQueue) {
+        this.controlQueue = controlQueue;
+    }
+
+    public ExecutorService getExecutor() {
+        return executor;
+    }
+    /**
+     *
+     * GETTERS AND SETTERS - END
+     *
+     */
+    
+    /**
+     * Parses a given URL to extract to domain
+     *
+     * @return String url
+     * @throws URISyntaxException
+     */
+    public static String extractDomain(String url) throws URISyntaxException {
+        if (url.isEmpty()) {
+            return null;
+        } else {
+            if(!url.startsWith("http") && !url.startsWith("https")){
+                 url = "http://" + url;
+            }
+            URI uri = new URI(url);
+            String domain = uri.getHost();
+            return domain.startsWith("www.") ? domain.substring(4) : domain;
+        }
+    }
+    
+    /**
+     * Checks if a given Webfile is inside the initial domain
+     * 
+     * @param wf
+     * @return
+     * @throws URISyntaxException 
+     */
+    public boolean isInDomain(Webfile wf) throws URISyntaxException {
+        String wfDomain = Config.extractDomain(wf.getUrl());
+        if(wfDomain.equalsIgnoreCase(this.domain))
+            return true;
+        else
+            return false;
+    }
+    
+    /**
+     * Checks if a given Webfile is inside the allowed deep level
+     * @param wf
+     * @return 
+     */
+    public boolean isInDeepLevel(Webfile wf) {
+        if(wf.getLevel() <= this.getDeepLevel())
+            return true;
+        else
+            return false;
     }
 }

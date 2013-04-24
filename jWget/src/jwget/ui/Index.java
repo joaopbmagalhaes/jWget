@@ -10,6 +10,8 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.UIManager;
 import jwget.Config;
@@ -34,6 +36,9 @@ public class Index extends javax.swing.JFrame {
 
         // Initialize components
         initComponents();
+        
+        // Initializes the folder path to the users home directory
+        txtFolderPath.setText(System.getProperty("user.home"));
     }
 
     /**
@@ -100,8 +105,9 @@ public class Index extends javax.swing.JFrame {
         lblFolderPath.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblFolderPath.setText("Folder");
 
+        txtFolderPath.setEditable(false);
+        txtFolderPath.setBackground(new java.awt.Color(255, 255, 255));
         txtFolderPath.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        txtFolderPath.setEnabled(false);
 
         cbImages.setText("Images");
 
@@ -226,17 +232,23 @@ public class Index extends javax.swing.JFrame {
      */
     private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
         if (!txtUrl.getText().isEmpty()) {
+            // Get user input
             String folderPath = txtFolderPath.getText() + "\\";
             boolean dlImages = cbImages.isSelected();
             boolean dlVideos = cbImages.isSelected();
             boolean dlCss = cbImages.isSelected();
             boolean dlJs = cbImages.isSelected();
             int deepLevel = Integer.parseInt(cbDeepness.getSelectedItem().toString());
-            Config config = new Config(txtUrl.getText(), folderPath, dlImages, dlVideos, dlCss, dlJs, deepLevel, folderPath);
-            jWget main = new jWget(config);
+            
             try {
+                // Create new config file
+                Config config;
+                config = new Config(Config.extractDomain(txtUrl.getText()), folderPath, dlImages, dlVideos, dlCss, dlJs, deepLevel, folderPath);
+                // Start downloading
+                jWget main = new jWget(txtUrl.getText(), config);
                 main.execute();
             } catch (URISyntaxException ex) {
+                Logger.getLogger(Index.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }//GEN-LAST:event_btnDownloadActionPerformed
