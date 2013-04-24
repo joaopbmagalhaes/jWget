@@ -108,10 +108,8 @@ public class jWget {
 
         // Create the first webfile to download and add to queue
         Webfile wf = new Webfile(this.root, 0, Webfile.FileType.HTML);
-        this.jConfig.getControlQueue().add(wf);
         
         // Begin the downloads
-        // DownloadProgress.main(null);
         Downloader d = new Downloader(this.jConfig,wf);
         this.jConfig.getExecutor().execute(d);
     }

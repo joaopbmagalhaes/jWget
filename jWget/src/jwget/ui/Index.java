@@ -242,8 +242,7 @@ public class Index extends javax.swing.JFrame {
             
             try {
                 // Create new config file
-                Config config;
-                config = new Config(Config.extractDomain(txtUrl.getText()), folderPath, dlImages, dlVideos, dlCss, dlJs, deepLevel, folderPath);
+                Config config = new Config(txtUrl.getText(), folderPath, dlImages, dlVideos, dlCss, dlJs, deepLevel, folderPath);
                 // Start downloading
                 jWget main = new jWget(txtUrl.getText(), config);
                 main.execute();

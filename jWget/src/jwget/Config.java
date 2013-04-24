@@ -43,8 +43,8 @@ public class Config {
      * @param deepLevel
      * @param dateTime 
      */
-    public Config(String domain, String folderPath, boolean dlImages, boolean dlVideos, boolean dlCss, boolean dlJs, int deepLevel, String dateTime) {
-        this.domain = domain;
+    public Config(String domain, String folderPath, boolean dlImages, boolean dlVideos, boolean dlCss, boolean dlJs, int deepLevel, String dateTime) throws URISyntaxException {
+        this.domain = extractDomain(domain);
         this.folderPath = folderPath;
         this.dlImages = dlImages;
         this.dlVideos = dlVideos;
@@ -146,16 +146,30 @@ public class Config {
      * @return String url
      * @throws URISyntaxException
      */
-    public static String extractDomain(String url) throws URISyntaxException {
+    public String extractDomain(String url) throws URISyntaxException {
+        URI uri = buildURI(url);
+        String dom = uri.getHost();
+        return dom.startsWith("www.") ? dom.substring(4) : dom;
+    }
+    
+    /**
+     * Builds URI
+     * 
+     * @param url
+     * @return
+     * @throws URISyntaxException 
+     */
+    public URI buildURI(String url) throws URISyntaxException {
         if (url.isEmpty()) {
             return null;
         } else {
-            if(!url.startsWith("http") && !url.startsWith("https")){
+            if(url.startsWith("/")) {
+                 url = this.domain + url;
+            }
+            if(!url.startsWith("http") && !url.startsWith("https")) {
                  url = "http://" + url;
             }
-            URI uri = new URI(url);
-            String domain = uri.getHost();
-            return domain.startsWith("www.") ? domain.substring(4) : domain;
+            return new URI(url);
         }
     }
     
@@ -167,7 +181,7 @@ public class Config {
      * @throws URISyntaxException 
      */
     public boolean isInDomain(Webfile wf) throws URISyntaxException {
-        String wfDomain = Config.extractDomain(wf.getUrl());
+        String wfDomain = extractDomain(wf.getUrl());
         if(wfDomain.equalsIgnoreCase(this.domain))
             return true;
         else

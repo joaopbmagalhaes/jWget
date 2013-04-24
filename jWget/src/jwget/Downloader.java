@@ -123,9 +123,8 @@ public class Downloader extends Thread {
                             url = element.attr("src");
                         // TODO control the level of deepness
 
-                        Webfile newWf = new Webfile(url, wf.getLevel()+1, HTML);
+                        Webfile newWf = new Webfile(this.jConfig.buildURI(url).toString(), wf.getLevel()+1, HTML);
                         Downloader dl = new Downloader(this.jConfig, newWf);
-                        this.jConfig.getExecutor().execute(dl);
                         this.jConfig.getExecutor().execute(dl);
                     }
                 }
@@ -135,6 +134,9 @@ public class Downloader extends Thread {
                 PrintWriter out = new PrintWriter(fstream);
                 out.println(doc.toString());
                 out.close();
+                
+                // Add webfile to the control queue
+                this.jConfig.getControlQueue().add(wf);
             } catch (MalformedURLException ex) {
                 Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
@@ -155,7 +157,7 @@ public class Downloader extends Thread {
     private void nameFile(String ext) {
         UUID uuid = UUID.randomUUID();
         String randomUUIDString = uuid.toString();
-        setFileName(String.format("%s.%s", randomUUIDString, ext));
+        setFileName(randomUUIDString + ext);
     }
     
     /**
