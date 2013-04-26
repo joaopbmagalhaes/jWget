@@ -17,8 +17,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author Joao
  */
 public class Config {
-
-    private String root;            // Root url
+    private String root;                  // Root url
     private String domain;                // Domain
     private String folderPath;            // Path to save all files
     private boolean dlImages;             // Download images
@@ -29,8 +28,8 @@ public class Config {
     private String dateTime;              // Date and time of the request
     private static final int NCORES = Runtime.getRuntime().availableProcessors();           // Number of cores the current computer has
     private ConcurrentLinkedQueue<Webfile> controlQueue = new ConcurrentLinkedQueue();      // Concurrent queue for websites (already downloaded, control dups)
-    private final ExecutorService executor = Executors.newFixedThreadPool(NCORES + 1); // Thread pool
-    private AtomicInteger countLinks = new AtomicInteger(0);              // Counter of the number of Links to be downloaded
+    private final ExecutorService executor = Executors.newFixedThreadPool(NCORES + 1);      // Thread pool
+    private AtomicInteger countLinks = new AtomicInteger(0);                                // Counter of the number of links to be downloaded
 
     public Config() {
     }
@@ -160,19 +159,19 @@ public class Config {
     public int getCountLinks() {
         return countLinks.get();
     }
-
     /**
      *
      * GETTERS AND SETTERS - END
      *
      */
+    
     /**
      * Parses a given URL to extract to domain
      *
      * @return String url
      * @throws URISyntaxException
      */
-    public String extractDomain(String url) throws URISyntaxException {
+    public final String extractDomain(String url) throws URISyntaxException {
         URI uri = buildURI(url);
         String dom = uri.getHost();
         return dom.startsWith("www.") ? dom.substring(4) : dom;

@@ -12,10 +12,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.lang.reflect.Array;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import jwget.FileTypeMap.FileType;
@@ -32,8 +34,6 @@ import org.jsoup.select.Elements;
  * @author Joao
  */
 public class Downloader extends Thread {
-
-    private String fileName;        // Name of the file to save
     private Webfile wf;             // Webfile to parse and download
     private Config jConfig;         // Main class with all the info
     private static final String[] PARSE_TAGS = {"link", "img", "script", "a"};     // HTML tags to be parsed
@@ -41,8 +41,13 @@ public class Downloader extends Thread {
     public Downloader() {
     }
 
-    public Downloader(String fileName, Config jConfig, Webfile wf) {
-        this.fileName = fileName;
+    /**
+     * Class constructor
+     * 
+     * @param jConfig
+     * @param wf 
+     */
+    public Downloader(Config jConfig, Webfile wf) {
         this.wf = wf;
         this.jConfig = jConfig;
     }
@@ -52,14 +57,6 @@ public class Downloader extends Thread {
      * GETTERS AND SETTERS - BEGIN
      *
      */
-    public String getFileName() {
-        return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
     public Webfile getWf() {
         return wf;
     }
@@ -75,12 +72,12 @@ public class Downloader extends Thread {
     public void setConfig(Config config) {
         this.jConfig = config;
     }
-
     /**
      *
      * GETTERS AND SETTERS - END
      *
      */
+
     @Override
     public void run() {
         System.out.println("run: " + String.valueOf(this.jConfig.getCountLinks()));
@@ -117,25 +114,19 @@ public class Downloader extends Thread {
      */
     private void parseHtml(Webfile wf) throws URISyntaxException {
         if (!this.jConfig.getControlQueue().contains(wf) // Control for repeated websites
-                && this.jConfig.isInDomain(wf) // and websites outside the initial domain
-                && this.jConfig.isInDeepLevel(wf)) {         // and also outside the deep level
+            && this.jConfig.isInDomain(wf)               // and websites outside the initial domain
+            && this.jConfig.isInDeepLevel(wf)) {         // and also outside the deep level
             try {
                 // Connect to server
                 Document doc = Jsoup.connect(wf.getUrl()).get();
-
-                // Name the file to be saved
-                if (this.getFileName() == null) {
-                    nameFile(".html");
-                }
 
                 // Parse all elements
                 for (int i = 0; i < PARSE_TAGS.length; i++) {
                     Elements links = doc.select(PARSE_TAGS[i]);
                     String url = "";
-
                     String newFileName = null;
+                    
                     for (Element element : links) {
-
                         if (element.hasAttr("href")) {
                             url = element.absUrl("href");
                             newFileName = constructDirTree(url, Utils.extractFileName(url, this.jConfig.getRoot()));
@@ -147,13 +138,17 @@ public class Downloader extends Thread {
                             element.attr("src", newFileName);
                         }
 
+                        System.out.println("Next URL: " + url);
+                        System.out.println("Next file name: " + newFileName);
+                        
                         // TODO control the level of deepness
-                        FileType fileType = getFileType(newFileName);
+                        FileType fileType = FileTypeMap.getFileType(newFileName);
                         if (fileType != null) {
-                            Webfile newWf = new Webfile(this.jConfig.buildURI(url).toString(), wf.getLevel() + 1, fileType);
+                            Webfile newWf = new Webfile(newFileName, this.jConfig.buildURI(url).toString(), wf.getLevel() + 1, fileType);
+                            controlDeepLevel(newWf);
                             if (!this.jConfig.getControlQueue().contains(newWf)) {
                                 this.jConfig.incrementCountLinks();
-                                Downloader dl = new Downloader(newFileName, this.jConfig, newWf);
+                                Downloader dl = new Downloader(this.jConfig, newWf);
                                 this.jConfig.getExecutor().execute(dl);
                             }
                         } else {
@@ -161,48 +156,45 @@ public class Downloader extends Thread {
                         }
                     }
                 }
-                checkDirTree(this.jConfig.getFolderPath(), this.fileName);
+                checkDirTree(this.jConfig.getFolderPath(), this.wf.getFileName());
                 // Save the file
-                FileWriter fstream = new FileWriter(this.fileName);
+                FileWriter fstream = new FileWriter(this.wf.getFileName());
                 PrintWriter out = new PrintWriter(fstream);
 
                 out.println(doc.toString());
                 out.close();
 
                 // Add webfile to the control queue
-                this.jConfig.getControlQueue()
-                        .add(wf);
+                this.jConfig.getControlQueue().add(wf);
                 this.jConfig.decrementCountLinks();
 
-                System.out.println(
-                        "after run: " + String.valueOf(this.jConfig.getCountLinks()));
+                System.out.println("after run: " + String.valueOf(this.jConfig.getCountLinks()));
             } catch (MalformedURLException ex) {
-                Logger.getLogger(Downloader.class
-                        .getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex) {
-                Logger.getLogger(Downloader.class
-                        .getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
 
+    /**
+     * Parses a CSS file and saves it
+     * @param wf 
+     */
     private void parseCSS(Webfile wf) {
         //Open a URL Stream
-        Response resultImageResponse;
         try {
-            resultImageResponse = Jsoup.connect(wf.getUrl()).ignoreContentType(true).execute();
+            Response resultImageResponse = Jsoup.connect(wf.getUrl()).ignoreContentType(true).execute();
 
             String src = wf.getUrl();
 
-
-            System.out.println(this.fileName);
-
+            System.out.println(this.wf.getFileName());
 
             //Open a URL Stream
             URL url = new URL(src);
             InputStream in = url.openStream();
-            checkDirTree(this.jConfig.getFolderPath(), this.fileName);
-            OutputStream out = new BufferedOutputStream(new FileOutputStream(this.fileName));
+            checkDirTree(this.jConfig.getFolderPath(), this.wf.getFileName());
+            OutputStream out = new BufferedOutputStream(new FileOutputStream(this.wf.getFileName()));
 
             for (int b; (b = in.read()) != -1;) {
                 out.write(b);
@@ -221,23 +213,27 @@ public class Downloader extends Thread {
             Logger.getLogger(Downloader.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
-
-
     }
 
+    /**
+     * * Parses a Javascript file and saves it
+     * 
+     * @param wf 
+     */
     private void parseJS(Webfile wf) {
+        
     }
 
+    /**
+     * Downloads a specific type of file rather than CSS, JS or HTML
+     * @param wf 
+     */
     private void downloadFile(Webfile wf) {
-
         //Open a URL Stream
-        Response resultImageResponse;
         try {
-            resultImageResponse = Jsoup.connect(wf.getUrl()).ignoreContentType(true).execute();
+            Response resultImageResponse = Jsoup.connect(wf.getUrl()).ignoreContentType(true).execute();
 
-
-            System.out.println(this.fileName);
-
+            System.out.println(this.wf.getFileName());
 
             //Open a URL Stream
           /*  URL url = new URL(src);
@@ -252,32 +248,15 @@ public class Downloader extends Thread {
              in.close();
              */
             // output here
-            checkDirTree(this.jConfig.getFolderPath(), this.fileName);
-            FileOutputStream out = (new FileOutputStream(new java.io.File(this.fileName)));
+            checkDirTree(this.jConfig.getFolderPath(), this.wf.getFileName());
+            FileOutputStream out = (new FileOutputStream(new java.io.File(this.wf.getFileName())));
             out.write(resultImageResponse.bodyAsBytes());           // resultImageResponse.body() is where the image's contents are.
 
             out.close();
-
-
         } catch (IOException ex) {
             Logger.getLogger(Downloader.class
                     .getName()).log(Level.SEVERE, null, ex);
         }
-
-
-
-
-
-
-    }
-
-    /**
-     * Names the file to be saved
-     */
-    private void nameFile(String ext) {
-        UUID uuid = UUID.randomUUID();
-        String randomUUIDString = uuid.toString();
-        setFileName(randomUUIDString + ext);
     }
 
     /**
@@ -286,9 +265,12 @@ public class Downloader extends Thread {
      * @param wf
      * @return boolean
      */
-    private boolean controlDeepLevel(Webfile wf) {
-        //TODO control the level of deepness of a webfile vs. control queue
-        return true;
+    private void controlDeepLevel(Webfile wf) {
+//        Webfile[] cq = (Webfile[]) this.jConfig.getControlQueue().toArray();
+//        for(int i=0 ; i < cq.length; i++) {
+//            if(cq[i].equals(wf))
+//                wf.setLevel(cq[i].getLevel());
+//        }
     }
 
     private String constructDirTree(String url, String fileName) {
@@ -338,7 +320,6 @@ public class Downloader extends Thread {
     }
 
     private void checkDirTree(String baseDir, String path) {
-
         String pathTemp = path.replace(baseDir, "");
         if (pathTemp.startsWith("\\")) {
             pathTemp = pathTemp.substring(1, pathTemp.length());
@@ -357,9 +338,7 @@ public class Downloader extends Thread {
         }
         String str = path.substring(index, indexDot);
 
-        if (!pathTemp.replace(fileName, "").isEmpty()) {
-
-
+        if (!pathTemp.replace(this.wf.getFileName(), "").isEmpty()) {
             String[] folders = pathTemp.split("/");
 
             for (String folder : folders) {
@@ -368,7 +347,6 @@ public class Downloader extends Thread {
                 if (folder.replace(str, "").isEmpty()) {
                     break;
                 }
-
 
                 // if the directory does not exist, create it
                 if (!theDir.exists()) {
@@ -379,19 +357,5 @@ public class Downloader extends Thread {
                 baseDir += "\\" + folder;
             }
         }
-    }
-
-    private FileType getFileType(String fileName) {
-        int index = fileName.lastIndexOf(".");
-
-        if (index == -1) {
-            return FileType.HTML;
-        } else {
-            String fileType = fileName.substring(index + 1, fileName.length());
-            if (FileTypeMap.getFileType().containsKey(fileType)) {
-                return FileTypeMap.getFileType().get(fileType);
-            }
-        }
-        return null;
     }
 }
