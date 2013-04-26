@@ -10,32 +10,34 @@ import java.net.URISyntaxException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
+import jwget.FileTypeMap.FileType;
 
 /**
  *
  * @author Joao
  */
 public class jWget {
-    private String root;            // Root url
+
     private Config jConfig;         // Configuration file
-    
+
     public jWget() {
     }
 
     /**
      * Class constructor
-     * 
+     *
      * @param config
      */
-    public jWget(String root, Config config) {
-        this.root = root;
+    public jWget(Config config) {
         this.jConfig = config;
+
     }
 
     /**
-     * 
+     *
      * GETTERS AND SETTERS - BEGIN
-     * 
+     *
      */
     public Config getConfig() {
         return jConfig;
@@ -45,19 +47,11 @@ public class jWget {
         this.jConfig = config;
     }
 
-    public String getRoot() {
-        return root;
-    }
-
-    public void setRoot(String root) {
-        this.root = root;
-    }
     /**
-     * 
+     *
      * GETTERS AND SETTERS - END
-     * 
+     *
      */
-
     /**
      * Updates the history file
      */
@@ -82,7 +76,7 @@ public class jWget {
         Date date = new Date();
         this.jConfig.setDateTime(dateFormat.format(date));
     }
-    
+
     /**
      * Main method to coordinate the download and parse threads
      *
@@ -107,10 +101,24 @@ public class jWget {
         updateHistory();
 
         // Create the first webfile to download and add to queue
-        Webfile wf = new Webfile(this.root, 0, Webfile.FileType.HTML);
-        
+        Webfile wf = new Webfile(this.jConfig.getRoot(), 0, FileType.HTML);
+
         // Begin the downloads
-        Downloader d = new Downloader(this.jConfig,wf);
+        int t = this.jConfig.getCountLinks();
+        this.jConfig.incrementCountLinks();
+
+
+        Downloader d = new Downloader(this.jConfig.getFolderPath() + "\\" + Utils.extractFileName(this.jConfig.getRoot(), this.jConfig.getRoot()), this.jConfig, wf);
         this.jConfig.getExecutor().execute(d);
+
+        System.out.println("initial: " + String.valueOf(this.jConfig.getCountLinks()));
+        while (this.jConfig.getCountLinks() > 0) {
+            //     System.out.println("loop: " + this.jConfig.getCountLinks());
+        }
+        this.jConfig.getExecutor().shutdown();
+        try {
+            this.jConfig.getExecutor().awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+        } catch (InterruptedException e) {
+        }
     }
 }

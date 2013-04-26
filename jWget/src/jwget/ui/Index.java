@@ -36,7 +36,7 @@ public class Index extends javax.swing.JFrame {
 
         // Initialize components
         initComponents();
-        
+
         // Initializes the folder path to the users home directory
         txtFolderPath.setText(System.getProperty("user.home"));
     }
@@ -239,12 +239,12 @@ public class Index extends javax.swing.JFrame {
             boolean dlCss = cbImages.isSelected();
             boolean dlJs = cbImages.isSelected();
             int deepLevel = Integer.parseInt(cbDeepness.getSelectedItem().toString());
-            
+
             try {
                 // Create new config file
-                Config config = new Config(txtUrl.getText(), folderPath, dlImages, dlVideos, dlCss, dlJs, deepLevel, folderPath);
+                Config config = new Config(txtUrl.getText(), txtUrl.getText(), folderPath, dlImages, dlVideos, dlCss, dlJs, deepLevel, folderPath);
                 // Start downloading
-                jWget main = new jWget(txtUrl.getText(), config);
+                jWget main = new jWget(config);
                 main.execute();
             } catch (URISyntaxException ex) {
                 Logger.getLogger(Index.class.getName()).log(Level.SEVERE, null, ex);

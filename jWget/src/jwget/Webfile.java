@@ -4,20 +4,17 @@
  */
 package jwget;
 
+import jwget.FileTypeMap.FileType;
+
 /**
  *
  * @author Joao
  */
 public class Webfile {
+
     private String url;         // URL to download/parse
     private int level;          // Level of deepness relative to the starting page
     private FileType type;      // Type of file
-    
-    public enum FileType {      // Available types of files
-        HTML, CSS, JS,
-        PDF, JPG, JPEG,
-        PNG, GIF
-    };
 
     public Webfile() {
     }
