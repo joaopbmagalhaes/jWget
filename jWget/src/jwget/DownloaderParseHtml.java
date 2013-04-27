@@ -42,6 +42,7 @@ public class DownloaderParseHtml extends Downloader {
      */
     @Override
     public void run() {
+
         try {
             try {
                 // Connect to server
