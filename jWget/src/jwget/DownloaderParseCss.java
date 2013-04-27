@@ -52,7 +52,7 @@ public class DownloaderParseCss extends Downloader {
             URL url = new URL(src);
             InputStream in = url.openStream();
             // TODO Check if this call is necessary
-        //    Utils.checkDirTree(this.jConfig.getRoot(), this.jConfig.getFolderPath(), this.wf.getFileName());
+            // Utils.checkDirTree(this.jConfig.getRoot(), this.jConfig.getFolderPath(), this.wf.getFileName());
             OutputStream out = new BufferedOutputStream(new FileOutputStream(this.wf.getFileName()));
 
             for (int b; (b = in.read()) != -1;) {
@@ -69,8 +69,7 @@ public class DownloaderParseCss extends Downloader {
 
              */
         } catch (IOException ex) {
-            Logger.getLogger(Downloader.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

@@ -42,71 +42,68 @@ public class DownloaderParseHtml extends Downloader {
     @Override
     public void run() {
         try {
-            if (!this.jConfig.getControlQueue().contains(wf) // Control for repeated websites
-                    && this.jConfig.isInDomain(wf) // and websites outside the initial domain
-                    && this.jConfig.isInDeepLevel(wf)) {         // and also outside the deep level
-                try {
-                    // Connect to server
-                    Document doc = Jsoup.connect(wf.getUrl()).get();
+            try {
+                // Connect to server
+                Document doc = Jsoup.connect(wf.getUrl()).get();
 
-                    // Parse all elements
-                    for (int i = 0; i < PARSE_TAGS.length; i++) {
-                        Elements links = doc.select(PARSE_TAGS[i]);
-                        String absoluteUrl = "";
-                        String newPathAndFileName = null;
+                // Parse all elements
+                for (int i = 0; i < PARSE_TAGS.length; i++) {
+                    Elements links = doc.select(PARSE_TAGS[i]);
+                    String absoluteUrl = "";
+                    String newPathAndFileName = null;
 
-                        for (Element element : links) {
-                            if (element.hasAttr("href")) {
-                                absoluteUrl = element.absUrl("href");
-                                newPathAndFileName = Utils.getPathAndFileName(this.getConfig().getFolderPath(), this.getConfig().getRoot(), absoluteUrl);
-                                element.attr("href", newPathAndFileName);
+                    for (Element element : links) {
+                        if (element.hasAttr("href")) {
+                            absoluteUrl = element.absUrl("href");
+                            newPathAndFileName = Utils.getPathAndFileName(this.getConfig().getFolderPath(), this.getConfig().getRoot(), absoluteUrl);
+                            element.attr("href", newPathAndFileName);
 
-                            }
-                            if (element.hasAttr("src")) {
-                                absoluteUrl = element.absUrl("src");
-                                newPathAndFileName = Utils.getPathAndFileName(this.getConfig().getFolderPath(), this.getConfig().getRoot(), absoluteUrl);
-                                element.attr("src", newPathAndFileName);
-                            }
+                        }
+                        if (element.hasAttr("src")) {
+                            absoluteUrl = element.absUrl("src");
+                            newPathAndFileName = Utils.getPathAndFileName(this.getConfig().getFolderPath(), this.getConfig().getRoot(), absoluteUrl);
+                            element.attr("src", newPathAndFileName);
+                        }
 
-                            System.out.println("Next URL: " + absoluteUrl);
-                            System.out.println("Next file name: " + newPathAndFileName);
+                        System.out.println("Next URL: " + absoluteUrl);
+                        System.out.println("Next file name: " + newPathAndFileName);
 
-                            // TODO control the level of deepness
+                        // TODO control the level of deepness
 
-                            Downloader newDownloader = FileTypeMap.getFileType(newPathAndFileName);
-                            if (newDownloader != null) {
-                                Webfile newWf = new Webfile(newPathAndFileName, this.jConfig.buildURI(absoluteUrl).toString(), wf.getLevel() + 1);
-                                controlDeepLevel(newWf);
-                                if (!this.jConfig.getControlQueue().contains(newWf)) {
+                        Downloader newDownloader = FileTypeMap.getFileType(newPathAndFileName);
+                        if (newDownloader != null) {
+                            Webfile newWf = new Webfile(newPathAndFileName, this.jConfig.buildURI(absoluteUrl).toString(), wf.getLevel() + 1);
+                            if (!this.jConfig.getControlQueue().contains(newWf) // Control for repeated websites
+                                && this.jConfig.isInDomain(newWf)               // and websites outside the initial domain
+                                && this.jConfig.isInDeepLevel(newWf)) {         // and also outside the deep level                            
                                     this.jConfig.incrementCountLinks();
                                     newDownloader.setConfig(this.jConfig);
                                     newDownloader.setWf(newWf);
                                     this.jConfig.getExecutor().execute(newDownloader);
-                                }
-                            } else {
-                                // TODO Handle null fileType
                             }
+                        } else {
+                            // TODO Handle null fileType
                         }
                     }
-                    // TODO Check if this call is necessary
-                    //  Utils.checkDirTree(this.jConfig.getRoot(), this.jConfig.getFolderPath(), this.wf.getFileName());
-                    // Save the file
-                    FileWriter fstream = new FileWriter(this.wf.getFileName());
-                    PrintWriter out = new PrintWriter(fstream);
-
-                    out.println(doc.toString());
-                    out.close();
-
-                    // Add webfile to the control queue
-                    this.jConfig.getControlQueue().add(wf);
-                    this.jConfig.decrementCountLinks();
-
-                    System.out.println("after run: " + String.valueOf(this.jConfig.getCountLinks()));
-                } catch (MalformedURLException ex) {
-                    Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                // TODO Check if this call is necessary
+                //  Utils.checkDirTree(this.jConfig.getRoot(), this.jConfig.getFolderPath(), this.wf.getFileName());
+                // Save the file
+                FileWriter fstream = new FileWriter(this.wf.getFileName());
+                PrintWriter out = new PrintWriter(fstream);
+
+                out.println(doc.toString());
+                out.close();
+
+                // Add webfile to the control queue
+                this.jConfig.getControlQueue().add(wf);
+                this.jConfig.decrementCountLinks();
+
+                System.out.println("after run: " + String.valueOf(this.jConfig.getCountLinks()));
+            } catch (MalformedURLException ex) {
+                Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
             }
         } catch (URISyntaxException ex) {
             Logger.getLogger(DownloaderParseHtml.class.getName()).log(Level.SEVERE, null, ex);

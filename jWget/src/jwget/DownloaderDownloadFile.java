@@ -42,28 +42,12 @@ public class DownloaderDownloadFile extends Downloader {
 
             System.out.println(this.wf.getFileName());
 
-            //Open a URL Stream
-          /*  URL url = new URL(src);
-             InputStream in = url.openStream();
-
-             OutputStream out = new BufferedOutputStream(new FileOutputStream(this.jConfig.getFolderPath() + name));
-
-             for (int b; (b = in.read()) != -1;) {
-             out.write(b);
-             }
-             out.close();
-             in.close();
-             */
-            // output here
-            // TODO Check if this call is necessary
-            //Utils.checkDirTree(this.jConfig.getRoot(), this.jConfig.getFolderPath(), this.wf.getFileName());
             FileOutputStream out = (new FileOutputStream(new java.io.File(this.wf.getFileName())));
             out.write(resultImageResponse.bodyAsBytes());           // resultImageResponse.body() is where the image's contents are.
 
             out.close();
         } catch (IOException ex) {
-            Logger.getLogger(Downloader.class
-                    .getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
