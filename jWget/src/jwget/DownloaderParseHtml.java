@@ -57,21 +57,22 @@ public class DownloaderParseHtml extends Downloader {
                         if (element.hasAttr("href")) {
                             absoluteUrl = element.absUrl("href");
                             newPathAndFileName = Utils.getPathAndFileName(this.getConfig().getFolderPath(), this.getConfig().getRoot(), absoluteUrl);
-                            if(this.jConfig.getDeepLevel() == this.wf.getLevel()
-                               && PARSE_TAGS[i].equals("a"))
+                            if (this.jConfig.getDeepLevel() == this.wf.getLevel()
+                                    && PARSE_TAGS[i].equals("a")) {
                                 element.attr("href", "");
-                            else
+                            } else {
                                 element.attr("href", newPathAndFileName);
-
+                            }
                         }
                         if (element.hasAttr("src")) {
                             absoluteUrl = element.absUrl("src");
                             newPathAndFileName = Utils.getPathAndFileName(this.getConfig().getFolderPath(), this.getConfig().getRoot(), absoluteUrl);
-                            if(this.jConfig.getDeepLevel() == this.wf.getLevel()
-                               && PARSE_TAGS[i].equals("a"))
+                            if (this.jConfig.getDeepLevel() == this.wf.getLevel()
+                                    && PARSE_TAGS[i].equals("a")) {
                                 element.attr("src", "");
-                            else
+                            } else {
                                 element.attr("src", newPathAndFileName);
+                            }
                         }
 
                         System.out.println("Next URL: " + absoluteUrl);
@@ -81,12 +82,12 @@ public class DownloaderParseHtml extends Downloader {
                         if (newDownloader != null) {
                             Webfile newWf = new Webfile(newPathAndFileName, this.jConfig.buildURI(absoluteUrl).toString(), (this.wf.getLevel() + 1));
                             if (!this.jConfig.getControlQueue().contains(newWf) // Control for repeated websites
-                                && this.jConfig.isInDomain(newWf)               // and websites outside the initial domain
-                                && this.jConfig.isInDeepLevel(newWf)) {         // and also outside the deep level
-                                    this.jConfig.incrementCountLinks();
-                                    newDownloader.setConfig(this.jConfig);
-                                    newDownloader.setWf(newWf);
-                                    this.jConfig.getExecutor().execute(newDownloader);
+                                    && this.jConfig.isInDomain(newWf) // and websites outside the initial domain
+                                    && this.jConfig.isInDeepLevel(newWf)) {         // and also outside the deep level
+                                this.jConfig.incrementCountLinks();
+                                newDownloader.setConfig(this.jConfig);
+                                newDownloader.setWf(newWf);
+                                this.jConfig.getExecutor().execute(newDownloader);
                             }
                         } else {
                             // TODO Handle null fileType
@@ -97,9 +98,9 @@ public class DownloaderParseHtml extends Downloader {
                 //  Utils.checkDirTree(this.jConfig.getRoot(), this.jConfig.getFolderPath(), this.wf.getFileName());
                 // Save the file
                 FileWriter fstream = new FileWriter(this.wf.getFileName());
-                PrintWriter out = new PrintWriter(fstream);
-                out.println(doc.toString());
-                out.close();
+                try (PrintWriter out = new PrintWriter(fstream)) {
+                    out.println(doc.toString());
+                }
 
                 // Add webfile to the control queue
                 this.jConfig.getControlQueue().add(wf);

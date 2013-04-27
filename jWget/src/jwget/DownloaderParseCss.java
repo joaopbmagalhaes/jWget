@@ -50,24 +50,14 @@ public class DownloaderParseCss extends Downloader {
 
             //Open a URL Stream
             URL url = new URL(src);
-            InputStream in = url.openStream();
-            // TODO Check if this call is necessary
-            // Utils.checkDirTree(this.jConfig.getRoot(), this.jConfig.getFolderPath(), this.wf.getFileName());
-            OutputStream out = new BufferedOutputStream(new FileOutputStream(this.wf.getFileName()));
+            try (InputStream in = url.openStream()) {
+                OutputStream out = new BufferedOutputStream(new FileOutputStream(this.wf.getFileName()));
 
-            for (int b; (b = in.read()) != -1;) {
-                out.write(b);
+                for (int b; (b = in.read()) != -1;) {
+                    out.write(b);
+                }
+                out.close();
             }
-            out.close();
-            in.close();
-            /*
-             // output here
-             FileOutputStream out = (new FileOutputStream(new java.io.File(this.jConfig.getFolderPath() + "\\" + name)));
-             out.write(resultImageResponse.bodyAsBytes());           // resultImageResponse.body() is where the image's contents are.
-
-             out.close();
-
-             */
         } catch (IOException ex) {
             Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
         }

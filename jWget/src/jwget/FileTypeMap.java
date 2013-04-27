@@ -16,8 +16,8 @@ import java.util.logging.Logger;
  */
 public class FileTypeMap {
     private static FileTypeMap instance;
-    private static Map<String, Class> fileClassType = new HashMap<String, Class>(); // Available types of files
-    private static Map<String, String[]> fileGenreType = new HashMap<String, String[]>(); // Available types of files
+    private static Map<String, Class> fileClassType = new HashMap<>(); // Available types of files
+    private static Map<String, String[]> fileGenreType = new HashMap<>(); // Available types of files
 
     private static FileTypeMap getInstance() {
         if (instance == null) {

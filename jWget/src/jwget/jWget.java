@@ -58,10 +58,9 @@ public class jWget {
         try {
             // Create file
             FileWriter fstream = new FileWriter("history.csv", true);
-            PrintWriter out = new PrintWriter(fstream);
-            out.println(this.jConfig.getDateTime() + ";" + this.jConfig.getDomain() + ";" + this.jConfig.getFolderPath() + ";" + this.jConfig.getDeepLevel());
-            //Close the output stream
-            out.close();
+            try (PrintWriter out = new PrintWriter(fstream)) {
+                out.println(this.jConfig.getDateTime() + ";" + this.jConfig.getDomain() + ";" + this.jConfig.getFolderPath() + ";" + this.jConfig.getDeepLevel());
+            }
         } catch (Exception e) { //Catch exception if any
             System.err.println("Error: " + e.getMessage());
         }
