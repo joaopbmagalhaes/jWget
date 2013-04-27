@@ -29,8 +29,8 @@ public class Index extends javax.swing.JFrame {
     public Index() {
         // Center window
         Dimension screenSize = new Dimension(Toolkit.getDefaultToolkit().getScreenSize());
-        int wdwLeft = screenSize.width / 2 - 420;
-        int wdwTop = screenSize.height / 2 - 170;
+        int wdwLeft = screenSize.width / 2 - 350;
+        int wdwTop = screenSize.height / 2 - 240;
         pack();
         setLocation(wdwLeft, wdwTop);
 
@@ -39,6 +39,10 @@ public class Index extends javax.swing.JFrame {
 
         // Initializes the folder path to the users home directory
         txtFolderPath.setText(System.getProperty("user.home"));
+        
+        // Hide pause and resume buttons
+        btnPause.setVisible(false);
+        btnResume.setVisible(false);
     }
 
     /**
@@ -53,22 +57,36 @@ public class Index extends javax.swing.JFrame {
         btnDownload = new javax.swing.JButton();
         lblUrl = new javax.swing.JLabel();
         txtUrl = new javax.swing.JTextField();
-        cbDeepness = new javax.swing.JComboBox();
+        lbDeepness = new javax.swing.JComboBox();
         lblDeepness = new javax.swing.JLabel();
         btnHistory = new javax.swing.JButton();
         lblFolderPath = new javax.swing.JLabel();
         txtFolderPath = new javax.swing.JTextField();
         cbImages = new javax.swing.JCheckBox();
-        lblDownloads = new javax.swing.JLabel();
+        lblDownloadImages = new javax.swing.JLabel();
         cbCss = new javax.swing.JCheckBox();
         cbJavascript = new javax.swing.JCheckBox();
         cbVideos = new javax.swing.JCheckBox();
         btnChooseFolder = new javax.swing.JButton();
         btnPaste = new javax.swing.JButton();
+        cbAll = new javax.swing.JCheckBox();
+        txtImg = new javax.swing.JTextField();
+        lblDownloadRes = new javax.swing.JLabel();
+        lblDownloadVideos = new javax.swing.JLabel();
+        lblDownloadOther = new javax.swing.JLabel();
+        txtVideos = new javax.swing.JTextField();
+        txtOther = new javax.swing.JTextField();
+        cbOther = new javax.swing.JCheckBox();
+        txtAudio = new javax.swing.JTextField();
+        cbAudio = new javax.swing.JCheckBox();
+        lblDownloadAudio = new javax.swing.JLabel();
+        btnPause = new javax.swing.JButton();
+        btnResume = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Simple wget");
-        setPreferredSize(new java.awt.Dimension(840, 340));
+        setMaximumSize(new java.awt.Dimension(700, 470));
+        setPreferredSize(new java.awt.Dimension(700, 480));
         setResizable(false);
 
         btnDownload.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
@@ -86,8 +104,8 @@ public class Index extends javax.swing.JFrame {
 
         txtUrl.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
-        cbDeepness.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        cbDeepness.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
+        lbDeepness.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lbDeepness.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" }));
 
         lblDeepness.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblDeepness.setText("Levels deep");
@@ -109,16 +127,26 @@ public class Index extends javax.swing.JFrame {
         txtFolderPath.setBackground(new java.awt.Color(255, 255, 255));
         txtFolderPath.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
-        cbImages.setText("Images");
+        cbImages.setText("All");
+        cbImages.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbImagesActionPerformed(evt);
+            }
+        });
 
-        lblDownloads.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
-        lblDownloads.setText("Download files");
+        lblDownloadImages.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblDownloadImages.setText("Download images");
 
         cbCss.setText("Stylesheets");
 
         cbJavascript.setText("Javascript");
 
-        cbVideos.setText("Videos");
+        cbVideos.setText("All");
+        cbVideos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbVideosActionPerformed(evt);
+            }
+        });
 
         btnChooseFolder.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         btnChooseFolder.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jwget/img/folder.png"))); // NOI18N
@@ -142,82 +170,177 @@ public class Index extends javax.swing.JFrame {
             }
         });
 
+        cbAll.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        cbAll.setText("Download all file types");
+        cbAll.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbAllActionPerformed(evt);
+            }
+        });
+
+        lblDownloadRes.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblDownloadRes.setText("Download resources");
+
+        lblDownloadVideos.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblDownloadVideos.setText("Download videos");
+
+        lblDownloadOther.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblDownloadOther.setText("Download other");
+
+        cbOther.setText("All");
+        cbOther.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbOtherActionPerformed(evt);
+            }
+        });
+
+        cbAudio.setText("All");
+        cbAudio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbAudioActionPerformed(evt);
+            }
+        });
+
+        lblDownloadAudio.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        lblDownloadAudio.setText("Download audio");
+
+        btnPause.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        btnPause.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jwget/img/pause.png"))); // NOI18N
+        btnPause.setText("Pause");
+        btnPause.setPreferredSize(new java.awt.Dimension(173, 43));
+        btnPause.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPauseActionPerformed(evt);
+            }
+        });
+
+        btnResume.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        btnResume.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jwget/img/play.png"))); // NOI18N
+        btnResume.setText("Resume");
+        btnResume.setPreferredSize(new java.awt.Dimension(173, 43));
+        btnResume.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnResumeActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(49, 49, 49)
+                .addGap(11, 11, 11)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblDownloadOther)
+                    .addComponent(lblDownloadVideos)
+                    .addComponent(lblDownloadRes)
                     .addComponent(lblUrl)
-                    .addComponent(lblDownloads)
                     .addComponent(lblFolderPath)
-                    .addComponent(lblDeepness))
+                    .addComponent(lblDeepness)
+                    .addComponent(lblDownloadAudio)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblDownloadImages)
+                        .addGap(62, 62, 62)))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cbDeepness, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtUrl)
+                            .addComponent(txtFolderPath))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnChooseFolder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnPaste, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(84, 84, 84))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cbAll)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(cbJavascript)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(cbCss, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtUrl)
-                                    .addComponent(txtFolderPath))
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addComponent(txtVideos, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                                        .addComponent(txtImg, javax.swing.GroupLayout.Alignment.LEADING))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(btnPause, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btnResume, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(btnDownload, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(18, 18, 18)
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(cbImages)
+                                            .addComponent(cbVideos, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btnHistory, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(lbDeepness, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(txtAudio, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                                    .addComponent(txtOther, javax.swing.GroupLayout.Alignment.LEADING))
                                 .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(btnChooseFolder, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btnPaste, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                        .addGap(297, 297, 297))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(btnDownload, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(cbImages, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(cbVideos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(cbCss, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(cbJavascript, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(644, 644, 644))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(35, 35, 35)
-                                .addComponent(btnHistory, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cbOther)
+                                    .addComponent(cbAudio))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnPaste, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtUrl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(lblUrl)))
-                .addGap(24, 24, 24)
+                .addGap(13, 13, 13)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtUrl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblUrl)
+                    .addComponent(btnPaste, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(34, 34, 34)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblFolderPath)
                     .addComponent(txtFolderPath, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnChooseFolder))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cbImages)
-                    .addComponent(cbVideos)
-                    .addComponent(cbCss)
+                    .addComponent(lbDeepness, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblDeepness))
+                .addGap(18, 18, 18)
+                .addComponent(cbAll)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cbJavascript)
-                    .addComponent(lblDownloads))
+                    .addComponent(cbCss)
+                    .addComponent(lblDownloadRes, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE))
+                .addGap(19, 19, 19)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblDownloadImages, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtImg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbImages))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblDownloadVideos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtVideos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbVideos))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtAudio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbAudio)
+                    .addComponent(lblDownloadAudio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblDownloadOther, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+                    .addComponent(txtOther, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbOther))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cbDeepness, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblDeepness))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 110, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnDownload, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnHistory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                    .addComponent(btnHistory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnPause, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnResume, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20))
         );
 
         lblUrl.getAccessibleContext().setAccessibleDescription("");
@@ -231,23 +354,29 @@ public class Index extends javax.swing.JFrame {
      * @param evt
      */
     private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
-        if (!txtUrl.getText().isEmpty()) {
-            // Get user input
-            String folderPath = txtFolderPath.getText();
-            boolean dlImages = cbImages.isSelected();
-            boolean dlVideos = cbImages.isSelected();
-            boolean dlCss = cbImages.isSelected();
-            boolean dlJs = cbImages.isSelected();
-            int deepLevel = Integer.parseInt(cbDeepness.getSelectedItem().toString());
+        if(false) {
+            
+        } else {
+            btnDownload.setVisible(false);
+            btnPause.setVisible(true);
+            if (!txtUrl.getText().isEmpty()) {
+                // Get user input
+                String folderPath = txtFolderPath.getText();
+                boolean dlImages = cbImages.isSelected();
+                boolean dlVideos = cbImages.isSelected();
+                boolean dlCss = cbImages.isSelected();
+                boolean dlJs = cbImages.isSelected();
+                int deepLevel = Integer.parseInt(lbDeepness.getSelectedItem().toString());
 
-            try {
-                // Create new config file
-                Config config = new Config(txtUrl.getText(), txtUrl.getText(), folderPath, dlImages, dlVideos, dlCss, dlJs, deepLevel, folderPath);
-                // Start downloading
-                jWget main = new jWget(config);
-                main.execute();
-            } catch (URISyntaxException ex) {
-                Logger.getLogger(Index.class.getName()).log(Level.SEVERE, null, ex);
+                try {
+                    // Create new config file
+                    Config config = new Config(txtUrl.getText(), txtUrl.getText(), folderPath, dlImages, dlVideos, dlCss, dlJs, deepLevel, folderPath);
+                    // Start downloading
+                    jWget main = new jWget(config);
+                    main.execute();
+                } catch (URISyntaxException ex) {
+                    Logger.getLogger(Index.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
     }//GEN-LAST:event_btnDownloadActionPerformed
@@ -273,6 +402,54 @@ public class Index extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnPasteActionPerformed
 
+    private void cbImagesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbImagesActionPerformed
+        // Disable images textbox
+        txtImg.setEnabled(!cbImages.isSelected());
+    }//GEN-LAST:event_cbImagesActionPerformed
+
+    private void cbVideosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbVideosActionPerformed
+        // Disable videos textbox
+        txtVideos.setEnabled(!cbVideos.isSelected());
+    }//GEN-LAST:event_cbVideosActionPerformed
+
+    private void cbOtherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbOtherActionPerformed
+        // Disable audio textbox
+        txtOther.setEnabled(!cbOther.isSelected());
+    }//GEN-LAST:event_cbOtherActionPerformed
+
+    private void cbAudioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbAudioActionPerformed
+        // Disable audio textbox
+        txtAudio.setEnabled(!cbAudio.isSelected());
+    }//GEN-LAST:event_cbAudioActionPerformed
+
+    private void cbAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbAllActionPerformed
+        boolean state = !cbAll.isSelected();
+        
+        // Disable all checkboxes
+        cbAudio.setEnabled(state);
+        cbCss.setEnabled(state);
+        cbImages.setEnabled(state);
+        cbJavascript.setEnabled(state);
+        cbOther.setEnabled(state);
+        cbVideos.setEnabled(state);
+        
+        // Disable all text boxes
+        txtAudio.setEnabled(state);
+        txtImg.setEnabled(state);
+        txtOther.setEnabled(state);
+        txtVideos.setEnabled(state);
+    }//GEN-LAST:event_cbAllActionPerformed
+
+    private void btnPauseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPauseActionPerformed
+        btnPause.setVisible(false);
+        btnResume.setVisible(true);
+    }//GEN-LAST:event_btnPauseActionPerformed
+
+    private void btnResumeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResumeActionPerformed
+        btnPause.setVisible(true);
+        btnResume.setVisible(false);
+    }//GEN-LAST:event_btnResumeActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -296,16 +473,29 @@ public class Index extends javax.swing.JFrame {
     private javax.swing.JButton btnDownload;
     private javax.swing.JButton btnHistory;
     private javax.swing.JButton btnPaste;
+    private javax.swing.JButton btnPause;
+    private javax.swing.JButton btnResume;
+    private javax.swing.JCheckBox cbAll;
+    private javax.swing.JCheckBox cbAudio;
     private javax.swing.JCheckBox cbCss;
-    private javax.swing.JComboBox cbDeepness;
     private javax.swing.JCheckBox cbImages;
     private javax.swing.JCheckBox cbJavascript;
+    private javax.swing.JCheckBox cbOther;
     private javax.swing.JCheckBox cbVideos;
+    private javax.swing.JComboBox lbDeepness;
     private javax.swing.JLabel lblDeepness;
-    private javax.swing.JLabel lblDownloads;
+    private javax.swing.JLabel lblDownloadAudio;
+    private javax.swing.JLabel lblDownloadImages;
+    private javax.swing.JLabel lblDownloadOther;
+    private javax.swing.JLabel lblDownloadRes;
+    private javax.swing.JLabel lblDownloadVideos;
     private javax.swing.JLabel lblFolderPath;
     private javax.swing.JLabel lblUrl;
+    private javax.swing.JTextField txtAudio;
     private javax.swing.JTextField txtFolderPath;
+    private javax.swing.JTextField txtImg;
+    private javax.swing.JTextField txtOther;
     private javax.swing.JTextField txtUrl;
+    private javax.swing.JTextField txtVideos;
     // End of variables declaration//GEN-END:variables
 }
