@@ -148,7 +148,7 @@ public class Config {
         this.controlQueue = controlQueue;
     }
 
-    public ExecutorService getExecutor() {
+    public PausableThreadPoolExecutor getExecutor() {
         return executor;
     }
 
