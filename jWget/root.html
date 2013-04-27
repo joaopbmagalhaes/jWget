@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
  <head> 
-  <title>IANA — Domain Name Services</title> 
+  <title>IANA — Root Zone Management</title> 
   <meta charset="utf-8" /> 
   <meta http-equiv="Content-type" content="text/html; charset=utf-8" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1" /> 
@@ -29,14 +29,32 @@
   </header> 
   <div id="body"> 
    <div id="main_right"> 
-    <h1>Domain Name Services</h1> 
-    <p>IANA is responsible for the operation and maintenance of a number of key aspects of the DNS, including the root zone, and the <span class="domain">.int</span> and <span class="domain">.arpa</span> domains.</p> 
-    <p><a href="root.html">The DNS Root Zone</a> <br />IANA is the global coordinator of the DNS root. The root is the upper-most part of the DNS hierarchy, and involves delegating administrative responsibility of “top-level domains”, which are the last segment of a domain name, such as <span class="domain">.com</span>, <span class="domain">.uk</span> and <span class="domain">.nz</span>. Part of this task includes evaluating requests to change the operators of country code domains, as well as day-to-day maintenance of the details of the existing operators.</p> 
-    <p><a href="int.html">.INT</a><br /> IANA operates the <span class="domain">.int</span> top-level domain, designed for the sole use of cross-national organisations, such as treaty organisations, that do not naturally fit into a specific country’s top-level domain. For example, <span class="domain">who.int</span> for the World Health Organisation.</p> 
-    <p><a href="arpa.html">.ARPA</a><br /> The <span class="domain">.arpa</span> domain is used internally by Internet protocols, such as for reverse mapping of IP addresses, and delivery of ENUM phone number mapping. IANA administers this domain in close liaison with the Internet Architecture Board, which has policy responsibility for <span class="domain">.arpa</span>.</p> 
-    <p><a href="idn-tables.html">IDN Practices Repository</a><br /> To help foster the deployment of Internationalised Domain Names (IDNs), IANA provides a repository of “IDN tables” which document the permissable characters for different languages and scripts provided for registration by different top-level domain registries. The repository is informative, and designed for information sharing.</p> 
-    <p><a href="dnssec.html">Root Key Signing Key</a><br /> The Root Key Signing Key is managed by ICANN to provide for verification of the DNSSEC-signed root zone.</p> 
-    <p><a href="special.html">Special Purpose Domains</a><br /> A number of special domains are reserved or managed for demonstration purposes, or for future use.</p> 
+    <h1>Root Zone Management</h1> 
+    <p>IANA is responsible for management of the DNS root zone. This role means assigning the operators of top-level domains, such as <span class="domain">.uk</span> and <span class="domain">.com</span>, and maintaining their technical and administrative details.</p> 
+    <h2>Browse</h2> IANA's Root Zone Database contains the authoritative record of the operators of various top-level domains. 
+    <ul> 
+     <li><a href=".html">Root Zone Database</a></li> 
+    </ul> 
+    <h2>Maintain</h2> 
+    <p>TLD operators can change their delegation details by submitting revised details using our online interface, or via the email template.</p> 
+    <ul> 
+     <li><a href="manage.html">Root zone change requests</a></li> 
+    </ul> 
+    <h2>Policy, Procedures and Guides</h2> 
+    <ul> 
+     <li><a href="rfc1591.html">Domain Name System Structure and Delegation</a> (RFC 1591, March 1994)</li> 
+     <li><a href="icp-1.htm">Internet Domain Name System Structure and Delegation</a> (ICP-1, May 1999)</li> 
+     <li><a href="procedures.html">Other procedures and guides...</a></li> 
+    </ul> 
+    <h2>DNSSEC Key Signing Key Information</h2> 
+    <p>Information regarding our role as operator of the Key Signing Key for the DNS Root Zone.</p> 
+    <ul> 
+     <li><a href=".html">Root Zone DNSSEC Trust Anchors</a></li> 
+     <li><a href=".html">KSK Ceremony Materials</a></li> 
+     <li><a href="icann-dps.txt">DNSSEC Practice Statement for the Root Zone KSK Operator</a></li> 
+     <li><a href="systrust.html">SysTrust Certification</a></li> 
+     <li><a href="root-dnssec-announce.html">Public Announcement Mailing List regarding KSK activity</a></li> 
+    </ul> 
    </div> 
    <div id="sidebar_left"> 
     <div class="navigation_box"> 
@@ -136,8 +154,8 @@
   </footer> 
   <script>
 $(document).ready(function() {
-	$("#nav_dom_top").addClass("selected")
-	$("#nav_dom_root_sub").hide()
+	$("#nav_dom_root").addClass("selected")
+	$("#nav_dom_root_top").addClass("selected")
 	$("#nav_dom_int_sub").hide()
 	$("#nav_dom_idn_sub").hide()
 	$("#nav_dom_dnssec_sub").hide()

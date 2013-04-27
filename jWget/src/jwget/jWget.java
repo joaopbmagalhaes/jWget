@@ -18,6 +18,7 @@ import jwget.FileTypeMap.FileType;
  * @author Joao
  */
 public class jWget {
+
     private Config jConfig;         // Configuration file
 
     public jWget() {
@@ -45,12 +46,12 @@ public class jWget {
     public void setConfig(Config config) {
         this.jConfig = config;
     }
+
     /**
      *
      * GETTERS AND SETTERS - END
      *
      */
-
     /**
      * Updates the history file
      */
@@ -100,24 +101,33 @@ public class jWget {
         updateHistory();
 
         // Create the first webfile to download and add to queue
-        Webfile wf = new Webfile(this.jConfig.getFolderPath() + "\\" + Utils.extractFileName(this.jConfig.getRoot(), this.jConfig.getRoot()),this.jConfig.getRoot(), 0, FileType.HTML);
+        String fullPathAndFileName = Utils.getPathAndFileName(this.jConfig.getFolderPath(), this.jConfig.getRoot(), this.jConfig.getRoot());
 
-        // Start counting downloaded links
-        int t = this.jConfig.getCountLinks();
-        this.jConfig.incrementCountLinks();
 
-        // Begin the downloads
-        Downloader d = new Downloader(this.jConfig, wf);
-        this.jConfig.getExecutor().execute(d);
+        if (fullPathAndFileName != null) {
+            Webfile wf = new Webfile(fullPathAndFileName, this.jConfig.getRoot(), 0, FileType.HTML);
 
-        System.out.println("initial: " + String.valueOf(this.jConfig.getCountLinks()));
-        while (this.jConfig.getCountLinks() > 0) {
-            //     System.out.println("loop: " + this.jConfig.getCountLinks());
+            // Start counting downloaded links
+            int t = this.jConfig.getCountLinks();
+            this.jConfig.incrementCountLinks();
+
+            // Begin the downloads
+            Downloader d = new DownloaderParseHtml(this.jConfig, wf);
+            this.jConfig.getExecutor().execute(d);
+
+            System.out.println("initial: " + String.valueOf(this.jConfig.getCountLinks()));
+            while (this.jConfig.getCountLinks() > 0) {
+                //     System.out.println("loop: " + this.jConfig.getCountLinks());
+            }
+            this.jConfig.getExecutor().shutdown();
+            try {
+                this.jConfig.getExecutor().awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
+            } catch (InterruptedException e) {
+            }
+
+        } else {
+            // TODO Handle fileName == null
         }
-        this.jConfig.getExecutor().shutdown();
-        try {
-            this.jConfig.getExecutor().awaitTermination(Long.MAX_VALUE, TimeUnit.NANOSECONDS);
-        } catch (InterruptedException e) {
-        }
+
     }
 }

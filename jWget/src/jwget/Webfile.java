@@ -11,6 +11,7 @@ import jwget.FileTypeMap.FileType;
  * @author Joao
  */
 public class Webfile {
+
     private String fileName;    // Name of the file to save
     private String url;         // URL to download/parse
     private int level;          // Level of deepness relative to the starting page
@@ -21,11 +22,11 @@ public class Webfile {
 
     /**
      * Class constructor
-     * 
+     *
      * @param fileName
      * @param url
      * @param level
-     * @param type 
+     * @param type
      */
     public Webfile(String fileName, String url, int level, FileType type) {
         this.fileName = fileName;
@@ -35,10 +36,25 @@ public class Webfile {
     }
 
     /**
+     * Class constructor
+     *
+     * @param fileName
+     * @param url
+     * @param level
+     *
+     */
+    public Webfile(String fileName, String url, int level) {
+        this.fileName = fileName;
+        this.url = url;
+        this.level = level;
+
+    }
+
+    /**
      *
      * GETTERS AND SETTERS - BEGIN
      *
-     */    
+     */
     public String getFileName() {
         return fileName;
     }

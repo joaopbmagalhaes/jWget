@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
  <head> 
-  <title>IANA — Domain Name Services</title> 
+  <title>IANA — .ARPA Zone Database</title> 
   <meta charset="utf-8" /> 
   <meta http-equiv="Content-type" content="text/html; charset=utf-8" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1" /> 
@@ -10,6 +10,13 @@
   <link rel="shortcut icon" type="image/ico" href="bookmark_icon.ico" /> 
   <script type="text/javascript" src="jquery.js"></script> 
   <script type="text/javascript" src="iana.js"></script> 
+  <script>
+window.onload = function() {
+	unsharpenDiv("iana-table-frame", 6);
+	insertNavigationHelper("iana-tld-nav", ["alpha", "tldtype", "search"]);
+	makeHoverTable("tld-table");
+}
+</script> 
  </head> 
  <body> 
   <header> 
@@ -29,14 +36,58 @@
   </header> 
   <div id="body"> 
    <div id="main_right"> 
-    <h1>Domain Name Services</h1> 
-    <p>IANA is responsible for the operation and maintenance of a number of key aspects of the DNS, including the root zone, and the <span class="domain">.int</span> and <span class="domain">.arpa</span> domains.</p> 
-    <p><a href="root.html">The DNS Root Zone</a> <br />IANA is the global coordinator of the DNS root. The root is the upper-most part of the DNS hierarchy, and involves delegating administrative responsibility of “top-level domains”, which are the last segment of a domain name, such as <span class="domain">.com</span>, <span class="domain">.uk</span> and <span class="domain">.nz</span>. Part of this task includes evaluating requests to change the operators of country code domains, as well as day-to-day maintenance of the details of the existing operators.</p> 
-    <p><a href="int.html">.INT</a><br /> IANA operates the <span class="domain">.int</span> top-level domain, designed for the sole use of cross-national organisations, such as treaty organisations, that do not naturally fit into a specific country’s top-level domain. For example, <span class="domain">who.int</span> for the World Health Organisation.</p> 
-    <p><a href="arpa.html">.ARPA</a><br /> The <span class="domain">.arpa</span> domain is used internally by Internet protocols, such as for reverse mapping of IP addresses, and delivery of ENUM phone number mapping. IANA administers this domain in close liaison with the Internet Architecture Board, which has policy responsibility for <span class="domain">.arpa</span>.</p> 
-    <p><a href="idn-tables.html">IDN Practices Repository</a><br /> To help foster the deployment of Internationalised Domain Names (IDNs), IANA provides a repository of “IDN tables” which document the permissable characters for different languages and scripts provided for registration by different top-level domain registries. The repository is informative, and designed for information sharing.</p> 
-    <p><a href="dnssec.html">Root Key Signing Key</a><br /> The Root Key Signing Key is managed by ICANN to provide for verification of the DNSSEC-signed root zone.</p> 
-    <p><a href="special.html">Special Purpose Domains</a><br /> A number of special domains are reserved or managed for demonstration purposes, or for future use.</p> 
+    <h1>.ARPA Zone Management</h1> 
+    <p>The .arpa domain is the “Address and Routing Parameter Area” domain and is designated to be used exclusively for Internet-infrastructure purposes. It is administered by the IANA in cooperation with the Internet technical community under the guidance of the Internet Architecture Board. For the management guidelines and operational requirements of the .arpa domain, see <a href="rfc3172.html">RFC 3172</a>. The .arpa domain currently includes the following second-level domains:</p> 
+    <div class="iana-table-frame"> 
+     <table id="arpa-table" class="iana-table"> 
+      <thead> 
+       <tr> 
+        <th>Domain / Usage</th> 
+        <th>Normative Reference</th> 
+       </tr> 
+      </thead> 
+      <tbody> 
+       <tr> 
+        <td><span class="domain label">arpa</span> Reserved exclusively to support operationally-critical infrastructural identifier spaces as advised by the Internet Architecture Board</td> 
+        <td><a href="rfc3172.html">RFC 3172</a></td> 
+       </tr> 
+       <tr> 
+        <td><span class="domain label">e164.arpa</span> For mapping E.164 numbers to Internet URIs</td> 
+        <td><a href="rfc3761.html">RFC 3761</a></td> 
+       </tr> 
+       <tr> 
+        <td><span class="domain label">in-addr-servers.arpa</span> For hosting authoritative name servers for the in-addr.arpa domain</td> 
+        <td><a href="rfc5855.html">RFC 5855</a></td> 
+       </tr> 
+       <tr> 
+        <td><span class="domain label">in-addr.arpa</span> For mapping IPv4 addresses to Internet domain names</td> 
+        <td><a href="rfc1035.html">RFC 1035</a></td> 
+       </tr> 
+       <tr> 
+        <td><span class="domain label">ip6-servers.arpa</span> For hosting authoritative name servers for the ip6.arpa domain</td> 
+        <td><a href="rfc5855.html">RFC 5855</a></td> 
+       </tr> 
+       <tr> 
+        <td><span class="domain label">ip6.arpa</span> For mapping IPv6 addresses to Internet domain names</td> 
+        <td><a href="rfc3152.html">RFC 3152</a></td> 
+       </tr> 
+       <tr> 
+        <td><span class="domain label">iris.arpa</span> For locating Internet Registry Information Services</td> 
+        <td><a href="rfc4698.html">RFC 4698</a></td> 
+       </tr> 
+       <tr> 
+        <td><span class="domain label">uri.arpa</span> For resolving Uniform Resource Identifiers according to the Dynamic Delegation Discovery System</td> 
+        <td><a href="rfc3405.html">RFC 3405</a></td> 
+       </tr> 
+       <tr> 
+        <td><span class="domain label">urn.arpa</span> For resolving Uniform Resource Names according to the Dynamic Delegation Discovery System</td> 
+        <td><a href="rfc3405.html">RFC 3405</a></td> 
+       </tr> 
+      </tbody> 
+     </table> 
+    </div> 
+    <h2>Maintain</h2> 
+    <p>Changes to the .arpa zone must be <a href="contact.html">coordinated manually with IANA.</a>.</p> 
    </div> 
    <div id="sidebar_left"> 
     <div class="navigation_box"> 
@@ -136,13 +187,12 @@
   </footer> 
   <script>
 $(document).ready(function() {
-	$("#nav_dom_top").addClass("selected")
+	$("#nav_dom_idn_sub").hide()
 	$("#nav_dom_root_sub").hide()
 	$("#nav_dom_int_sub").hide()
-	$("#nav_dom_idn_sub").hide()
 	$("#nav_dom_dnssec_sub").hide()
 	$("#nav_dom_tools_sub").hide()
-	
+	$("#nav_dom_arpa").addClass("selected")
 });
 </script>   
  </body>

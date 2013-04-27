@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
  <head> 
-  <title>IANA — Domain Name Services</title> 
+  <title>IANA — Special Use Domains</title> 
   <meta charset="utf-8" /> 
   <meta http-equiv="Content-type" content="text/html; charset=utf-8" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1" /> 
@@ -29,14 +29,95 @@
   </header> 
   <div id="body"> 
    <div id="main_right"> 
-    <h1>Domain Name Services</h1> 
-    <p>IANA is responsible for the operation and maintenance of a number of key aspects of the DNS, including the root zone, and the <span class="domain">.int</span> and <span class="domain">.arpa</span> domains.</p> 
-    <p><a href="root.html">The DNS Root Zone</a> <br />IANA is the global coordinator of the DNS root. The root is the upper-most part of the DNS hierarchy, and involves delegating administrative responsibility of “top-level domains”, which are the last segment of a domain name, such as <span class="domain">.com</span>, <span class="domain">.uk</span> and <span class="domain">.nz</span>. Part of this task includes evaluating requests to change the operators of country code domains, as well as day-to-day maintenance of the details of the existing operators.</p> 
-    <p><a href="int.html">.INT</a><br /> IANA operates the <span class="domain">.int</span> top-level domain, designed for the sole use of cross-national organisations, such as treaty organisations, that do not naturally fit into a specific country’s top-level domain. For example, <span class="domain">who.int</span> for the World Health Organisation.</p> 
-    <p><a href="arpa.html">.ARPA</a><br /> The <span class="domain">.arpa</span> domain is used internally by Internet protocols, such as for reverse mapping of IP addresses, and delivery of ENUM phone number mapping. IANA administers this domain in close liaison with the Internet Architecture Board, which has policy responsibility for <span class="domain">.arpa</span>.</p> 
-    <p><a href="idn-tables.html">IDN Practices Repository</a><br /> To help foster the deployment of Internationalised Domain Names (IDNs), IANA provides a repository of “IDN tables” which document the permissable characters for different languages and scripts provided for registration by different top-level domain registries. The repository is informative, and designed for information sharing.</p> 
-    <p><a href="dnssec.html">Root Key Signing Key</a><br /> The Root Key Signing Key is managed by ICANN to provide for verification of the DNSSEC-signed root zone.</p> 
-    <p><a href="special.html">Special Purpose Domains</a><br /> A number of special domains are reserved or managed for demonstration purposes, or for future use.</p> 
+    <h1>Special Use Domains</h1> 
+    <p>Certain domains are set aside, and nominally registered to “IANA”, for specific policy or technical purposes.</p> 
+    <h2>Example domains</h2> 
+    <p>As described in <a href="rfc2606.html">RFC 2606</a>, we maintain a number of domains such as EXAMPLE.COM and EXAMPLE.ORG for documentation purposes. These domains may be used as illustrative examples in documents without prior coordination with us. They are not available for registration.</p> 
+    <h2>Test IDN top-level domains</h2> 
+    <p>These domains have been temporarily delegated by IANA for the <a href=".html">IDN Evaluation</a> being conducted by <a href=".html">ICANN</a>.</p> 
+    <div class="iana-table-frame"> 
+     <table id="arpa-table" class="iana-table"> 
+      <thead> 
+       <tr>
+        <th>Domain</th>
+        <th>Domain (A-label)</th>
+        <th>Language</th>
+        <th>Script</th>
+       </tr> 
+      </thead> 
+      <tbody> 
+       <tr>
+        <td>إختبار</td>
+        <td><span class="domain label"><a href="xn--kgbechtv.html">XN--KGBECHTV</a></span></td> 
+        <td>Arabic</td>
+        <td>Arabic</td>
+       </tr> 
+       <tr>
+        <td>آزمایشی</td>
+        <td><span class="domain label"><a href="xn--hgbk6aj7f53bba.html">XN--HGBK6AJ7F53BBA</a></span></td> 
+        <td>Persian</td>
+        <td>Arabic</td>
+       </tr> 
+       <tr>
+        <td>测试</td>
+        <td><span class="domain label"><a href="xn--0zwm56d.html">XN--0ZWM56D</a></span></td> 
+        <td>Chinese</td>
+        <td>Han (Simplified variant)</td>
+       </tr> 
+       <tr>
+        <td>測試</td>
+        <td><span class="domain label"><a href="xn--g6w251d.html">XN--G6W251D</a></span></td> 
+        <td>Chinese</td>
+        <td>Han (Traditional variant)</td>
+       </tr> 
+       <tr>
+        <td>испытание</td>
+        <td><span class="domain label"><a href="xn--80akhbyknj4f.html">XN--80AKHBYKNJ4F</a></span></td> 
+        <td>Russian</td>
+        <td>Cyrillic</td>
+       </tr> 
+       <tr>
+        <td>परीक्षा</td>
+        <td><span class="domain label"><a href="xn--11b5bs3a9aj6g.html">XN--11B5BS3A9AJ6G</a></span></td> 
+        <td>Hindi</td>
+        <td>Devanagari (Nagari)</td>
+       </tr> 
+       <tr>
+        <td>δοκιμή</td>
+        <td><span class="domain label"><a href="xn--jxalpdlp.html">XN--JXALPDLP</a></span></td> 
+        <td>Greek, Modern (1453-)</td>
+        <td>Greek</td>
+       </tr> 
+       <tr>
+        <td>테스트</td>
+        <td><span class="domain label"><a href="xn--9t4b11yi5a.html">XN--9T4B11YI5A</a></span></td> 
+        <td>Korean</td>
+        <td>Hangul (Hangŭl, Hangeul)</td>
+       </tr> 
+       <tr>
+        <td>טעסט</td>
+        <td><span class="domain label"><a href="xn--deba0ad.html">XN--DEBA0AD</a></span></td> 
+        <td>Yiddish</td>
+        <td>Hebrew</td>
+       </tr> 
+       <tr>
+        <td>テスト</td>
+        <td><span class="domain label"><a href="xn--zckzah.html">XN--ZCKZAH</a></span></td> 
+        <td>Japanese</td>
+        <td>Katakana</td>
+       </tr> 
+       <tr>
+        <td>பரிட்சை</td>
+        <td><span class="domain label"><a href="xn--hlcj6aya9esc7a.html">XN--HLCJ6AYA9ESC7A</a></span></td> 
+        <td>Tamil</td>
+        <td>Tamil</td>
+       </tr>
+      </tbody> 
+     </table> 
+    </div> 
+    <h2>Reserved domains</h2> 
+    <p>We act as both the registrant and registrar for a select number of domains which have been reserved under policy grounds. These exclusions are typically indicated in either technical standards (RFC documents), or <a href="agreements.htm">contractual limitations</a>.</p> 
+    <p>Domains which are described as registered to IANA or ICANN on policy grounds are not available for registration or transfer, with the exception of <span class="domain label"><i>country-name</i>.info</span> domains. These domains are available for release by the ICANN Governmental Advisory Committee Secretariat.</p> 
    </div> 
    <div id="sidebar_left"> 
     <div class="navigation_box"> 
@@ -136,13 +217,12 @@
   </footer> 
   <script>
 $(document).ready(function() {
-	$("#nav_dom_top").addClass("selected")
-	$("#nav_dom_root_sub").hide()
+	$("#nav_dom_special").addClass("selected")
 	$("#nav_dom_int_sub").hide()
 	$("#nav_dom_idn_sub").hide()
 	$("#nav_dom_dnssec_sub").hide()
 	$("#nav_dom_tools_sub").hide()
-	
+	$("#nav_dom_root_sub").hide()
 });
 </script>   
  </body>
