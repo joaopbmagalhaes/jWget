@@ -4,8 +4,6 @@
  */
 package jwget;
 
-import jwget.FileTypeMap.FileType;
-
 /**
  *
  * @author Joao

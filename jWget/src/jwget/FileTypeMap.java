@@ -15,9 +15,9 @@ import java.util.logging.Logger;
  * @author Isaac
  */
 public class FileTypeMap {
-
     private static FileTypeMap instance;
-    private static Map<String, Class> fileType = new HashMap<String, Class>(); // Available types of files
+    private static Map<String, Class> fileClassType = new HashMap<String, Class>(); // Available types of files
+    private static Map<String, String[]> fileGenreType = new HashMap<String, String[]>(); // Available types of files
 
     private static FileTypeMap getInstance() {
         if (instance == null) {
@@ -30,46 +30,38 @@ public class FileTypeMap {
      * Declaration of all possible file types
      */
     private FileTypeMap() {
-        fileType.put("html", DownloaderParseHtml.class);
-        fileType.put("css", DownloaderParseCss.class);
-        fileType.put("js", DownloaderParseJs.class);
-        fileType.put("pdf", DownloaderDownloadFile.class);
-        fileType.put("docx", DownloaderDownloadFile.class);
-        fileType.put("txt", DownloaderDownloadFile.class);
-        fileType.put("jpg", DownloaderDownloadFile.class);
-        fileType.put("jpeg", DownloaderDownloadFile.class);
-        fileType.put("png", DownloaderDownloadFile.class);
-        fileType.put("gif", DownloaderDownloadFile.class);
-        fileType.put("svg", DownloaderDownloadFile.class);
-        fileType.put("ico", DownloaderDownloadFile.class);
-        fileType.put("mp3", DownloaderDownloadFile.class);
-        /* fileType.put("js", FileType.JS);
-         fileType.put("pdf", FileType.PDF);
-         fileType.put("txt", FileType.TXT);
-         fileType.put("docx", FileType.DOCX);
-         fileType.put("jpg", FileType.JPG);
-         fileType.put("jpeg", FileType.JPEG);
-         fileType.put("png", FileType.PNG);
-         fileType.put("gif", FileType.GIF);
-         fileType.put("svg", FileType.SVG);
-         fileType.put("ico", FileType.ICO);
-         fileType.put("mp3", FileType.MP3);
-         */
+        fileClassType.put("html", DownloaderParseHtml.class);
+        fileClassType.put("css", DownloaderParseCss.class);
+        fileClassType.put("js", DownloaderParseJs.class);
+        fileClassType.put("pdf", DownloaderDownloadFile.class);
+        fileClassType.put("docx", DownloaderDownloadFile.class);
+        fileClassType.put("txt", DownloaderDownloadFile.class);
+        fileClassType.put("jpg", DownloaderDownloadFile.class);
+        fileClassType.put("jpeg", DownloaderDownloadFile.class);
+        fileClassType.put("png", DownloaderDownloadFile.class);
+        fileClassType.put("gif", DownloaderDownloadFile.class);
+        fileClassType.put("svg", DownloaderDownloadFile.class);
+        fileClassType.put("ico", DownloaderDownloadFile.class);
+        fileClassType.put("mp3", DownloaderDownloadFile.class);
+        
+//        String xpto[] = {""};
+//        fileGenreType.put("web",xpto);
+//        fileGenreType.put("css");
+//        fileGenreType.put("js");
+//        fileGenreType.put("pdf");
+//        fileGenreType.put("docx");
+//        fileGenreType.put("txt");
+//        fileGenreType.put("jpg");
+//        fileGenreType.put("jpeg");
+//        fileGenreType.put("png");
+//        fileGenreType.put("gif");
+//        fileGenreType.put("svg");
+//        fileGenreType.put("ico");
+//        fileGenreType.put("mp3");
     }
 
-    /**
-     * Available types of files
-     */
-    public enum FileType {
-
-        HTML, CSS, JS,
-        PDF, DOCX, TXT,
-        JPG, JPEG, PNG, GIF, SVG, ICO,
-        MP3
-    };
-
-    public static Map<String, Class> getFileType() {
-        return getInstance().fileType;
+    public static Map<String, Class> getFileClassType() {
+        return getInstance().fileClassType;
     }
 
     /**
@@ -85,9 +77,9 @@ public class FileTypeMap {
             return new DownloaderParseHtml();
         } else {
             String ext = fileName.substring(index + 1, fileName.length());
-            if (FileTypeMap.getFileType().containsKey(ext)) {
+            if (FileTypeMap.getFileClassType().containsKey(ext)) {
                 try {
-                    c = FileTypeMap.getFileType().get(ext);
+                    c = FileTypeMap.getFileClassType().get(ext);
                     return (Downloader) c.newInstance();
                 } catch (InstantiationException ex) {
                     Logger.getLogger(FileTypeMap.class.getName()).log(Level.SEVERE, null, ex);

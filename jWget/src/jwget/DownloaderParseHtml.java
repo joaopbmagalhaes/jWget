@@ -11,6 +11,7 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static jwget.Downloader.PARSE_TAGS;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -56,26 +57,32 @@ public class DownloaderParseHtml extends Downloader {
                         if (element.hasAttr("href")) {
                             absoluteUrl = element.absUrl("href");
                             newPathAndFileName = Utils.getPathAndFileName(this.getConfig().getFolderPath(), this.getConfig().getRoot(), absoluteUrl);
-                            element.attr("href", newPathAndFileName);
+                            if(this.jConfig.getDeepLevel() == this.wf.getLevel()
+                               && PARSE_TAGS[i].equals("a"))
+                                element.attr("href", "");
+                            else
+                                element.attr("href", newPathAndFileName);
 
                         }
                         if (element.hasAttr("src")) {
                             absoluteUrl = element.absUrl("src");
                             newPathAndFileName = Utils.getPathAndFileName(this.getConfig().getFolderPath(), this.getConfig().getRoot(), absoluteUrl);
-                            element.attr("src", newPathAndFileName);
+                            if(this.jConfig.getDeepLevel() == this.wf.getLevel()
+                               && PARSE_TAGS[i].equals("a"))
+                                element.attr("src", "");
+                            else
+                                element.attr("src", newPathAndFileName);
                         }
 
                         System.out.println("Next URL: " + absoluteUrl);
                         System.out.println("Next file name: " + newPathAndFileName);
 
-                        // TODO control the level of deepness
-
                         Downloader newDownloader = FileTypeMap.getFileType(newPathAndFileName);
                         if (newDownloader != null) {
-                            Webfile newWf = new Webfile(newPathAndFileName, this.jConfig.buildURI(absoluteUrl).toString(), wf.getLevel() + 1);
+                            Webfile newWf = new Webfile(newPathAndFileName, this.jConfig.buildURI(absoluteUrl).toString(), (this.wf.getLevel() + 1));
                             if (!this.jConfig.getControlQueue().contains(newWf) // Control for repeated websites
                                 && this.jConfig.isInDomain(newWf)               // and websites outside the initial domain
-                                && this.jConfig.isInDeepLevel(newWf)) {         // and also outside the deep level                            
+                                && this.jConfig.isInDeepLevel(newWf)) {         // and also outside the deep level
                                     this.jConfig.incrementCountLinks();
                                     newDownloader.setConfig(this.jConfig);
                                     newDownloader.setWf(newWf);
@@ -91,7 +98,6 @@ public class DownloaderParseHtml extends Downloader {
                 // Save the file
                 FileWriter fstream = new FileWriter(this.wf.getFileName());
                 PrintWriter out = new PrintWriter(fstream);
-
                 out.println(doc.toString());
                 out.close();
 
