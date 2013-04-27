@@ -102,11 +102,11 @@ public class jWget {
 
         Thread executeWget = new Thread(new jWget.ExecuteWget());
         executeWget.start();
-        try {
-            executeWget.wait();
-        } catch (InterruptedException ex) {
-            Logger.getLogger(jWget.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        try {
+//            executeWget.wait();
+//        } catch (InterruptedException ex) {
+//            Logger.getLogger(jWget.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
 
     class ExecuteWget extends jWget implements Runnable {
