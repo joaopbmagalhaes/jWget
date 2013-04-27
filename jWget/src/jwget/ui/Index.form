@@ -32,7 +32,7 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="55" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
                   <Component id="lblDownloadOther" alignment="1" min="-2" max="-2" attributes="0"/>
                   <Component id="lblDownloadVideos" alignment="1" min="-2" max="-2" attributes="0"/>
@@ -41,10 +41,7 @@
                   <Component id="lblFolderPath" min="-2" max="-2" attributes="0"/>
                   <Component id="lblDeepness" min="-2" max="-2" attributes="0"/>
                   <Component id="lblDownloadAudio" min="-2" max="-2" attributes="0"/>
-                  <Group type="102" alignment="1" attributes="0">
-                      <Component id="lblDownloadImages" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="62" max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="lblDownloadImages" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -138,10 +135,12 @@
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="cbAll" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="32767" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="cbJavascript" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="cbCss" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="lblDownloadRes" alignment="3" pref="31" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="cbCss" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblDownloadRes" alignment="3" pref="31" max="32767" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -150,10 +149,12 @@
                   <Component id="cbImages" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="lblDownloadVideos" alignment="1" max="32767" attributes="0"/>
-                  <Component id="txtVideos" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="cbVideos" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="txtVideos" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="cbVideos" alignment="3" min="-2" max="-2" attributes="0"/>
+                  </Group>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
