@@ -105,7 +105,7 @@ public class jWget {
 
 
         if (fullPathAndFileName != null) {
-            Webfile wf = new Webfile(fullPathAndFileName, this.jConfig.getRoot(), 0, FileType.HTML);
+            Webfile wf = new Webfile(fullPathAndFileName, this.jConfig.getRoot(), 0);
 
             // Start counting downloaded links
             int t = this.jConfig.getCountLinks();
