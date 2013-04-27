@@ -77,7 +77,9 @@ public class Utils {
                     .getName()).log(Level.SEVERE, null, ex);
         }
         if (uriRootUrl != null) {
-            strUrlTemp = uriRootUrl.getProtocol() + "://" + uriRootUrl.getHost();
+            strUrlTemp = uriRootUrl.getHost();
+            absoluteUrl = absoluteUrl.replace("http://", "");
+            absoluteUrl = absoluteUrl.replace("https://", "");
             // Extract the fullRootUrl from the absoluteUrl
             strUrlTemp = absoluteUrl.replace(strUrlTemp, "");
             if (strUrlTemp.startsWith("/")) {

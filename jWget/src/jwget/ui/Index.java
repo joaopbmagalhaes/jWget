@@ -233,8 +233,7 @@ public class Index extends javax.swing.JFrame {
     private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
         if (!txtUrl.getText().isEmpty()) {
             // Get user input
-            String folderPath = txtFolderPath.getText();
-            boolean dlImages = cbImages.isSelected();
+            String folderPath = txtFolderPath.getText()       boolean dlImages = cbImages.isSelected();
             boolean dlVideos = cbImages.isSelected();
             boolean dlCss = cbImages.isSelected();
             boolean dlJs = cbImages.isSelected();
