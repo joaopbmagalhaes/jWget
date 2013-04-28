@@ -100,7 +100,7 @@ public class jWget {
         // Update the hisory file
         updateHistory();
 
-        Thread executeWget = new Thread(new jWget.ExecuteWget());
+        Thread executeWget = new Thread(new jWget.ExecuteWget(this.jConfig));
         executeWget.start();
 //        try {
 //            executeWget.wait();
@@ -110,6 +110,12 @@ public class jWget {
     }
 
     class ExecuteWget extends jWget implements Runnable {
+
+        private Config jConfig;         // Configuration file
+
+        public ExecuteWget(Config config) {
+            this.jConfig = config;
+        }
 
         @Override
         public void run() {
