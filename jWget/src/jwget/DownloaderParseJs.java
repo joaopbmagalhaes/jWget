@@ -8,7 +8,7 @@ package jwget;
  *
  * @author Isaac
  */
-public class DownloaderParseJs extends Downloader {
+public class DownloaderParseJs extends Downloader implements Runnable {
 
     public DownloaderParseJs() {
         super();

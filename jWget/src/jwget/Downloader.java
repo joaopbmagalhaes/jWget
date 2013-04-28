@@ -10,7 +10,7 @@ package jwget;
  *
  * @author Joao
  */
-public abstract class Downloader extends Thread {
+public abstract class Downloader implements Runnable {
 
     protected Webfile wf;             // Webfile to parse and download
     protected Config jConfig;         // Main class with all the info
@@ -59,7 +59,6 @@ public abstract class Downloader extends Thread {
     @Override
     public abstract void run();
 
-  
     /**
      * Controls if a webfile is indeed of that deep level or not
      *
