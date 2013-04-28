@@ -19,7 +19,7 @@ import org.jsoup.Jsoup;
  *
  * @author Isaac
  */
-public class DownloaderParseCss extends Downloader {
+public class DownloaderParseCss extends Downloader implements Runnable {
 
     public DownloaderParseCss() {
         super();
