@@ -21,7 +21,7 @@ import org.jsoup.select.Elements;
  *
  * @author Isaac
  */
-public class DownloaderParseHtml extends Downloader {
+public class DownloaderParseHtml extends Downloader implements Runnable{
 
     /**
      * Class constructor
