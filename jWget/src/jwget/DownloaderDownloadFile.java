@@ -15,7 +15,7 @@ import org.jsoup.Jsoup;
  *
  * @author Isaac
  */
-public class DownloaderDownloadFile extends Downloader {
+public class DownloaderDownloadFile extends Downloader implements Runnable{
 
     public DownloaderDownloadFile() {
         super();
