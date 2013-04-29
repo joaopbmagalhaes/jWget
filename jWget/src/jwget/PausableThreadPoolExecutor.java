@@ -15,7 +15,6 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author Isaac
  */
 public class PausableThreadPoolExecutor extends ThreadPoolExecutor {
-
     private boolean isPaused;
     private ReentrantLock pauseLock = new ReentrantLock();
     private Condition unpaused = pauseLock.newCondition();

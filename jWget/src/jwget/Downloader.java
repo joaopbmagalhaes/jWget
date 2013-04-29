@@ -35,11 +35,11 @@ public abstract class Downloader implements Runnable {
      * GETTERS AND SETTERS - BEGIN
      *
      */
-    public Webfile getWf() {
+    public Webfile getWebfile() {
         return wf;
     }
 
-    public void setWf(Webfile wf) {
+    public void setWebfile(Webfile wf) {
         this.wf = wf;
     }
 

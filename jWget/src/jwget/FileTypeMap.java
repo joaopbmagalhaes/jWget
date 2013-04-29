@@ -44,33 +44,33 @@ public class FileTypeMap {
         fileClassType.put("ico", DownloaderDownloadFile.class);
         fileClassType.put("mp3", DownloaderDownloadFile.class);
         
-//        String xpto[] = {""};
-//        fileGenreType.put("web",xpto);
-//        fileGenreType.put("css");
-//        fileGenreType.put("js");
-//        fileGenreType.put("pdf");
-//        fileGenreType.put("docx");
-//        fileGenreType.put("txt");
-//        fileGenreType.put("jpg");
-//        fileGenreType.put("jpeg");
-//        fileGenreType.put("png");
-//        fileGenreType.put("gif");
-//        fileGenreType.put("svg");
-//        fileGenreType.put("ico");
-//        fileGenreType.put("mp3");
+        String web[] = {"html,css,js"};
+        fileGenreType.put("web",web);
+        String img[] = {"jpg,jpeg,gif,ico,svg,png"};
+        fileGenreType.put("img",img);
+        String audio[] = {"mp3"};
+        fileGenreType.put("audio",audio);
+        String video[] = {"mp4,avi"};
+        fileGenreType.put("video",video);
+        String other[] = {"pdf,docx,txt"};
+        fileGenreType.put("other",other);
     }
 
     public static Map<String, Class> getFileClassType() {
         return getInstance().fileClassType;
     }
 
+    public static Map<String, String[]> getFileGenreType() {
+        return getInstance().fileGenreType;
+    }
+    
     /**
      * Returns the type of the file
      *
      * @param fileName
      * @return
      */
-    public static Downloader getFileType(String fileName) {
+    public static Downloader getFileTypeClass(String fileName) {
         int index = fileName.lastIndexOf(".");
         Class c;
         if (index == -1) {
@@ -87,6 +87,39 @@ public class FileTypeMap {
                     Logger.getLogger(FileTypeMap.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+        }
+        return null;
+    }
+    
+    /**
+     * Returns the extension of the file
+     *
+     * @param fileName
+     * @return
+     */
+    public static String getFileExt(String fileName) {
+        int index = fileName.lastIndexOf(".");
+        if (index == -1) {
+            return "html";
+        } else {
+            return fileName.substring(index + 1, fileName.length());
+        }
+    }
+    
+    /**
+     * Returns the type of the file
+     *
+     * @param fileName
+     * @return
+     */
+    public static String getFileType(String fileName) {
+        String ext = getFileExt(fileName);
+        Map<String, String[]> fileGenre = FileTypeMap.getFileGenreType();
+        for(int i = 0; i < fileGenre.size(); i++) {
+            String[] extList = fileGenre.get("web");
+        }
+        if(FileTypeMap.getFileGenreType().containsValue(ext)) {
+            
         }
         return null;
     }

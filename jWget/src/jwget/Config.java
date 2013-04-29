@@ -7,8 +7,6 @@ package jwget;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -23,10 +21,17 @@ public class Config {
     private String root;                  // Root url
     private String domain;                // Domain
     private String folderPath;            // Path to save all files
+    private boolean dlAll;                // Download all types of files
+    private String txtImages;             // Downloadable images extensions
+    private String txtAudio;              // Downloadable audio extensions
+    private String txtVideos;             // Downloadable video extensions
+    private String txtOther;              // Other downloadable extensions
     private boolean dlImages;             // Download images
+    private boolean dlAudio;              // Download audio
     private boolean dlVideos;             // Download videos
     private boolean dlCss;                // Download stylesheets
     private boolean dlJs;                 // Download javascript
+    private boolean dlOther;              // Download other files
     private int deepLevel;                // Level of deepness to crawl for websites
     private String dateTime;              // Date and time of the request
     private static final int NCORES = Runtime.getRuntime().availableProcessors();           // Number of cores the current computer has
@@ -40,25 +45,37 @@ public class Config {
 
     /**
      * Class constructor
-     *
+     * 
      * @param root
      * @param domain
      * @param folderPath
+     * @param dlAll
+     * @param txtImages
+     * @param txtAudio
+     * @param txtVideos
      * @param dlImages
+     * @param dlAudio
      * @param dlVideos
      * @param dlCss
      * @param dlJs
      * @param deepLevel
-     * @param dateTime
+     * @param dateTime 
      */
-    public Config(String root, String domain, String folderPath, boolean dlImages, boolean dlVideos, boolean dlCss, boolean dlJs, int deepLevel, String dateTime) throws URISyntaxException {
+    public Config(String root, String domain, String folderPath, boolean dlAll, String txtImages, String txtAudio, String txtVideos, String txtOther, boolean dlImages, boolean dlAudio, boolean dlVideos, boolean dlCss, boolean dlJs, boolean dlOther, int deepLevel, String dateTime) {
         this.root = root;
-        this.domain = extractDomain(domain);
+        this.domain = domain;
         this.folderPath = folderPath;
+        this.dlAll = dlAll;
+        this.txtImages = txtImages;
+        this.txtAudio = txtAudio;
+        this.txtVideos = txtVideos;
+        this.txtOther = txtOther;
         this.dlImages = dlImages;
+        this.dlAudio = dlAudio;
         this.dlVideos = dlVideos;
         this.dlCss = dlCss;
         this.dlJs = dlJs;
+        this.dlOther = dlOther;
         this.deepLevel = deepLevel;
         this.dateTime = dateTime;
     }
@@ -92,6 +109,54 @@ public class Config {
         this.folderPath = folderPath;
     }
 
+    public boolean isDlAll() {
+        return dlAll;
+    }
+
+    public void setDlAll(boolean dlAll) {
+        this.dlAll = dlAll;
+    }
+
+    public String getTxtImages() {
+        return txtImages;
+    }
+
+    public void setTxtImages(String txtImages) {
+        this.txtImages = txtImages;
+    }
+
+    public String getTxtAudio() {
+        return txtAudio;
+    }
+
+    public void setTxtAudio(String txtAudio) {
+        this.txtAudio = txtAudio;
+    }
+
+    public String getTxtVideos() {
+        return txtVideos;
+    }
+
+    public void setTxtVideos(String txtVideos) {
+        this.txtVideos = txtVideos;
+    }
+
+    public String getTxtOther() {
+        return txtOther;
+    }
+
+    public void setTxtOther(String txtOther) {
+        this.txtOther = txtOther;
+    }
+
+    public boolean isDlAudio() {
+        return dlAudio;
+    }
+
+    public void setDlAudio(boolean dlAudio) {
+        this.dlAudio = dlAudio;
+    }
+
     public boolean isDlImages() {
         return dlImages;
     }
@@ -122,6 +187,14 @@ public class Config {
 
     public void setDlJs(boolean dlJs) {
         this.dlJs = dlJs;
+    }
+
+    public boolean isDlOther() {
+        return dlOther;
+    }
+
+    public void setDlOther(boolean dlOther) {
+        this.dlOther = dlOther;
     }
 
     public int getDeepLevel() {
@@ -229,6 +302,65 @@ public class Config {
             return true;
         } else {
             return false;
+        }
+    }
+    
+    /**
+     * Check if webfiles should be downloaded or not
+     * 
+     * @param wf
+     * @return 
+     */
+    public boolean canDownload(String ext) {
+        if(this.dlAll || ext.equalsIgnoreCase("html"))
+            return true;
+        
+        // Check for images
+        if(this.dlImages) {
+            
+        }
+        String[] imgExt = getImageExt();
+        
+        
+        return false;
+    }
+    
+    /**
+     * Returns a list of extensions to download
+     * @return 
+     */
+    public String[] getImageExt() {
+        if(!this.txtImages.isEmpty()) {
+            this.txtImages = this.txtImages.replace(" ", "");
+            return this.txtImages.split(",");
+        } else {
+            return null;
+        }
+    }
+    
+    /**
+     * Returns a list of extensions to download
+     * @return 
+     */
+    public String[] getAudioExt() {
+        if(!this.txtAudio.isEmpty()) {
+            this.txtAudio = this.txtAudio.replace(" ", "");
+            return this.txtAudio.split(",");
+        } else {
+            return null;
+        }
+    }
+    
+    /**
+     * Returns a list of extensions to download
+     * @return 
+     */
+    public String[] getVideoExt() {
+        if(!this.txtVideos.isEmpty()) {
+            this.txtVideos = this.txtVideos.replace(" ", "");
+            return this.txtVideos.split(",");
+        } else {
+            return null;
         }
     }
 }

@@ -125,7 +125,6 @@ public class Index extends javax.swing.JFrame {
         lblFolderPath.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblFolderPath.setText("Folder");
 
-        txtFolderPath.setBackground(new java.awt.Color(255, 255, 255));
         txtFolderPath.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
         cbImages.setText("All");
@@ -364,6 +363,7 @@ public class Index extends javax.swing.JFrame {
                 String folderPath = txtFolderPath.getText();
                 boolean dlAll = cbAll.isSelected();
                 boolean dlImages = cbImages.isSelected();
+                boolean dlAudio = cbAudio.isSelected();
                 boolean dlVideos = cbVideos.isSelected();
                 boolean dlCss = cbImages.isSelected();
                 boolean dlJs = cbImages.isSelected();
@@ -371,11 +371,12 @@ public class Index extends javax.swing.JFrame {
                 String extImage = txtImg.getText();
                 String extAudio = txtAudio.getText();
                 String extVideo = txtVideos.getText();
+                String extOther = txtOther.getText();
                 int deepLevel = Integer.parseInt(lbDeepness.getSelectedItem().toString());
 
                 try {
                     // Create new config file
-                    config = new Config(txtUrl.getText(), txtUrl.getText(), folderPath, dlImages, dlVideos, dlCss, dlJs, deepLevel, folderPath);
+                    config = new Config(txtUrl.getText(), txtUrl.getText(), folderPath, dlAll, extImage, extAudio, extVideo, extOther, dlImages, dlAudio, dlVideos, dlCss, dlJs, dlOther, deepLevel, folderPath);
                     // Start downloading
                     main = new jWget(config);
                     main.execute();
