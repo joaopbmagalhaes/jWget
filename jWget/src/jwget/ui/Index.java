@@ -32,7 +32,7 @@ public class Index extends javax.swing.JFrame {
         // Center window
         Dimension screenSize = new Dimension(Toolkit.getDefaultToolkit().getScreenSize());
         int wdwLeft = screenSize.width / 2 - 350;
-        int wdwTop = screenSize.height / 2 - 240;
+        int wdwTop = screenSize.height / 2 - 250;
         pack();
         setLocation(wdwLeft, wdwTop);
 
@@ -88,7 +88,7 @@ public class Index extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Simple wget");
         setMaximumSize(new java.awt.Dimension(700, 470));
-        setPreferredSize(new java.awt.Dimension(700, 480));
+        setPreferredSize(new java.awt.Dimension(700, 500));
         setResizable(false);
 
         btnDownload.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
@@ -125,7 +125,6 @@ public class Index extends javax.swing.JFrame {
         lblFolderPath.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         lblFolderPath.setText("Folder");
 
-        txtFolderPath.setEditable(false);
         txtFolderPath.setBackground(new java.awt.Color(255, 255, 255));
         txtFolderPath.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
 
@@ -310,11 +309,10 @@ public class Index extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(cbAll)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cbJavascript)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(cbCss)
-                        .addComponent(lblDownloadRes, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cbCss)
+                    .addComponent(lblDownloadRes, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
+                    .addComponent(cbJavascript))
                 .addGap(19, 19, 19)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblDownloadImages, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -364,10 +362,15 @@ public class Index extends javax.swing.JFrame {
             if (!txtUrl.getText().isEmpty()) {
                 // Get user input
                 String folderPath = txtFolderPath.getText();
+                boolean dlAll = cbAll.isSelected();
                 boolean dlImages = cbImages.isSelected();
-                boolean dlVideos = cbImages.isSelected();
+                boolean dlVideos = cbVideos.isSelected();
                 boolean dlCss = cbImages.isSelected();
                 boolean dlJs = cbImages.isSelected();
+                boolean dlOther = cbOther.isSelected();
+                String extImage = txtImg.getText();
+                String extAudio = txtAudio.getText();
+                String extVideo = txtVideos.getText();
                 int deepLevel = Integer.parseInt(lbDeepness.getSelectedItem().toString());
 
                 try {

@@ -8,7 +8,7 @@
       <Dimension value="[700, 470]"/>
     </Property>
     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-      <Dimension value="[700, 480]"/>
+      <Dimension value="[700, 500]"/>
     </Property>
     <Property name="resizable" type="boolean" value="false"/>
   </Properties>
@@ -135,12 +135,10 @@
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="cbAll" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="32767" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="cbJavascript" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="cbCss" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="lblDownloadRes" alignment="3" pref="31" max="32767" attributes="0"/>
-                  </Group>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="cbCss" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblDownloadRes" alignment="3" pref="31" max="32767" attributes="0"/>
+                  <Component id="cbJavascript" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -272,7 +270,6 @@
     </Component>
     <Component class="javax.swing.JTextField" name="txtFolderPath">
       <Properties>
-        <Property name="editable" type="boolean" value="false"/>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="ff" green="ff" red="ff" type="rgb"/>
         </Property>
