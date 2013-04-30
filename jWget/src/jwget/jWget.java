@@ -11,8 +11,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -31,9 +29,6 @@ public class jWget {
      * @param domain
      * @param folderPath
      * @param dlAll
-     * @param txtImages
-     * @param txtAudio
-     * @param txtVideos
      * @param txtOther
      * @param dlImages
      * @param dlAudio
@@ -44,11 +39,11 @@ public class jWget {
      * @param deepLevel
      * @param dateTime
      */
-    public jWget(String root, String domain, String folderPath, boolean dlAll, String txtImages, String txtAudio, String txtVideos, String txtOther, boolean dlImages, boolean dlAudio, boolean dlVideos, boolean dlCss, boolean dlJs, boolean dlOther, int deepLevel, String dateTime) {
+    public jWget(String root, String domain, String folderPath, boolean dlAll, String txtOther, boolean dlImages, boolean dlAudio, boolean dlVideos, boolean dlCss, boolean dlJs, boolean dlOther, int deepLevel, String dateTime) {
 
         Config config = new Config(root, domain, folderPath, deepLevel, dateTime);
-        FileTypeManager fileTypeManager = new FileTypeManager(dlAll, txtImages, txtAudio, txtVideos, txtOther, dlImages, dlAudio, dlVideos, dlCss, dlJs, dlOther);
-        FileTypeMap.getInstance().setFileTypeManager(fileTypeManager);
+        FileTypeManager fileTypeManager = new FileTypeManager(dlAll, txtOther, dlImages, dlAudio, dlVideos, dlCss, dlJs, dlOther);
+        FileTypeMap.setFileTypeManager(fileTypeManager);
 
         this.jConfig = config;
     }
@@ -158,6 +153,7 @@ public class jWget {
                 while (this.jConfig.getCountLinks() > 0) {
                     //     System.out.println("loop: " + this.jConfig.getCountLinks());
                 }
+                System.out.println("final: " + String.valueOf(this.jConfig.getCountLinks()));
                 this.jConfig.getExecutor().shutdown();
                 try {
                     this.jConfig.getExecutor().awaitTermination(1, TimeUnit.SECONDS);
