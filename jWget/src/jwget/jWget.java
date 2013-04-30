@@ -42,7 +42,7 @@ public class jWget {
     public jWget(String root, String domain, String folderPath, boolean dlAll, String txtOther, boolean dlImages, boolean dlAudio, boolean dlVideos, boolean dlCss, boolean dlJs, boolean dlOther, int deepLevel, String dateTime) {
 
         Config config = new Config(root, domain, folderPath, deepLevel, dateTime);
-        FileTypeManager fileTypeManager = new FileTypeManager(dlAll, txtOther, dlImages, dlAudio, dlVideos, dlCss, dlJs, dlOther);
+        FileTypeManager fileTypeManager = new FileTypeManager(dlAll, dlImages, dlAudio, dlVideos, dlCss, dlJs, dlOther, txtOther);
         FileTypeMap.setFileTypeManager(fileTypeManager);
 
         this.jConfig = config;
