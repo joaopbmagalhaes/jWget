@@ -98,9 +98,10 @@ public class DownloaderParseHtml extends Downloader implements Runnable {
                                 && this.jConfig.isInDeepLevel(newWf) // and also outside the deep level
                                 //      && FileTypeMap.getFileTypeManager().canDownload(fileTypeExt)) { // and if the download is wanted
                                 ) {
-                            this.jConfig.incrementCountLinks();
+                           
                             newDownloader.setConfig(this.jConfig);
                             newDownloader.setWebfile(newWf);
+                            this.jConfig.incrementCountLinks();
                             this.jConfig.getExecutor().execute(newDownloader);
                         }
                     }
