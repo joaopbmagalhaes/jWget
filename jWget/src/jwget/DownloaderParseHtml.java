@@ -83,9 +83,6 @@ public class DownloaderParseHtml extends Downloader implements Runnable {
                         }
                     }
 
-                    System.out.println("Next URL: " + absoluteUrl);
-                    System.out.println("Next file name: " + newPathAndFileName);
-
                     //Creates a new downloader object for the filetype in question
                     Downloader newDownloader = FileTypeMap.getFileTypeClass(newPathAndFileName);
                     // Get file type extension
@@ -97,6 +94,9 @@ public class DownloaderParseHtml extends Downloader implements Runnable {
                                 && this.jConfig.isInDeepLevel(newWf) // and also outside the deep level
                                 && FileTypeMap.getFileTypeManager().canDownload(fileTypeExt)) { // and if the download is wanted
                            
+                            System.out.println("Next URL: " + absoluteUrl);
+                            System.out.println("Next file name: " + newPathAndFileName);
+                            
                             newDownloader.setConfig(this.jConfig);
                             newDownloader.setWebfile(newWf);
                             this.jConfig.incrementCountLinks();
@@ -117,7 +117,7 @@ public class DownloaderParseHtml extends Downloader implements Runnable {
             this.jConfig.getControlQueue().add(wf);
             this.jConfig.decrementCountLinks();
 
-            System.out.println("after run: " + String.valueOf(this.jConfig.getCountLinks()));
+            System.out.println("Count after run: " + String.valueOf(this.jConfig.getCountLinks()));
         } catch (URISyntaxException ex) {
             Logger.getLogger(DownloaderParseHtml.class.getName()).log(Level.SEVERE, null, ex);
         } catch (MalformedURLException ex) {
