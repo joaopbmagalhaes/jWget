@@ -10,6 +10,8 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Configuration file with location of the HTML files and other resources
@@ -42,7 +44,7 @@ public class Config {
      * @param dateTime
      */
     public Config(String root, String domain, String folderPath, int deepLevel, String dateTime) {
-        this.root = root;
+        this.root = buildURI(root).toString();
         this.domain = domain;
         this.folderPath = folderPath;
         this.deepLevel = deepLevel;
@@ -142,17 +144,22 @@ public class Config {
      * @return
      * @throws URISyntaxException
      */
-    public URI buildURI(String url) throws URISyntaxException {
+    public URI buildURI(String url) {
         if (url.isEmpty()) {
             return null;
         } else {
-            if (url.startsWith("/")) {
-                url = this.domain + url;
+            try {
+                if (url.startsWith("/")) {
+                    url = this.domain + url;
+                }
+                if (!url.startsWith("http") && !url.startsWith("https")) {
+                    url = "http://" + url;
+                }
+                return new URI(url);
+            } catch (URISyntaxException ex) {
+                Logger.getLogger(Config.class.getName()).log(Level.SEVERE, null, ex);
             }
-            if (!url.startsWith("http") && !url.startsWith("https")) {
-                url = "http://" + url;
-            }
-            return new URI(url);
+            return null;
         }
     }
 
@@ -165,7 +172,7 @@ public class Config {
      */
     public boolean isInDomain(Webfile wf) throws URISyntaxException {
         String wfDomain = extractDomain(wf.getUrl());
-        if (wfDomain.equalsIgnoreCase(this.domain)) {
+        if (wfDomain.equalsIgnoreCase(extractDomain(this.domain))) {
             return true;
         } else {
             return false;
