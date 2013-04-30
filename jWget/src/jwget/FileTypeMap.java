@@ -4,6 +4,7 @@
  */
 package jwget;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -43,17 +44,6 @@ public class FileTypeMap {
         fileClassType.put("svg", DownloaderDownloadFile.class);
         fileClassType.put("ico", DownloaderDownloadFile.class);
         fileClassType.put("mp3", DownloaderDownloadFile.class);
-        
-        String web[] = {"html,css,js"};
-        fileGenreType.put("web",web);
-        String img[] = {"jpg,jpeg,gif,ico,svg,png"};
-        fileGenreType.put("img",img);
-        String audio[] = {"mp3"};
-        fileGenreType.put("audio",audio);
-        String video[] = {"mp4,avi"};
-        fileGenreType.put("video",video);
-        String other[] = {"pdf,docx,txt"};
-        fileGenreType.put("other",other);
     }
 
     public static Map<String, Class> getFileClassType() {
@@ -112,15 +102,28 @@ public class FileTypeMap {
      * @param fileName
      * @return
      */
-    public static String getFileType(String fileName) {
-        String ext = getFileExt(fileName);
-        Map<String, String[]> fileGenre = FileTypeMap.getFileGenreType();
-        for(int i = 0; i < fileGenre.size(); i++) {
-            String[] extList = fileGenre.get("web");
-        }
-        if(FileTypeMap.getFileGenreType().containsValue(ext)) {
-            
-        }
+    public static String getFileType(String ext) {     
+        ArrayList<String> web = new ArrayList<>();
+        web.add("html"); web.add("css"); web.add("js");
+        
+        ArrayList<String> img = new ArrayList<>();
+        img.add("jpg"); img.add("jpeg"); img.add("gif");
+        img.add("ico"); img.add("svg"); img.add("png");
+
+        ArrayList<String> audio = new ArrayList<>();
+        audio.add("mp3");
+        
+        ArrayList<String> video = new ArrayList<>();
+        video.add("mp4"); video.add("avi");
+        
+        ArrayList<String> other = new ArrayList<>();
+        other.add("pdf"); other.add("docx"); other.add("txt");
+        
+        if(web.contains(ext)) return "web";
+        if(img.contains(ext)) return "img";
+        if(audio.contains(ext)) return "audio";
+        if(video.contains(ext)) return "video";
+        if(other.contains(ext)) return "other";
         return null;
     }
 }
