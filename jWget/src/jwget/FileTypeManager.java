@@ -10,23 +10,23 @@ package jwget;
  */
 public class FileTypeManager {
     private boolean dlAll;                // Download all types of files
-    private String txtOther;              // Other downloadable extensions
     private boolean dlImages;             // Download images
     private boolean dlAudio;              // Download audio
     private boolean dlVideos;             // Download videos
     private boolean dlCss;                // Download stylesheets
     private boolean dlJs;                 // Download javascript
     private boolean dlOther;              // Download other files
+    private String txtOther;              // Other downloadable extensions
 
-    public FileTypeManager(boolean dlAll, String txtOther, boolean dlImages, boolean dlAudio, boolean dlVideos, boolean dlCss, boolean dlJs, boolean dlOther) {
+    public FileTypeManager(boolean dlAll, boolean dlImages, boolean dlAudio, boolean dlVideos, boolean dlCss, boolean dlJs, boolean dlOther, String txtOther) {
         this.dlAll = dlAll;
-        this.txtOther = txtOther;
         this.dlImages = dlImages;
         this.dlAudio = dlAudio;
         this.dlVideos = dlVideos;
         this.dlCss = dlCss;
         this.dlJs = dlJs;
         this.dlOther = dlOther;
+        this.txtOther = txtOther;
     }
 
     public boolean isDlAll() {
@@ -35,14 +35,6 @@ public class FileTypeManager {
 
     public void setDlAll(boolean dlAll) {
         this.dlAll = dlAll;
-    }
-
-    public String getTxtOther() {
-        return txtOther;
-    }
-
-    public void setTxtOther(String txtOther) {
-        this.txtOther = txtOther;
     }
 
     public boolean isDlAudio() {
@@ -93,6 +85,14 @@ public class FileTypeManager {
         this.dlOther = dlOther;
     }
 
+    public String getTxtOther() {
+        return txtOther;
+    }
+
+    public void setTxtOther(String txtOther) {
+        this.txtOther = txtOther;
+    }
+    
     /**
      * Check if webfiles should be downloaded or not
      *
@@ -111,8 +111,37 @@ public class FileTypeManager {
         }
 
         // Check for images files
+        if (FileTypeMap.getFileType(ext).equals("img")
+                && dlImages) {
+            return true;
+        }
+        
+        // Check for audio files
+        if (FileTypeMap.getFileType(ext).equals("audio")
+                && dlAudio) {
+            return true;
+        }
+        
+        // Check for video files
+        if (FileTypeMap.getFileType(ext).equals("video")
+                && dlVideos) {
+            return true;
+        }
+        
+        // Check for images files
+        if (FileTypeMap.getFileType(ext).equals("other")
+                && dlOther) {
+            return true;
+        }
 
-
+        // Check for other file extensions
+        String otherExt[] = getTextExt();
+        for(int k = 0; k < otherExt.length; k++) {
+            if(otherExt[k].equalsIgnoreCase(ext)) {
+                return true;
+            }
+        }
+        
         return false;
     }
 
@@ -121,10 +150,11 @@ public class FileTypeManager {
      *
      * @return
      */
-    public String[] getTextExt(String text) {
-        if (!text.isEmpty()) {
-            text = text.replace(" ", "");
-            return text.split(",");
+    private String[] getTextExt() {
+        String ext = this.txtOther;
+        if (!ext.isEmpty()) {
+            ext = ext.replace(" ", "");
+            return ext.split(",");
         } else {
             return null;
         }
