@@ -26,13 +26,31 @@ public class jWget {
     }
 
     /**
-     * Class constructor
      *
-     * @param config
+     * @param root
+     * @param domain
+     * @param folderPath
+     * @param dlAll
+     * @param txtImages
+     * @param txtAudio
+     * @param txtVideos
+     * @param txtOther
+     * @param dlImages
+     * @param dlAudio
+     * @param dlVideos
+     * @param dlCss
+     * @param dlJs
+     * @param dlOther
+     * @param deepLevel
+     * @param dateTime
      */
-    public jWget(Config config) {
-        this.jConfig = config;
+    public jWget(String root, String domain, String folderPath, boolean dlAll, String txtImages, String txtAudio, String txtVideos, String txtOther, boolean dlImages, boolean dlAudio, boolean dlVideos, boolean dlCss, boolean dlJs, boolean dlOther, int deepLevel, String dateTime) {
 
+        Config config = new Config(root, domain, folderPath, deepLevel, dateTime);
+        FileTypeManager fileTypeManager = new FileTypeManager(dlAll, txtImages, txtAudio, txtVideos, txtOther, dlImages, dlAudio, dlVideos, dlCss, dlJs, dlOther);
+        FileTypeMap.getInstance().setFileTypeManager(fileTypeManager);
+
+        this.jConfig = config;
     }
 
     /**

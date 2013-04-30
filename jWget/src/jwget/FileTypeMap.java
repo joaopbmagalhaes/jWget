@@ -16,11 +16,13 @@ import java.util.logging.Logger;
  * @author Isaac
  */
 public class FileTypeMap {
+
     private static FileTypeMap instance;
     private static Map<String, Class> fileClassType = new HashMap<>(); // Available types of files
     private static Map<String, String[]> fileGenreType = new HashMap<>(); // Available types of files
+    private static FileTypeManager fileTypeManager;
 
-    private static FileTypeMap getInstance() {
+    public static FileTypeMap getInstance() {
         if (instance == null) {
             instance = new FileTypeMap();
         }
@@ -53,7 +55,15 @@ public class FileTypeMap {
     public static Map<String, String[]> getFileGenreType() {
         return getInstance().fileGenreType;
     }
-    
+
+    public static FileTypeManager getFileTypeManager() {
+        return fileTypeManager;
+    }
+
+    public static void setFileTypeManager(FileTypeManager fileTypeManager) {
+        FileTypeMap.fileTypeManager = fileTypeManager;
+    }
+
     /**
      * Returns the type of the file
      *
@@ -80,7 +90,7 @@ public class FileTypeMap {
         }
         return null;
     }
-    
+
     /**
      * Returns the extension of the file
      *
@@ -95,35 +105,57 @@ public class FileTypeMap {
             return fileName.substring(index + 1, fileName.length());
         }
     }
-    
+
     /**
      * Returns the type of the file
      *
      * @param fileName
      * @return
      */
-    public static String getFileType(String ext) {     
+    public static String getFileType(String ext) {
         ArrayList<String> web = new ArrayList<>();
-        web.add("html"); web.add("css"); web.add("js");
-        
+        web.add("html");
+        web.add("css");
+        web.add("js");
+
         ArrayList<String> img = new ArrayList<>();
-        img.add("jpg"); img.add("jpeg"); img.add("gif");
-        img.add("ico"); img.add("svg"); img.add("png");
+        img.add("jpg");
+        img.add("jpeg");
+        img.add("gif");
+        img.add("ico");
+        img.add("svg");
+        img.add("png");
 
         ArrayList<String> audio = new ArrayList<>();
         audio.add("mp3");
-        
+
         ArrayList<String> video = new ArrayList<>();
-        video.add("mp4"); video.add("avi");
-        
+        video.add("mp4");
+        video.add("avi");
+
         ArrayList<String> other = new ArrayList<>();
-        other.add("pdf"); other.add("docx"); other.add("txt");
-        
-        if(web.contains(ext)) return "web";
-        if(img.contains(ext)) return "img";
-        if(audio.contains(ext)) return "audio";
-        if(video.contains(ext)) return "video";
-        if(other.contains(ext)) return "other";
+        other.add("pdf");
+        other.add("docx");
+        other.add("txt");
+
+        if (web.contains(ext)) {
+            return "web";
+        }
+        if (img.contains(ext)) {
+            return "img";
+        }
+        if (audio.contains(ext)) {
+            return "audio";
+        }
+        if (video.contains(ext)) {
+            return "video";
+        }
+        if (other.contains(ext)) {
+            return "other";
+        }
         return null;
+    }
+
+    public static void initFileTypePossible() {
     }
 }
