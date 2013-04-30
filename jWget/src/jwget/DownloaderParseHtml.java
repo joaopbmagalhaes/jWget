@@ -64,7 +64,7 @@ public class DownloaderParseHtml extends Downloader implements Runnable {
                         if (this.jConfig.getDeepLevel() == this.wf.getLevel()
                                 && PARSE_TAGS[i].equals("a")
                                 && !this.jConfig.getControlQueue().contains(newWf)) {
-                            element.attr("href", "");
+                            element.attr("href", absoluteUrl);
                         } else {
                             element.attr("href", newPathAndFileName);
                         }
@@ -77,7 +77,7 @@ public class DownloaderParseHtml extends Downloader implements Runnable {
                         if (this.jConfig.getDeepLevel() == this.wf.getLevel()
                                 && PARSE_TAGS[i].equals("a")
                                 && !this.jConfig.getControlQueue().contains(newWf)) {
-                            element.attr("src", "");
+                            element.attr("src", absoluteUrl);
                         } else {
                             element.attr("src", newPathAndFileName);
                         }
@@ -96,8 +96,8 @@ public class DownloaderParseHtml extends Downloader implements Runnable {
                         if (!this.jConfig.getControlQueue().contains(newWf) // Control for repeated websites
                                 && this.jConfig.isInDomain(newWf) // and websites outside the initial domain
                                 && this.jConfig.isInDeepLevel(newWf) // and also outside the deep level
-                                && FileTypeMap.getFileTypeManager().canDownload(fileTypeExt)) { // and if the download is wanted
-
+                                //      && FileTypeMap.getFileTypeManager().canDownload(fileTypeExt)) { // and if the download is wanted
+                                ) {
                             this.jConfig.incrementCountLinks();
                             newDownloader.setConfig(this.jConfig);
                             newDownloader.setWebfile(newWf);

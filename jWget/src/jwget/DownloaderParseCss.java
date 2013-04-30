@@ -42,8 +42,7 @@ public class DownloaderParseCss extends Downloader implements Runnable {
     public void run() {
         //Open a URL Stream
         try {
-            Connection.Response resultImageResponse = Jsoup.connect(wf.getUrl()).ignoreContentType(true).execute();
-
+           
             String src = wf.getUrl();
 
             System.out.println(this.wf.getFileName());
