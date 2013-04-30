@@ -9,11 +9,7 @@ package jwget;
  * @author Isaac
  */
 public class FileTypeManager {
-
     private boolean dlAll;                // Download all types of files
-    private String txtImages;             // Downloadable images extensions
-    private String txtAudio;              // Downloadable audio extensions
-    private String txtVideos;             // Downloadable video extensions
     private String txtOther;              // Other downloadable extensions
     private boolean dlImages;             // Download images
     private boolean dlAudio;              // Download audio
@@ -22,11 +18,8 @@ public class FileTypeManager {
     private boolean dlJs;                 // Download javascript
     private boolean dlOther;              // Download other files
 
-    public FileTypeManager(boolean dlAll, String txtImages, String txtAudio, String txtVideos, String txtOther, boolean dlImages, boolean dlAudio, boolean dlVideos, boolean dlCss, boolean dlJs, boolean dlOther) {
+    public FileTypeManager(boolean dlAll, String txtOther, boolean dlImages, boolean dlAudio, boolean dlVideos, boolean dlCss, boolean dlJs, boolean dlOther) {
         this.dlAll = dlAll;
-        this.txtImages = txtImages;
-        this.txtAudio = txtAudio;
-        this.txtVideos = txtVideos;
         this.txtOther = txtOther;
         this.dlImages = dlImages;
         this.dlAudio = dlAudio;
@@ -42,30 +35,6 @@ public class FileTypeManager {
 
     public void setDlAll(boolean dlAll) {
         this.dlAll = dlAll;
-    }
-
-    public String getTxtImages() {
-        return txtImages;
-    }
-
-    public void setTxtImages(String txtImages) {
-        this.txtImages = txtImages;
-    }
-
-    public String getTxtAudio() {
-        return txtAudio;
-    }
-
-    public void setTxtAudio(String txtAudio) {
-        this.txtAudio = txtAudio;
-    }
-
-    public String getTxtVideos() {
-        return txtVideos;
-    }
-
-    public void setTxtVideos(String txtVideos) {
-        this.txtVideos = txtVideos;
     }
 
     public String getTxtOther() {
@@ -142,60 +111,7 @@ public class FileTypeManager {
         }
 
         // Check for images files
-        if (FileTypeMap.getFileType(ext).equals("img")) {
-            if (this.dlImages) {
-                return true;
-            } else {
-                String[] imgExt = getTextExt(this.txtImages);
-                for (int i = 0; i < imgExt.length; i++) {
-                    if (imgExt[i].equals(ext)) {
-                        return true;
-                    }
-                }
-            }
-        }
 
-        // Check for audio files
-        if (FileTypeMap.getFileType(ext).equals("audio")) {
-            if (this.dlAudio) {
-                return true;
-            } else {
-                String[] audioExt = getTextExt(this.txtAudio);
-                for (int i = 0; i < audioExt.length; i++) {
-                    if (audioExt[i].equals(ext)) {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        // Check for video files
-        if (FileTypeMap.getFileType(ext).equals("video")) {
-            if (this.dlVideos) {
-                return true;
-            } else {
-                String[] videoExt = getTextExt(this.txtVideos);
-                for (int i = 0; i < videoExt.length; i++) {
-                    if (videoExt[i].equals(ext)) {
-                        return true;
-                    }
-                }
-            }
-        }
-
-        // Check for other files
-        if (FileTypeMap.getFileType(ext).equals("other")) {
-            if (this.dlOther) {
-                return true;
-            } else {
-                String[] otherExt = getTextExt(this.txtOther);
-                for (int i = 0; i < otherExt.length; i++) {
-                    if (otherExt[i].equals(ext)) {
-                        return true;
-                    }
-                }
-            }
-        }
 
         return false;
     }

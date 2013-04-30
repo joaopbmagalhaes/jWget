@@ -4,7 +4,6 @@
  */
 package jwget;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
@@ -16,10 +15,9 @@ import java.util.logging.Logger;
  * @author Isaac
  */
 public class FileTypeMap {
-
     private static FileTypeMap instance;
     private static Map<String, Class> fileClassType = new HashMap<>(); // Available types of files
-    private static Map<String, String[]> fileGenreType = new HashMap<>(); // Available types of files
+    private static Map<String, String> fileGenreType = new HashMap<>(); // Available types of files
     private static FileTypeManager fileTypeManager;
 
     public static FileTypeMap getInstance() {
@@ -46,13 +44,53 @@ public class FileTypeMap {
         fileClassType.put("svg", DownloaderDownloadFile.class);
         fileClassType.put("ico", DownloaderDownloadFile.class);
         fileClassType.put("mp3", DownloaderDownloadFile.class);
+        
+        // Init web file types
+        fileGenreType.put("html","web");
+        fileGenreType.put("css","web");
+        fileGenreType.put("js","web");
+        // Init image file types
+        fileGenreType.put("jpg","img");
+        fileGenreType.put("jpeg","img");
+        fileGenreType.put("svg","img");
+        fileGenreType.put("png","img");
+        fileGenreType.put("gif","img");
+        fileGenreType.put("ico","img");
+        fileGenreType.put("raw","img");
+        fileGenreType.put("tiff","img");
+        fileGenreType.put("bmp","img");
+        // Init audio file types
+        fileGenreType.put("mp3","audio");
+        fileGenreType.put("wav","audio");
+        fileGenreType.put("au","audio");
+        fileGenreType.put("flac","audio");
+        // Init video file types
+        fileGenreType.put("mp4","video");
+        fileGenreType.put("mpeg","video");
+        fileGenreType.put("mpg","video");
+        fileGenreType.put("m1s","video");
+        fileGenreType.put("mpa","video");
+        fileGenreType.put("avi","video");
+        fileGenreType.put("mov","video");
+        fileGenreType.put("qt","video");
+        fileGenreType.put("asf","video");
+        fileGenreType.put("asx","video");
+        fileGenreType.put("wmv","video");
+        fileGenreType.put("wma","video");
+        fileGenreType.put("wmx","video");
+        fileGenreType.put("ogm","video");
+        fileGenreType.put("mkv","video");
+        // Init other file types
+        fileGenreType.put("docx","other");
+        fileGenreType.put("pdf","other");
+        fileGenreType.put("txt","other");
     }
 
     public static Map<String, Class> getFileClassType() {
         return getInstance().fileClassType;
     }
 
-    public static Map<String, String[]> getFileGenreType() {
+    public static Map<String, String> getFileGenreType() {
         return getInstance().fileGenreType;
     }
 
@@ -61,7 +99,7 @@ public class FileTypeMap {
     }
 
     public static void setFileTypeManager(FileTypeManager fileTypeManager) {
-        FileTypeMap.fileTypeManager = fileTypeManager;
+        FileTypeMap.getInstance().fileTypeManager = fileTypeManager;
     }
 
     /**
@@ -113,49 +151,6 @@ public class FileTypeMap {
      * @return
      */
     public static String getFileType(String ext) {
-        ArrayList<String> web = new ArrayList<>();
-        web.add("html");
-        web.add("css");
-        web.add("js");
-
-        ArrayList<String> img = new ArrayList<>();
-        img.add("jpg");
-        img.add("jpeg");
-        img.add("gif");
-        img.add("ico");
-        img.add("svg");
-        img.add("png");
-
-        ArrayList<String> audio = new ArrayList<>();
-        audio.add("mp3");
-
-        ArrayList<String> video = new ArrayList<>();
-        video.add("mp4");
-        video.add("avi");
-
-        ArrayList<String> other = new ArrayList<>();
-        other.add("pdf");
-        other.add("docx");
-        other.add("txt");
-
-        if (web.contains(ext)) {
-            return "web";
-        }
-        if (img.contains(ext)) {
-            return "img";
-        }
-        if (audio.contains(ext)) {
-            return "audio";
-        }
-        if (video.contains(ext)) {
-            return "video";
-        }
-        if (other.contains(ext)) {
-            return "other";
-        }
-        return null;
-    }
-
-    public static void initFileTypePossible() {
+        return getFileGenreType().get(ext);
     }
 }
