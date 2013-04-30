@@ -315,50 +315,70 @@ public class Config {
         if(this.dlAll || ext.equalsIgnoreCase("html"))
             return true;
         
-        // Check for images
-        if(this.dlImages) {
-            
-        }
-        String[] imgExt = getImageExt();
+        // Check for web files
+        if(FileTypeMap.getFileType(ext).equals("web")
+        && (ext.equals("css") || ext.equals("js")))
+            return true;
         
+        // Check for images files
+        if(FileTypeMap.getFileType(ext).equals("img")) {
+            if(this.dlImages) {
+                return true;
+            } else {
+                String[] imgExt = getTextExt(this.txtImages);
+                for(int i = 0; i < imgExt.length; i++)
+                    if(imgExt[i].equals(ext))
+                        return true;
+            }
+        }
+        
+       // Check for audio files
+        if(FileTypeMap.getFileType(ext).equals("audio")) {
+            if(this.dlAudio) {
+                return true;
+            } else {
+                String[] audioExt = getTextExt(this.txtAudio);
+                for(int i = 0; i < audioExt.length; i++)
+                    if(audioExt[i].equals(ext))
+                        return true;
+            }
+        }
+        
+       // Check for video files
+        if(FileTypeMap.getFileType(ext).equals("video")) {
+            if(this.dlVideos) {
+                return true;
+            } else {
+                String[] videoExt = getTextExt(this.txtVideos);
+                for(int i = 0; i < videoExt.length; i++)
+                    if(videoExt[i].equals(ext))
+                        return true;
+            }
+        }
+        
+       // Check for other files
+        if(FileTypeMap.getFileType(ext).equals("other")) {
+            if(this.dlOther) {
+                return true;
+            } else {
+                String[] otherExt = getTextExt(this.txtOther);
+                for(int i = 0; i < otherExt.length; i++)
+                    if(otherExt[i].equals(ext))
+                        return true;
+            }
+        }
         
         return false;
     }
     
     /**
-     * Returns a list of extensions to download
+     * Returns a list of  extensions to download
      * @return 
      */
-    public String[] getImageExt() {
-        if(!this.txtImages.isEmpty()) {
-            this.txtImages = this.txtImages.replace(" ", "");
-            return this.txtImages.split(",");
-        } else {
-            return null;
-        }
-    }
-    
-    /**
-     * Returns a list of extensions to download
-     * @return 
-     */
-    public String[] getAudioExt() {
-        if(!this.txtAudio.isEmpty()) {
-            this.txtAudio = this.txtAudio.replace(" ", "");
-            return this.txtAudio.split(",");
-        } else {
-            return null;
-        }
-    }
-    
-    /**
-     * Returns a list of extensions to download
-     * @return 
-     */
-    public String[] getVideoExt() {
-        if(!this.txtVideos.isEmpty()) {
-            this.txtVideos = this.txtVideos.replace(" ", "");
-            return this.txtVideos.split(",");
+    public String[] getTextExt(String text) {
+        if(!text.isEmpty()) {
+            text = text.replace(" ", "");
+            return text.split(",");
         } else {
             return null;
         }
