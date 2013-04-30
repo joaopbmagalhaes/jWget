@@ -14,6 +14,7 @@
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+    <SyntheticProperty name="generateCenter" type="boolean" value="false"/>
   </SyntheticProperties>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
@@ -33,17 +34,17 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="55" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="lblDownloadOther" alignment="1" min="-2" max="-2" attributes="0"/>
-                  <Component id="lblDownloadVideos" alignment="1" min="-2" max="-2" attributes="0"/>
-                  <Component id="lblDownloadRes" alignment="1" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblExt" alignment="1" min="-2" max="-2" attributes="0"/>
                   <Component id="lblUrl" min="-2" max="-2" attributes="0"/>
                   <Component id="lblFolderPath" min="-2" max="-2" attributes="0"/>
                   <Component id="lblDeepness" min="-2" max="-2" attributes="0"/>
-                  <Component id="lblDownloadAudio" min="-2" max="-2" attributes="0"/>
-                  <Component id="lblDownloadImages" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Component id="cbAudio" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  </Group>
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="txtUrl" max="32767" attributes="0"/>
@@ -59,49 +60,27 @@
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="cbAll" min="-2" max="-2" attributes="0"/>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="cbJavascript" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="cbCss" min="-2" pref="100" max="-2" attributes="0"/>
-                          </Group>
                           <Group type="102" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                                      <Component id="txtVideos" alignment="0" pref="200" max="32767" attributes="0"/>
-                                      <Component id="txtImg" alignment="0" max="32767" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <Component id="btnPause" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="btnResume" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Component id="btnDownload" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                              </Group>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="cbImages" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Component id="cbVideos" alignment="0" min="-2" pref="70" max="-2" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-                                      <Component id="btnHistory" min="-2" pref="190" max="-2" attributes="0"/>
-                                  </Group>
-                              </Group>
+                              <Component id="btnPause" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="btnResume" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="btnDownload" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                              <Component id="btnHistory" min="-2" pref="190" max="-2" attributes="0"/>
                           </Group>
                           <Component id="lbDeepness" min="-2" pref="58" max="-2" attributes="0"/>
+                          <Component id="txtExt" alignment="0" min="-2" pref="200" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                  <Component id="txtAudio" alignment="0" pref="200" max="32767" attributes="0"/>
-                                  <Component id="txtOther" alignment="0" max="32767" attributes="0"/>
-                              </Group>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="cbOther" min="-2" max="-2" attributes="0"/>
-                                  <Component id="cbAudio" min="-2" max="-2" attributes="0"/>
+                                  <Component id="cbJavascript" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="cbImages" alignment="0" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="cbVideos" min="-2" pref="70" max="-2" attributes="0"/>
+                                  <Component id="cbCss" min="-2" pref="100" max="-2" attributes="0"/>
+                                  <Component id="cbOther" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -133,37 +112,25 @@
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="cbAll" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" max="32767" attributes="0"/>
+              <EmptySpace type="unrelated" pref="30" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="cbCss" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="lblDownloadRes" alignment="3" pref="31" max="32767" attributes="0"/>
                   <Component id="cbJavascript" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="lblDownloadImages" alignment="3" max="32767" attributes="0"/>
-                  <Component id="txtImg" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="cbImages" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="cbVideos" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="lblDownloadVideos" alignment="1" max="32767" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="txtVideos" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="cbVideos" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-              </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="txtAudio" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="cbAudio" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="lblDownloadAudio" alignment="3" max="32767" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="lblDownloadOther" alignment="3" pref="31" max="32767" attributes="0"/>
-                  <Component id="txtOther" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="cbOther" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="lblExt" alignment="3" pref="31" max="32767" attributes="0"/>
+                  <Component id="txtExt" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -276,19 +243,11 @@
     </Component>
     <Component class="javax.swing.JCheckBox" name="cbImages">
       <Properties>
-        <Property name="text" type="java.lang.String" value="All"/>
+        <Property name="text" type="java.lang.String" value="Images"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbImagesActionPerformed"/>
       </Events>
-    </Component>
-    <Component class="javax.swing.JLabel" name="lblDownloadImages">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Arial" size="14" style="0"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="Download images"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JCheckBox" name="cbCss">
       <Properties>
@@ -302,7 +261,7 @@
     </Component>
     <Component class="javax.swing.JCheckBox" name="cbVideos">
       <Properties>
-        <Property name="text" type="java.lang.String" value="All"/>
+        <Property name="text" type="java.lang.String" value="Videos"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbVideosActionPerformed"/>
@@ -353,61 +312,31 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbAllActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JTextField" name="txtImg">
-    </Component>
-    <Component class="javax.swing.JLabel" name="lblDownloadRes">
+    <Component class="javax.swing.JLabel" name="lblExt">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Arial" size="14" style="0"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Download resources"/>
+        <Property name="text" type="java.lang.String" value="Specify the extensions"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="lblDownloadVideos">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Arial" size="14" style="0"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="Download videos"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="lblDownloadOther">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Arial" size="14" style="0"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="Download other"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="txtVideos">
-    </Component>
-    <Component class="javax.swing.JTextField" name="txtOther">
+    <Component class="javax.swing.JTextField" name="txtExt">
     </Component>
     <Component class="javax.swing.JCheckBox" name="cbOther">
       <Properties>
-        <Property name="text" type="java.lang.String" value="All"/>
+        <Property name="text" type="java.lang.String" value="Others"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbOtherActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JTextField" name="txtAudio">
-    </Component>
     <Component class="javax.swing.JCheckBox" name="cbAudio">
       <Properties>
-        <Property name="text" type="java.lang.String" value="All"/>
+        <Property name="text" type="java.lang.String" value="Audio"/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbAudioActionPerformed"/>
       </Events>
-    </Component>
-    <Component class="javax.swing.JLabel" name="lblDownloadAudio">
-      <Properties>
-        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Arial" size="14" style="0"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="Download audio"/>
-      </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="btnPause">
       <Properties>
