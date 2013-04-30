@@ -44,7 +44,7 @@ public class FileTypeMap {
         fileClassType.put("svg", DownloaderDownloadFile.class);
         fileClassType.put("ico", DownloaderDownloadFile.class);
         fileClassType.put("mp3", DownloaderDownloadFile.class);
-        
+
         // Init web file types
         fileGenreType.put("html","web");
         fileGenreType.put("css","web");
@@ -150,7 +150,7 @@ public class FileTypeMap {
      * @param fileName
      * @return
      */
-    public static String getFileType(String ext) {
+    public String getFileType(String ext) {
         return getFileGenreType().get(ext);
     }
 }

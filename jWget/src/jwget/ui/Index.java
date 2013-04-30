@@ -14,7 +14,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.UIManager;
-import jwget.Config;
 import jwget.jWget;
 
 /**
@@ -320,8 +319,8 @@ public class Index extends javax.swing.JFrame {
                 boolean dlImages = cbImages.isSelected();
                 boolean dlAudio = cbAudio.isSelected();
                 boolean dlVideos = cbVideos.isSelected();
-                boolean dlCss = cbImages.isSelected();
-                boolean dlJs = cbImages.isSelected();
+                boolean dlCss = cbCss.isSelected();
+                boolean dlJs = cbJavascript.isSelected();
                 boolean dlOther = cbOther.isSelected();
                 String extOther = txtExt.getText();
                 int deepLevel = Integer.parseInt(lbDeepness.getSelectedItem().toString());

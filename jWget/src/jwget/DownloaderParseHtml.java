@@ -92,12 +92,10 @@ public class DownloaderParseHtml extends Downloader implements Runnable {
                     String fileTypeExt = FileTypeMap.getFileExt(newPathAndFileName);
                     if (newDownloader != null) {
                         // Creates a new Webfile to be downloaded
-                        FileTypeMap.getFileTypeManager().canDownload(fileTypeExt);
                         if (!this.jConfig.getControlQueue().contains(newWf) // Control for repeated websites
                                 && this.jConfig.isInDomain(newWf) // and websites outside the initial domain
                                 && this.jConfig.isInDeepLevel(newWf) // and also outside the deep level
-                                //      && FileTypeMap.getFileTypeManager().canDownload(fileTypeExt)) { // and if the download is wanted
-                                ) {
+                                && FileTypeMap.getFileTypeManager().canDownload(fileTypeExt)) { // and if the download is wanted
                            
                             newDownloader.setConfig(this.jConfig);
                             newDownloader.setWebfile(newWf);
