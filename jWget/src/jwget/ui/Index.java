@@ -22,9 +22,9 @@ import jwget.jWget;
  * @author Joao
  */
 public class Index extends javax.swing.JFrame {
-    public Config config;
+
     public jWget main;
-    
+
     /**
      * Creates new form Index
      */
@@ -41,7 +41,7 @@ public class Index extends javax.swing.JFrame {
 
         // Initializes the folder path to the users home directory
         txtFolderPath.setText(System.getProperty("user.home"));
-        
+
         // Hide pause and resume buttons
         btnPause.setVisible(false);
         btnResume.setVisible(false);
@@ -353,8 +353,7 @@ public class Index extends javax.swing.JFrame {
      * @param evt
      */
     private void btnDownloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDownloadActionPerformed
-        if(false) {
-            
+        if (false) {
         } else {
             btnDownload.setVisible(false);
             btnPause.setVisible(true);
@@ -375,10 +374,9 @@ public class Index extends javax.swing.JFrame {
                 int deepLevel = Integer.parseInt(lbDeepness.getSelectedItem().toString());
 
                 try {
-                    // Create new config file
-                    config = new Config(txtUrl.getText(), txtUrl.getText(), folderPath, dlAll, extImage, extAudio, extVideo, extOther, dlImages, dlAudio, dlVideos, dlCss, dlJs, dlOther, deepLevel, folderPath);
                     // Start downloading
-                    main = new jWget(config);
+                    main = new jWget(txtUrl.getText(), txtUrl.getText(), folderPath, dlAll, extImage, extAudio, extVideo, extOther, dlImages, dlAudio, dlVideos, dlCss, dlJs, dlOther, deepLevel, folderPath);
+
                     main.execute();
                 } catch (URISyntaxException ex) {
                     Logger.getLogger(Index.class.getName()).log(Level.SEVERE, null, ex);
@@ -430,7 +428,7 @@ public class Index extends javax.swing.JFrame {
 
     private void cbAllActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbAllActionPerformed
         boolean state = !cbAll.isSelected();
-        
+
         // Disable all checkboxes
         cbAudio.setEnabled(state);
         cbCss.setEnabled(state);
@@ -438,7 +436,7 @@ public class Index extends javax.swing.JFrame {
         cbJavascript.setEnabled(state);
         cbOther.setEnabled(state);
         cbVideos.setEnabled(state);
-        
+
         // Disable all text boxes
         txtAudio.setEnabled(state);
         txtImg.setEnabled(state);
@@ -449,15 +447,15 @@ public class Index extends javax.swing.JFrame {
     private void btnPauseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPauseActionPerformed
         btnPause.setVisible(false);
         btnResume.setVisible(true);
-        
-        config.getExecutor().pause();
+
+        main.getConfig().getExecutor().pause();
     }//GEN-LAST:event_btnPauseActionPerformed
 
     private void btnResumeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResumeActionPerformed
         btnPause.setVisible(true);
         btnResume.setVisible(false);
-        
-        config.getExecutor().resume();
+
+        main.getConfig().getExecutor().resume();
     }//GEN-LAST:event_btnResumeActionPerformed
 
     /**
