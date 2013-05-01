@@ -19,7 +19,6 @@ import java.util.logging.Logger;
  * @author Joao
  */
 public class Config {
-
     private String root;                  // Root url
     private String domain;                // Domain
     private String folderPath;            // Path to save all files   
@@ -27,7 +26,6 @@ public class Config {
     private String dateTime;              // Date and time of the request
     private static final int NCORES = Runtime.getRuntime().availableProcessors();           // Number of cores the current computer has
     private ConcurrentLinkedQueue<Webfile> controlQueue = new ConcurrentLinkedQueue();      // Concurrent queue for websites (already downloaded, control dups)
-    //  private final ExecutorService executor1 = Executors.newFixedThreadPool(NCORES + 1);      // Thread pool
     private final PausableThreadPoolExecutor executor = new PausableThreadPoolExecutor(NCORES + 1, NCORES + 1, 10, TimeUnit.SECONDS, new LinkedBlockingDeque<Runnable>());// Thread pool
     private AtomicInteger countLinks = new AtomicInteger(0);                                // Counter of the number of links to be downloaded
 
@@ -43,9 +41,9 @@ public class Config {
      * @param deepLevel
      * @param dateTime
      */
-    public Config(String root, String domain, String folderPath, int deepLevel, String dateTime) {
+    public Config(String root, String domain, String folderPath, int deepLevel, String dateTime) throws URISyntaxException {
         this.root = buildURI(root).toString();
-        this.domain = domain;
+        this.domain = extractDomain(domain).toString();
         this.folderPath = folderPath;
         this.deepLevel = deepLevel;
         this.dateTime = dateTime;
@@ -119,12 +117,12 @@ public class Config {
     public int getCountLinks() {
         return countLinks.get();
     }
-
     /**
      *
      * GETTERS AND SETTERS - END
      *
      */
+    
     /**
      * Parses a given URL to extract to domain
      *
@@ -156,7 +154,7 @@ public class Config {
                     url = "http://" + url;
                 }
                 return new URI(url);
-            } catch (URISyntaxException ex) {
+            } catch (URISyntaxException | NullPointerException ex) {
                 Logger.getLogger(Config.class.getName()).log(Level.SEVERE, null, ex);
             }
             return null;
@@ -172,7 +170,7 @@ public class Config {
      */
     public boolean isInDomain(Webfile wf) throws URISyntaxException {
         String wfDomain = extractDomain(wf.getUrl());
-        if (wfDomain.equalsIgnoreCase(extractDomain(this.domain))) {
+        if (wfDomain.equalsIgnoreCase(this.domain)) {
             return true;
         } else {
             return false;
