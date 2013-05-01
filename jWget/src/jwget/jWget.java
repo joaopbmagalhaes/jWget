@@ -17,7 +17,6 @@ import java.util.concurrent.TimeUnit;
  * @author Joao
  */
 public class jWget {
-
     protected Config jConfig;         // Configuration file
 
     public jWget() {
@@ -39,8 +38,7 @@ public class jWget {
      * @param deepLevel
      * @param dateTime
      */
-    public jWget(String root, String domain, String folderPath, boolean dlAll, String txtOther, boolean dlImages, boolean dlAudio, boolean dlVideos, boolean dlCss, boolean dlJs, boolean dlOther, int deepLevel, String dateTime) {
-
+    public jWget(String root, String domain, String folderPath, boolean dlAll, String txtOther, boolean dlImages, boolean dlAudio, boolean dlVideos, boolean dlCss, boolean dlJs, boolean dlOther, int deepLevel, String dateTime) throws URISyntaxException {
         Config config = new Config(root, domain, folderPath, deepLevel, dateTime);
         FileTypeManager fileTypeManager = new FileTypeManager(dlAll, dlImages, dlAudio, dlVideos, dlCss, dlJs, dlOther, txtOther);
         FileTypeMap.setFileTypeManager(fileTypeManager);
@@ -60,12 +58,12 @@ public class jWget {
     public void setConfig(Config config) {
         this.jConfig = config;
     }
-
     /**
      *
      * GETTERS AND SETTERS - END
      *
      */
+    
     /**
      * Updates the history file
      */
