@@ -5,15 +5,18 @@
 package jwget;
 
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.jsoup.Connection;
-import org.jsoup.Jsoup;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -57,8 +60,7 @@ public class DownloaderParseCss extends Downloader implements Runnable {
                 }
                 out.close();
             }
-            // Add webfile to the control queue
-            this.jConfig.getControlQueue().add(wf);
+
         } catch (IOException ex) {
             Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
         }
