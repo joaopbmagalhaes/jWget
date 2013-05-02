@@ -61,6 +61,7 @@ public class DownloaderParseHtml extends Downloader implements Runnable {
                         absoluteUrl = element.absUrl("href");
                         newPathAndFileName = Utils.getPathAndFileName(this.getConfig().getFolderPath(), this.getConfig().getRoot(), absoluteUrl);
                         newWf = new Webfile(newPathAndFileName, this.jConfig.buildURI(absoluteUrl).toString(), (this.wf.getLevel() + 1));
+                        element.attr("href", newPathAndFileName);
                         if (this.jConfig.getDeepLevel() == this.wf.getLevel()
                                 && PARSE_TAGS[i].equals("a")
                                 && !this.jConfig.getControlQueue().contains(newWf)) {
@@ -74,6 +75,7 @@ public class DownloaderParseHtml extends Downloader implements Runnable {
                         absoluteUrl = element.absUrl("src");
                         newPathAndFileName = Utils.getPathAndFileName(this.getConfig().getFolderPath(), this.getConfig().getRoot(), absoluteUrl);
                         newWf = new Webfile(newPathAndFileName, this.jConfig.buildURI(absoluteUrl).toString(), (this.wf.getLevel() + 1));
+                        element.attr("src", newPathAndFileName);
                         if (this.jConfig.getDeepLevel() == this.wf.getLevel()
                                 && PARSE_TAGS[i].equals("a")
                                 && !this.jConfig.getControlQueue().contains(newWf)) {
@@ -83,23 +85,51 @@ public class DownloaderParseHtml extends Downloader implements Runnable {
                         }
                     }
 
-                    //Creates a new downloader object for the filetype in question
-                    Downloader newDownloader = FileTypeMap.getFileTypeClass(newPathAndFileName);
-                    // Get file type extension
-                    String fileTypeExt = FileTypeMap.getFileExt(newPathAndFileName);
-                    if (newDownloader != null) {
+                    if (newPathAndFileName != null) {
+                        //Creates a new downloader object for the filetype in question
+                        Downloader newDownloader = FileTypeMap.getFileTypeClass(newPathAndFileName);
+                        // Get file type extension
+                        String fileTypeExt = FileTypeMap.getFileExt(newPathAndFileName);
+
                         // Creates a new Webfile to be downloaded
-                        if (!this.jConfig.getControlQueue().contains(newWf) // Control for repeated websites
-                                && this.jConfig.isInDomain(newWf) // and websites outside the initial domain
-                                && this.jConfig.isInDeepLevel(newWf) // and also outside the deep level
-                                && FileTypeMap.getFileTypeManager().canDownload(fileTypeExt)) { // and if the download is wanted
+                        if (!this.jConfig.getControlQueue().contains(newWf)) {
+                            // Check diferente properties if is a HTML or a resource
+                            if (newDownloader instanceof DownloaderParseHtml) {
+                                // Control websites outside the initial domain
+                                // and also outside the deep level
+                                if (this.jConfig.isInDomain(newWf)
+                                        && this.jConfig.isInDeepLevel(newWf)) {
 
-                            System.out.println("Next URL: " + absoluteUrl);
-                            System.out.println("Next file name: " + newPathAndFileName);
+                                    System.out.println("Next URL: " + absoluteUrl);
+                                    System.out.println("Next file name: " + newPathAndFileName);
 
-                            newDownloader.setConfig(this.jConfig);
-                            newDownloader.setWebfile(newWf);
-                            this.jConfig.getExecutor().execute(newDownloader);
+                                    newDownloader.setConfig(this.jConfig);
+                                    newDownloader.setWebfile(newWf);
+                                    this.jConfig.getExecutor().execute(newDownloader);
+                                }
+                            } else {
+                                // Control if the download is wanted
+                                if (FileTypeMap.getFileTypeManager().canDownload(fileTypeExt)) {
+                                    System.out.println("Next URL: " + absoluteUrl);
+                                    System.out.println("Next file name: " + newPathAndFileName);
+
+                                    newDownloader.setConfig(this.jConfig);
+                                    newDownloader.setWebfile(newWf);
+                                    this.jConfig.getExecutor().execute(newDownloader);
+                                }
+                            }
+                            if (!this.jConfig.getControlQueue().contains(newWf) // Control for repeated websites
+                                    && this.jConfig.isInDomain(newWf) // and websites outside the initial domain
+                                    && this.jConfig.isInDeepLevel(newWf) // and also outside the deep level
+                                    && FileTypeMap.getFileTypeManager().canDownload(fileTypeExt)) { // and if the download is wanted
+
+                                System.out.println("Next URL: " + absoluteUrl);
+                                System.out.println("Next file name: " + newPathAndFileName);
+
+                                newDownloader.setConfig(this.jConfig);
+                                newDownloader.setWebfile(newWf);
+                                this.jConfig.getExecutor().execute(newDownloader);
+                            }
                         }
                     }
                 }
@@ -112,12 +142,13 @@ public class DownloaderParseHtml extends Downloader implements Runnable {
 
             // Add webfile to the control queue
             this.jConfig.getControlQueue().add(wf);
-
         } catch (URISyntaxException ex) {
             Logger.getLogger(DownloaderParseHtml.class.getName()).log(Level.SEVERE, null, ex);
         } catch (MalformedURLException ex) {
             Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
+            Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NullPointerException ex) {
             Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
