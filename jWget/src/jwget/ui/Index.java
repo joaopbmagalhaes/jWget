@@ -45,6 +45,7 @@ public class Index extends javax.swing.JFrame {
         // Hide pause and resume buttons
         btnPause.setVisible(false);
         btnResume.setVisible(false);
+        btnCancel.setVisible(false);
     }
 
     /**
@@ -77,6 +78,7 @@ public class Index extends javax.swing.JFrame {
         cbAudio = new javax.swing.JCheckBox();
         btnPause = new javax.swing.JButton();
         btnResume = new javax.swing.JButton();
+        btnCancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Simple wget");
@@ -205,17 +207,28 @@ public class Index extends javax.swing.JFrame {
             }
         });
 
+        btnCancel.setFont(new java.awt.Font("Arial", 1, 18)); // NOI18N
+        btnCancel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/jwget/img/stop.png"))); // NOI18N
+        btnCancel.setText("Stop");
+        btnCancel.setPreferredSize(new java.awt.Dimension(173, 43));
+        btnCancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCancelActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(55, 55, 55)
+                .addGap(23, 23, 23)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(lblExt)
                     .addComponent(lblUrl)
                     .addComponent(lblFolderPath)
-                    .addComponent(lblDeepness))
+                    .addComponent(lblDeepness)
+                    .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -294,7 +307,8 @@ public class Index extends javax.swing.JFrame {
                     .addComponent(btnDownload, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnHistory, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnPause, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnResume, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnResume, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(20, 20, 20))
         );
 
@@ -313,6 +327,7 @@ public class Index extends javax.swing.JFrame {
         } else {
             btnDownload.setVisible(false);
             btnPause.setVisible(true);
+            btnCancel.setVisible(true);
             if (!txtUrl.getText().isEmpty()) {
                 // Get user input
                 String folderPath = txtFolderPath.getText();
@@ -400,6 +415,13 @@ public class Index extends javax.swing.JFrame {
         main.getConfig().getExecutor().resume();
     }//GEN-LAST:event_btnResumeActionPerformed
 
+    private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
+//        main.getConfig().getExecutor().cancel();
+        btnPause.setVisible(false);
+        btnResume.setVisible(false);
+        btnCancel.setVisible(false);
+    }//GEN-LAST:event_btnCancelActionPerformed
+
     public void downloadFinalyzed() {
         btnPause.setVisible(false);
         btnResume.setVisible(false);
@@ -427,6 +449,7 @@ public class Index extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnChooseFolder;
     private javax.swing.JButton btnDownload;
     private javax.swing.JButton btnHistory;
