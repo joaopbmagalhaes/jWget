@@ -405,7 +405,7 @@ public class Index extends javax.swing.JFrame {
         btnResume.setVisible(false);
         btnDownload.setVisible(true);
 
-        JOptionPane.showMessageDialog(this, "Download Realizado com Sucesso.");
+        JOptionPane.showMessageDialog(this, "Download finished.","Simple wget",JOptionPane.OK_OPTION);
     }
 
     /**
