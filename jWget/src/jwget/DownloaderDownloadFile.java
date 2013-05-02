@@ -15,7 +15,7 @@ import org.jsoup.Jsoup;
  *
  * @author Isaac
  */
-public class DownloaderDownloadFile extends Downloader implements Runnable{
+public class DownloaderDownloadFile extends Downloader implements Runnable {
 
     public DownloaderDownloadFile() {
         super();
@@ -46,6 +46,8 @@ public class DownloaderDownloadFile extends Downloader implements Runnable{
             out.write(resultImageResponse.bodyAsBytes());           // resultImageResponse.body() is where the image's contents are.
 
             out.close();
+            // Add webfile to the control queue
+            this.jConfig.getControlQueue().add(wf);
         } catch (IOException ex) {
             Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
         }

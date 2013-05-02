@@ -19,6 +19,7 @@ import java.util.logging.Logger;
  * @author Joao
  */
 public class Config {
+
     private String root;                  // Root url
     private String domain;                // Domain
     private String folderPath;            // Path to save all files   
@@ -27,7 +28,6 @@ public class Config {
     private static final int NCORES = Runtime.getRuntime().availableProcessors();           // Number of cores the current computer has
     private ConcurrentLinkedQueue<Webfile> controlQueue = new ConcurrentLinkedQueue();      // Concurrent queue for websites (already downloaded, control dups)
     private final PausableThreadPoolExecutor executor = new PausableThreadPoolExecutor(NCORES + 1, NCORES + 1, 10, TimeUnit.SECONDS, new LinkedBlockingDeque<Runnable>());// Thread pool
-    private AtomicInteger countLinks = new AtomicInteger(0);                                // Counter of the number of links to be downloaded
 
     public Config() {
     }
@@ -106,23 +106,11 @@ public class Config {
         return executor;
     }
 
-    public int incrementCountLinks() {
-        return countLinks.incrementAndGet();
-    }
-
-    public int decrementCountLinks() {
-        return countLinks.decrementAndGet();
-    }
-
-    public int getCountLinks() {
-        return countLinks.get();
-    }
     /**
      *
      * GETTERS AND SETTERS - END
      *
      */
-    
     /**
      * Parses a given URL to extract to domain
      *

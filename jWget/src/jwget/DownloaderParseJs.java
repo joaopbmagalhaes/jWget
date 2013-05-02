@@ -56,7 +56,10 @@ public class DownloaderParseJs extends Downloader implements Runnable {
                     out.write(b);
                 }
                 out.close();
+                // Add webfile to the control queue
+                this.jConfig.getControlQueue().add(wf);
             }
+
         } catch (IOException ex) {
             Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
         }

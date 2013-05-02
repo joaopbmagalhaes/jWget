@@ -7,6 +7,7 @@ package jwget;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -15,9 +16,11 @@ import java.util.concurrent.locks.ReentrantLock;
  * @author Isaac
  */
 public class PausableThreadPoolExecutor extends ThreadPoolExecutor {
+
     private boolean isPaused;
     private ReentrantLock pauseLock = new ReentrantLock();
     private Condition unpaused = pauseLock.newCondition();
+    private static AtomicInteger countLinks = new AtomicInteger(0);  // Counter of the number of links to be downloaded
 
     public PausableThreadPoolExecutor(int corePoolSize,
             int maximumPoolSize,
@@ -42,6 +45,25 @@ public class PausableThreadPoolExecutor extends ThreadPoolExecutor {
         }
     }
 
+    private static int incrementCountLinks() {
+        return countLinks.incrementAndGet();
+    }
+
+    private static int decrementCountLinks() {
+        return countLinks.decrementAndGet();
+    }
+
+    public static int getCountLinks() {
+        return countLinks.get();
+    }
+
+    @Override
+    public void execute(Runnable command) {
+        int cont = incrementCountLinks();
+        System.out.println("Added new Task: " + cont);
+        super.execute(command);
+    }
+
     public void pause() {
         pauseLock.lock();
         try {
@@ -58,6 +80,22 @@ public class PausableThreadPoolExecutor extends ThreadPoolExecutor {
             unpaused.signalAll();
         } finally {
             pauseLock.unlock();
+        }
+    }
+
+    @Override
+    protected void afterExecute(Runnable r, Throwable t) {
+        try {
+            int cont = decrementCountLinks();
+            System.out.println("Task Finalyzed: " + cont);
+            if (cont == 0) {
+                System.out.println("######################## ##### ### TERMINOU  ### #######      #################################");
+                jWget.returnResult("Success");
+            }
+
+        } finally {
+            jWget.returnResult("ENVIADO ----------------- TESTE ---::::: ");
+            super.afterExecute(r, t);
         }
     }
 }

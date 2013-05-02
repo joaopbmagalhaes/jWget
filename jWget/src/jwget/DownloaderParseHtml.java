@@ -64,7 +64,7 @@ public class DownloaderParseHtml extends Downloader implements Runnable {
                         if (this.jConfig.getDeepLevel() == this.wf.getLevel()
                                 && PARSE_TAGS[i].equals("a")
                                 && !this.jConfig.getControlQueue().contains(newWf)) {
-                            element.attr("href", absoluteUrl);
+                            element.attr("href", "");
                         } else {
                             element.attr("href", newPathAndFileName);
                         }
@@ -77,7 +77,7 @@ public class DownloaderParseHtml extends Downloader implements Runnable {
                         if (this.jConfig.getDeepLevel() == this.wf.getLevel()
                                 && PARSE_TAGS[i].equals("a")
                                 && !this.jConfig.getControlQueue().contains(newWf)) {
-                            element.attr("src", absoluteUrl);
+                            element.attr("src", "");
                         } else {
                             element.attr("src", newPathAndFileName);
                         }
@@ -93,20 +93,17 @@ public class DownloaderParseHtml extends Downloader implements Runnable {
                                 && this.jConfig.isInDomain(newWf) // and websites outside the initial domain
                                 && this.jConfig.isInDeepLevel(newWf) // and also outside the deep level
                                 && FileTypeMap.getFileTypeManager().canDownload(fileTypeExt)) { // and if the download is wanted
-                           
+
                             System.out.println("Next URL: " + absoluteUrl);
                             System.out.println("Next file name: " + newPathAndFileName);
-                            
+
                             newDownloader.setConfig(this.jConfig);
                             newDownloader.setWebfile(newWf);
-                            this.jConfig.incrementCountLinks();
                             this.jConfig.getExecutor().execute(newDownloader);
                         }
                     }
                 }
             }
-            // TODO Check if this call is necessary
-            //  Utils.checkDirTree(this.jConfig.getRoot(), this.jConfig.getFolderPath(), this.wf.getFileName());
             // Save the file
             FileWriter fstream = new FileWriter(this.wf.getFileName());
             try (PrintWriter out = new PrintWriter(fstream)) {
@@ -115,9 +112,7 @@ public class DownloaderParseHtml extends Downloader implements Runnable {
 
             // Add webfile to the control queue
             this.jConfig.getControlQueue().add(wf);
-            this.jConfig.decrementCountLinks();
 
-            System.out.println("Count after run: " + String.valueOf(this.jConfig.getCountLinks()));
         } catch (URISyntaxException ex) {
             Logger.getLogger(DownloaderParseHtml.class.getName()).log(Level.SEVERE, null, ex);
         } catch (MalformedURLException ex) {

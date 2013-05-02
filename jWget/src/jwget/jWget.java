@@ -10,14 +10,16 @@ import java.net.URISyntaxException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
+import jwget.ui.Index;
 
 /**
  *
  * @author Joao
  */
 public class jWget {
+
     protected Config jConfig;         // Configuration file
+    private static Index index;
 
     public jWget() {
     }
@@ -38,7 +40,8 @@ public class jWget {
      * @param deepLevel
      * @param dateTime
      */
-    public jWget(String root, String domain, String folderPath, boolean dlAll, String txtOther, boolean dlImages, boolean dlAudio, boolean dlVideos, boolean dlCss, boolean dlJs, boolean dlOther, int deepLevel, String dateTime) throws URISyntaxException {
+    public jWget(Index index, String root, String domain, String folderPath, boolean dlAll, String txtOther, boolean dlImages, boolean dlAudio, boolean dlVideos, boolean dlCss, boolean dlJs, boolean dlOther, int deepLevel, String dateTime) throws URISyntaxException {
+        this.index = index;
         Config config = new Config(root, domain, folderPath, deepLevel, dateTime);
         FileTypeManager fileTypeManager = new FileTypeManager(dlAll, dlImages, dlAudio, dlVideos, dlCss, dlJs, dlOther, txtOther);
         FileTypeMap.setFileTypeManager(fileTypeManager);
@@ -58,12 +61,12 @@ public class jWget {
     public void setConfig(Config config) {
         this.jConfig = config;
     }
+
     /**
      *
      * GETTERS AND SETTERS - END
      *
      */
-    
     /**
      * Updates the history file
      */
@@ -86,6 +89,18 @@ public class jWget {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
         this.jConfig.setDateTime(dateFormat.format(date));
+    }
+
+    public static void returnResult(Object result) {
+        if (result instanceof String) {
+            System.out.println("Recevido: " + result);
+            if (result.equals("Success")) {
+                index.downloadFinalyzed();
+            }
+        } else {
+            System.out.println("Recevido não String");
+        }
+
     }
 
     /**
@@ -111,55 +126,27 @@ public class jWget {
         // Update the hisory file
         updateHistory();
 
-        Thread executeWget = new Thread(new jWget.ExecuteWget(this.jConfig));
-        executeWget.start();
-//        try {
-//            executeWget.wait();
-//        } catch (InterruptedException ex) {
-//            Logger.getLogger(jWget.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-    }
+        // Create the first webfile to download and add to queue
+        String fullPathAndFileName = Utils.getPathAndFileName(this.jConfig.getFolderPath(), this.jConfig.getRoot(), this.jConfig.getRoot());
 
-    class ExecuteWget extends jWget implements Runnable {
 
-        private Config jConfig;         // Configuration file
+        if (fullPathAndFileName != null) {
 
-        public ExecuteWget(Config config) {
-            this.jConfig = config;
+            Webfile wf = new Webfile(fullPathAndFileName, this.jConfig.getRoot(), 0);
+
+            // Begin the downloads
+            Downloader d = new DownloaderParseHtml(this.jConfig, wf);
+            this.jConfig.getExecutor().execute(d);
+
+
+            /*   this.jConfig.getExecutor().shutdown();
+             try {
+             this.jConfig.getExecutor().awaitTermination(1, TimeUnit.SECONDS);
+             } catch (InterruptedException e) {
+             }*/
+        } else {
+            // TODO Handle fileName == null
         }
 
-        @Override
-        public void run() {
-
-            // Create the first webfile to download and add to queue
-            String fullPathAndFileName = Utils.getPathAndFileName(this.jConfig.getFolderPath(), this.jConfig.getRoot(), this.jConfig.getRoot());
-
-
-            if (fullPathAndFileName != null) {
-
-                Webfile wf = new Webfile(fullPathAndFileName, this.jConfig.getRoot(), 0);
-
-                // Start counting downloaded links
-                int t = this.jConfig.getCountLinks();
-                this.jConfig.incrementCountLinks();
-
-                // Begin the downloads
-                Downloader d = new DownloaderParseHtml(this.jConfig, wf);
-                this.jConfig.getExecutor().execute(d);
-
-                System.out.println("initial: " + String.valueOf(this.jConfig.getCountLinks()));
-                while (this.jConfig.getCountLinks() > 0) {
-                    //     System.out.println("loop: " + this.jConfig.getCountLinks());
-                }
-                System.out.println("final: " + String.valueOf(this.jConfig.getCountLinks()));
-                this.jConfig.getExecutor().shutdown();
-                try {
-                    this.jConfig.getExecutor().awaitTermination(1, TimeUnit.SECONDS);
-                } catch (InterruptedException e) {
-                }
-            } else {
-                // TODO Handle fileName == null
-            }
-        }
     }
 }

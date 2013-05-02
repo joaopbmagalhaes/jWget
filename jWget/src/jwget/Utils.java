@@ -104,8 +104,11 @@ public class Utils {
         } else {
             int indexLastSlash = cleanAbsoluteUrl.lastIndexOf("/");
 
-            newFileName = cleanAbsoluteUrl.substring(indexLastSlash + 1, cleanAbsoluteUrl.length());
-
+            if (indexLastSlash + 1 == cleanAbsoluteUrl.length()) {
+                newFileName = cleanAbsoluteUrl.substring(0, indexLastSlash);
+            } else {
+                newFileName = cleanAbsoluteUrl.substring(indexLastSlash + 1, cleanAbsoluteUrl.length());
+            }
             if (newFileName.lastIndexOf(".") == -1) {
                 newFileName = newFileName + ".html";
             }

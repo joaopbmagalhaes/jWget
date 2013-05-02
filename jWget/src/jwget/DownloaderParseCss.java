@@ -42,7 +42,7 @@ public class DownloaderParseCss extends Downloader implements Runnable {
     public void run() {
         //Open a URL Stream
         try {
-           
+
             String src = wf.getUrl();
 
             System.out.println(this.wf.getFileName());
@@ -57,6 +57,8 @@ public class DownloaderParseCss extends Downloader implements Runnable {
                 }
                 out.close();
             }
+            // Add webfile to the control queue
+            this.jConfig.getControlQueue().add(wf);
         } catch (IOException ex) {
             Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
         }
