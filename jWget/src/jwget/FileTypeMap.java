@@ -109,20 +109,22 @@ public class FileTypeMap {
      * @return
      */
     public static Downloader getFileTypeClass(String fileName) {
-        int index = fileName.lastIndexOf(".");
-        Class c;
-        if (index == -1) {
-            return new DownloaderParseHtml();
-        } else {
-            String ext = fileName.substring(index + 1, fileName.length());
-            if (FileTypeMap.getFileClassType().containsKey(ext)) {
-                try {
-                    c = FileTypeMap.getFileClassType().get(ext);
-                    return (Downloader) c.newInstance();
-                } catch (InstantiationException ex) {
-                    Logger.getLogger(FileTypeMap.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (IllegalAccessException ex) {
-                    Logger.getLogger(FileTypeMap.class.getName()).log(Level.SEVERE, null, ex);
+        if(!fileName.isEmpty()) {
+            int index = fileName.lastIndexOf(".");
+            Class c;
+            if (index == -1) {
+                return new DownloaderParseHtml();
+            } else {
+                String ext = fileName.substring(index + 1, fileName.length());
+                if (FileTypeMap.getFileClassType().containsKey(ext)) {
+                    try {
+                        c = FileTypeMap.getFileClassType().get(ext);
+                        return (Downloader) c.newInstance();
+                    } catch (InstantiationException ex) {
+                        Logger.getLogger(FileTypeMap.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IllegalAccessException ex) {
+                        Logger.getLogger(FileTypeMap.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             }
         }
