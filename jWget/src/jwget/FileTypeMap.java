@@ -120,9 +120,7 @@ public class FileTypeMap {
                     try {
                         c = FileTypeMap.getFileClassType().get(ext);
                         return (Downloader) c.newInstance();
-                    } catch (InstantiationException ex) {
-                        Logger.getLogger(FileTypeMap.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (IllegalAccessException ex) {
+                    } catch (InstantiationException | IllegalAccessException ex) {
                         Logger.getLogger(FileTypeMap.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
