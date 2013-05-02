@@ -13,6 +13,7 @@ import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import jwget.jWget;
 
@@ -327,7 +328,7 @@ public class Index extends javax.swing.JFrame {
 
                 try {
                     // Start downloading
-                    main = new jWget(txtUrl.getText(), txtUrl.getText(), folderPath, dlAll, extOther, dlImages, dlAudio, dlVideos, dlCss, dlJs, dlOther, deepLevel, folderPath);
+                    main = new jWget(this, txtUrl.getText(), txtUrl.getText(), folderPath, dlAll, extOther, dlImages, dlAudio, dlVideos, dlCss, dlJs, dlOther, deepLevel, folderPath);
 
                     main.execute();
                 } catch (URISyntaxException ex) {
@@ -398,6 +399,14 @@ public class Index extends javax.swing.JFrame {
 
         main.getConfig().getExecutor().resume();
     }//GEN-LAST:event_btnResumeActionPerformed
+
+    public void downloadFinalyzed() {
+        btnPause.setVisible(false);
+        btnResume.setVisible(false);
+        btnDownload.setVisible(true);
+
+        JOptionPane.showMessageDialog(this, "Download Realizado com Sucesso.");
+    }
 
     /**
      * @param args the command line arguments
