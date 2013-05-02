@@ -62,13 +62,7 @@ public class DownloaderParseHtml extends Downloader implements Runnable {
                         newPathAndFileName = Utils.getPathAndFileName(this.getConfig().getFolderPath(), this.getConfig().getRoot(), absoluteUrl);
                         newWf = new Webfile(newPathAndFileName, this.jConfig.buildURI(absoluteUrl).toString(), (this.wf.getLevel() + 1));
                         element.attr("href", newPathAndFileName);
-                        if (this.jConfig.getDeepLevel() == this.wf.getLevel()
-                                && PARSE_TAGS[i].equals("a")
-                                && !this.jConfig.getControlQueue().contains(newWf)) {
-                            element.attr("href", "");
-                        } else {
-                            element.attr("href", newPathAndFileName);
-                        }
+                        element.attr("href", newPathAndFileName);
                     }
                     // For elements with src
                     if (element.hasAttr("src")) {
@@ -76,13 +70,7 @@ public class DownloaderParseHtml extends Downloader implements Runnable {
                         newPathAndFileName = Utils.getPathAndFileName(this.getConfig().getFolderPath(), this.getConfig().getRoot(), absoluteUrl);
                         newWf = new Webfile(newPathAndFileName, this.jConfig.buildURI(absoluteUrl).toString(), (this.wf.getLevel() + 1));
                         element.attr("src", newPathAndFileName);
-                        if (this.jConfig.getDeepLevel() == this.wf.getLevel()
-                                && PARSE_TAGS[i].equals("a")
-                                && !this.jConfig.getControlQueue().contains(newWf)) {
-                            element.attr("src", "");
-                        } else {
-                            element.attr("src", newPathAndFileName);
-                        }
+                        element.attr("src", newPathAndFileName);
                     }
 
                     if (newPathAndFileName != null) {
