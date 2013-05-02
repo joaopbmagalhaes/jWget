@@ -34,16 +34,6 @@ public class FileTypeMap {
         fileClassType.put("html", DownloaderParseHtml.class);
         fileClassType.put("css", DownloaderParseCss.class);
         fileClassType.put("js", DownloaderParseJs.class);
-        fileClassType.put("pdf", DownloaderDownloadFile.class);
-        fileClassType.put("docx", DownloaderDownloadFile.class);
-        fileClassType.put("txt", DownloaderDownloadFile.class);
-        fileClassType.put("jpg", DownloaderDownloadFile.class);
-        fileClassType.put("jpeg", DownloaderDownloadFile.class);
-        fileClassType.put("png", DownloaderDownloadFile.class);
-        fileClassType.put("gif", DownloaderDownloadFile.class);
-        fileClassType.put("svg", DownloaderDownloadFile.class);
-        fileClassType.put("ico", DownloaderDownloadFile.class);
-        fileClassType.put("mp3", DownloaderDownloadFile.class);
 
         // Init web file types
         fileGenreType.put("html","web");
@@ -123,6 +113,8 @@ public class FileTypeMap {
                     } catch (InstantiationException | IllegalAccessException ex) {
                         Logger.getLogger(FileTypeMap.class.getName()).log(Level.SEVERE, null, ex);
                     }
+                } else {
+                    return (Downloader) new DownloaderDownloadFile();
                 }
             }
         }
