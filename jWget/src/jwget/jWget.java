@@ -5,11 +5,13 @@
 package jwget;
 
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 import jwget.ui.Index;
 
 /**
@@ -41,7 +43,7 @@ public class jWget {
      * @param dateTime
      */
     public jWget(Index index, String root, String domain, String folderPath, boolean dlAll, String txtOther, boolean dlImages, boolean dlAudio, boolean dlVideos, boolean dlCss, boolean dlJs, boolean dlOther, int deepLevel, String dateTime) throws URISyntaxException {
-        this.index = index;
+        jWget.index = index;
         Config config = new Config(root, domain, folderPath, deepLevel, dateTime);
         FileTypeManager fileTypeManager = new FileTypeManager(dlAll, dlImages, dlAudio, dlVideos, dlCss, dlJs, dlOther, txtOther);
         FileTypeMap.setFileTypeManager(fileTypeManager);
@@ -77,7 +79,7 @@ public class jWget {
             try (PrintWriter out = new PrintWriter(fstream)) {
                 out.println(this.jConfig.getDateTime() + ";" + this.jConfig.getDomain() + ";" + this.jConfig.getFolderPath() + ";" + this.jConfig.getDeepLevel());
             }
-        } catch (Exception e) { //Catch exception if any
+        } catch (IOException e) { //Catch exception if any
             System.err.println("Error: " + e.getMessage());
         }
     }
@@ -93,14 +95,24 @@ public class jWget {
 
     public static void returnResult(Object result) {
         if (result instanceof String) {
-            System.out.println("Recevido: " + result);
+            System.out.println("Recceived: " + result);
             if (result.equals("Success")) {
                 index.downloadFinalyzed();
             }
         } else {
-            System.out.println("Recevido não String");
+            System.out.println("Not Received Correct String.");
         }
+    }
 
+    public void cancelDownload() {
+
+        this.jConfig.getExecutor().shutdown();
+
+        try {
+            this.jConfig.getExecutor().awaitTermination(1, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            System.out.println("Error Cancelling the download: " + e.getMessage());
+        }
     }
 
     /**
@@ -128,7 +140,6 @@ public class jWget {
 
         // Create the first webfile to download and add to queue
         String fullPathAndFileName = Utils.getPathAndFileName(this.jConfig.getFolderPath(), this.jConfig.getRoot(), this.jConfig.getRoot());
-
 
         if (fullPathAndFileName != null) {
 

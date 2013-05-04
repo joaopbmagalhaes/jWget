@@ -18,9 +18,9 @@ import java.util.concurrent.locks.ReentrantLock;
 public class PausableThreadPoolExecutor extends ThreadPoolExecutor {
 
     private boolean isPaused;
-    private ReentrantLock pauseLock = new ReentrantLock();
-    private Condition unpaused = pauseLock.newCondition();
-    private static AtomicInteger countLinks = new AtomicInteger(0);  // Counter of the number of links to be downloaded
+    private final ReentrantLock pauseLock = new ReentrantLock();
+    private final Condition unpaused = pauseLock.newCondition();
+    private final static AtomicInteger countLinks = new AtomicInteger(0);  // Counter of the number of links to be downloaded
 
     public PausableThreadPoolExecutor(int corePoolSize,
             int maximumPoolSize,

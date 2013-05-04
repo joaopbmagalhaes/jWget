@@ -416,7 +416,7 @@ public class Index extends javax.swing.JFrame {
     }//GEN-LAST:event_btnResumeActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
-//        main.getConfig().getExecutor().cancel();
+        main.cancelDownload();
         btnPause.setVisible(false);
         btnResume.setVisible(false);
         btnCancel.setVisible(false);
@@ -427,7 +427,7 @@ public class Index extends javax.swing.JFrame {
         btnResume.setVisible(false);
         btnDownload.setVisible(true);
 
-        JOptionPane.showMessageDialog(this, "Download finished.","Simple wget",JOptionPane.OK_OPTION);
+        JOptionPane.showMessageDialog(this, "Download finished.", "Simple wget", JOptionPane.OK_OPTION);
     }
 
     /**
