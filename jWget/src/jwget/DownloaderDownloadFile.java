@@ -40,12 +40,13 @@ public class DownloaderDownloadFile extends Downloader implements Runnable {
         try {
             Connection.Response resultImageResponse = Jsoup.connect(wf.getUrl()).ignoreContentType(true).execute();
 
+            System.out.println(this.wf.getFileName());
+
             FileOutputStream out = (new FileOutputStream(new java.io.File(this.wf.getFileName())));
             out.write(resultImageResponse.bodyAsBytes());           // resultImageResponse.body() is where the image's contents are.
 
             out.close();
-            // Add webfile to the control queue
-            this.jConfig.getControlQueue().add(wf);
+
         } catch (IOException ex) {
             Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
         }
