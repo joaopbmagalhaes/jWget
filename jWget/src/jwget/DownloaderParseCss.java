@@ -106,11 +106,13 @@ public class DownloaderParseCss extends Downloader implements Runnable {
 
                         Utils.constructDirTree(this.getConfig().getFolderPath(), newPathAndFileName);
                         this.jConfig.getExecutor().execute(newDownloader);
+                        // Add webfile to the control queue
+                        this.jConfig.getControlQueue().add(newWf);
                     }
                 }
 
             }
-            // Saves the resource and updates the Control Queue
+            // Saves the resource
             saveFile(content);
         } catch (SocketTimeoutException ex) {
             Logger.getLogger(DownloaderParseHtml.class.getName()).log(Level.SEVERE, null, ex);
@@ -136,8 +138,5 @@ public class DownloaderParseCss extends Downloader implements Runnable {
                 Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-
-        // Add webfile to the control queue
-        this.jConfig.getControlQueue().add(wf);
     }
 }

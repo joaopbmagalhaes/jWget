@@ -148,6 +148,8 @@ public class jWget {
             // Begin the downloads
             Downloader d = new DownloaderParseHtml(this.jConfig, wf);
             this.jConfig.getExecutor().execute(d);
+            // Add webfile to the control queue
+            this.jConfig.getControlQueue().add(wf);
 
 
             /*   this.jConfig.getExecutor().shutdown();

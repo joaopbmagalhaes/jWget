@@ -82,8 +82,6 @@ public class DownloaderParseHtml extends Downloader implements Runnable {
                     out.close();
                 }
             }
-            // Add webfile to the control queue
-            this.jConfig.getControlQueue().add(wf);
         } catch (SocketTimeoutException | URISyntaxException ex) {
             Logger.getLogger(DownloaderParseHtml.class.getName()).log(Level.SEVERE, null, ex);
         } catch (MalformedURLException ex) {
@@ -138,6 +136,8 @@ public class DownloaderParseHtml extends Downloader implements Runnable {
 
                     Utils.constructDirTree(this.getConfig().getFolderPath(), newPathAndFileName);
                     this.jConfig.getExecutor().execute(newDownloader);
+                    // Add webfile to the control queue
+                    this.jConfig.getControlQueue().add(newWf);
                 }
             } else {
                 // Control if the download is wanted
@@ -145,6 +145,8 @@ public class DownloaderParseHtml extends Downloader implements Runnable {
 
                     Utils.constructDirTree(this.getConfig().getFolderPath(), newPathAndFileName);
                     this.jConfig.getExecutor().execute(newDownloader);
+                    // Add webfile to the control queue
+                    this.jConfig.getControlQueue().add(newWf);
                 }
             }
         }
