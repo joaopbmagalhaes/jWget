@@ -12,8 +12,6 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.jsoup.Connection;
-import org.jsoup.Jsoup;
 
 /**
  *

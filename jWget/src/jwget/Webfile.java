@@ -66,7 +66,6 @@ public class Webfile {
      * GETTERS AND SETTERS - END
      *
      */
-
     /**
      * Compare 2 Webfiles
      *

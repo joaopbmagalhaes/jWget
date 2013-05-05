@@ -9,6 +9,7 @@ package jwget;
  * @author Isaac
  */
 public class FileTypeManager {
+
     private boolean dlAll;                // Download all types of files
     private boolean dlImages;             // Download images
     private boolean dlAudio;              // Download audio
@@ -92,7 +93,7 @@ public class FileTypeManager {
     public void setTxtOther(String txtOther) {
         this.txtOther = txtOther;
     }
-    
+
     /**
      * Check if webfiles should be downloaded or not
      *
@@ -101,12 +102,12 @@ public class FileTypeManager {
      */
     public boolean canDownload(String ext) {
         String fileType = FileTypeMap.getInstance().getFileType(ext);
-        
+
         // Checks if the extension exists
-        if(fileType == null) {
+        if (fileType == null) {
             return false;
         }
-        
+
         // Download all html files and all other files if checkbox selected
         if (this.dlAll || ext.equalsIgnoreCase("html")) {
             return true;
@@ -117,7 +118,7 @@ public class FileTypeManager {
                 && dlCss) {
             return true;
         }
-        
+
         // Check for js files
         if (ext.equals("js")
                 && dlJs) {
@@ -129,19 +130,19 @@ public class FileTypeManager {
                 && dlImages) {
             return true;
         }
-        
+
         // Check for audio files
         if (fileType.equals("audio")
                 && dlAudio) {
             return true;
         }
-        
+
         // Check for video files
         if (fileType.equals("video")
                 && dlVideos) {
             return true;
         }
-        
+
         // Check for other files
         if (fileType.equals("other")
                 && dlOther) {
@@ -150,14 +151,14 @@ public class FileTypeManager {
 
         // Check for other file extensions
         String otherExt[] = getTextExt();
-        if(otherExt != null) {
-            for(int k = 0; k < otherExt.length; k++) {
-                if(otherExt[k].equalsIgnoreCase(ext)) {
+        if (otherExt != null) {
+            for (int k = 0; k < otherExt.length; k++) {
+                if (otherExt[k].equalsIgnoreCase(ext)) {
                     return true;
                 }
             }
         }
-        
+
         return false;
     }
 

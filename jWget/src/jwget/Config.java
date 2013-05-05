@@ -9,7 +9,6 @@ import java.net.URISyntaxException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -183,10 +182,6 @@ public class Config {
      * @return
      */
     public boolean isInDeepLevel(Webfile wf) {
-        if (wf.getLevel() <= this.getDeepLevel()) {
-            return true;
-        } else {
-            return false;
-        }
+        return wf.getLevel() <= this.getDeepLevel();
     }
 }
