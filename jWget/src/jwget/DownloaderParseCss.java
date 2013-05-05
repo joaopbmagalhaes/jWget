@@ -94,7 +94,7 @@ public class DownloaderParseCss extends Downloader implements Runnable {
 
                 // Create the new fileName and Path of the resource to be available offline
                 newPathAndFileName = Utils.getPathAndFileName(this.getConfig().getFolderPath(), this.getConfig().getRoot(), urlFound);
-                if (!resourceFound.contains("/")) {
+                if (!resourceFound.startsWith("/")) {
                     resource = urlFound;
                 } else {
                     content = content.replace(resourceFound, newPathAndFileName.replace("\\", "/"));
