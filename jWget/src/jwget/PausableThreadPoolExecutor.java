@@ -74,10 +74,9 @@ public class PausableThreadPoolExecutor extends ThreadPoolExecutor {
     }
 
     /**
-     * This method is responsible for pausing the download process. 
-     * This method first adquires the pauseLock lock and then sets
-     * the isPaused to true so that all the Threads await until the 
-     * process is resumed
+     * This method is responsible for pausing the download process. This method
+     * first adquires the pauseLock lock and then sets the isPaused to true so
+     * that all the Threads await until the process is resumed
      */
     public void pause() {
         pauseLock.lock();
@@ -89,9 +88,9 @@ public class PausableThreadPoolExecutor extends ThreadPoolExecutor {
     }
 
     /**
-     * This method is responsible for resuming the download process.
-     * This method first adquires the pauseLock lock and then calls
-     * signalAll to unlock all Threads awaiting
+     * This method is responsible for resuming the download process. This method
+     * first adquires the pauseLock lock and then calls signalAll to unlock all
+     * Threads awaiting
      */
     public void resume() {
         pauseLock.lock();
