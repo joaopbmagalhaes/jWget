@@ -45,8 +45,6 @@ public class DownloaderParseJs extends Downloader implements Runnable {
 
             String src = wf.getUrl();
 
-            System.out.println(this.wf.getFileName());
-
             //Open a URL Stream
             URL url = new URL(src);
             try (InputStream in = url.openStream()) {

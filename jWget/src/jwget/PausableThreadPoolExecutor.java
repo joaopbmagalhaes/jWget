@@ -60,7 +60,9 @@ public class PausableThreadPoolExecutor extends ThreadPoolExecutor {
     @Override
     public void execute(Runnable command) {
         int cont = incrementCountLinks();
+        Downloader d = (Downloader) command;
         System.out.println("Added new Task: " + cont);
+        System.out.println("\t\t\t Resource: " + d.getWebfile().getUrl());
         super.execute(command);
     }
 
@@ -88,13 +90,15 @@ public class PausableThreadPoolExecutor extends ThreadPoolExecutor {
         try {
             int cont = decrementCountLinks();
             System.out.println("Task Finalyzed: " + cont);
+            Downloader d = (Downloader) r;
+            System.out.println("\t\t\t Resource: " + d.getWebfile().getUrl());
             if (cont == 0) {
                 System.out.println("######################## ##### ### TERMINOU  ### #######      #################################");
                 jWget.returnResult("Success");
             }
 
         } finally {
-            jWget.returnResult("ENVIADO ----------------- TESTE ---::::: ");
+
             super.afterExecute(r, t);
         }
     }

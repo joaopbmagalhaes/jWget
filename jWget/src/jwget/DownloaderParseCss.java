@@ -95,17 +95,15 @@ public class DownloaderParseCss extends Downloader implements Runnable {
 
                 //Creates a new downloader object for the filetype in question
                 Downloader newDownloader = FileTypeMap.getFileTypeClass(newPathAndFileName);
+                newDownloader.setConfig(this.jConfig);
+                newDownloader.setWebfile(newWf);
                 // Get file type extension
                 String fileTypeExt = FileTypeMap.getFileExt(newPathAndFileName);
 
                 // Check if the new Resource should be downloded  or not
                 if (!this.jConfig.getControlQueue().contains(newWf)) {
                     if (FileTypeMap.getFileTypeManager().canDownload(fileTypeExt)) {
-                        System.out.println("Next URL: " + urlFound);
-                        System.out.println("Next file name: " + newPathAndFileName);
 
-                        newDownloader.setConfig(this.jConfig);
-                        newDownloader.setWebfile(newWf);
                         Utils.constructDirTree(this.getConfig().getFolderPath(), newPathAndFileName);
                         this.jConfig.getExecutor().execute(newDownloader);
                     }

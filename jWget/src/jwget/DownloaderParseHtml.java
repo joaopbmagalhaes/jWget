@@ -104,6 +104,8 @@ public class DownloaderParseHtml extends Downloader implements Runnable {
         if (newPathAndFileName != null) {
             newWf = new Webfile(newPathAndFileName, this.jConfig.buildURI(absoluteUrl).toString(), (this.wf.getLevel() + 1));
             Downloader newDownloader = FileTypeMap.getFileTypeClass(newPathAndFileName);
+            newDownloader.setConfig(this.jConfig);
+            newDownloader.setWebfile(newWf);
             if (newDownloader instanceof DownloaderParseHtml) {
                 if (this.jConfig.isInDomain(newWf)) {
                     element.attr(elementType, newPathAndFileName);
@@ -133,22 +135,14 @@ public class DownloaderParseHtml extends Downloader implements Runnable {
                 // and also outside the deep level
                 if (this.jConfig.isInDomain(newWf)
                         && this.jConfig.isInDeepLevel(newWf)) {
-                    System.out.println("Next URL: " + absoluteUrl);
-                    System.out.println("Next file name: " + newPathAndFileName);
 
-                    newDownloader.setConfig(this.jConfig);
-                    newDownloader.setWebfile(newWf);
                     Utils.constructDirTree(this.getConfig().getFolderPath(), newPathAndFileName);
                     this.jConfig.getExecutor().execute(newDownloader);
                 }
             } else {
                 // Control if the download is wanted
                 if (FileTypeMap.getFileTypeManager().canDownload(fileTypeExt)) {
-                    System.out.println("Next URL: " + absoluteUrl);
-                    System.out.println("Next file name: " + newPathAndFileName);
 
-                    newDownloader.setConfig(this.jConfig);
-                    newDownloader.setWebfile(newWf);
                     Utils.constructDirTree(this.getConfig().getFolderPath(), newPathAndFileName);
                     this.jConfig.getExecutor().execute(newDownloader);
                 }

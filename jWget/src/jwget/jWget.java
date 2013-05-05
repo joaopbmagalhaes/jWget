@@ -95,7 +95,7 @@ public class jWget {
 
     public static void returnResult(Object result) {
         if (result instanceof String) {
-            System.out.println("Recceived: " + result);
+
             if (result.equals("Success")) {
                 index.downloadFinalyzed();
             }
