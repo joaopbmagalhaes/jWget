@@ -34,9 +34,15 @@ public class PausableThreadPoolExecutor extends ThreadPoolExecutor {
     @Override
     protected void beforeExecute(Thread t, Runnable r) {
         super.beforeExecute(t, r);
+        // Try to obtain the lock - The lock is obtained 
+        // sucessfully if no other Thread as ownership over 
+        // the lock. The method lock() will return immediately
+        // if the current Thread already owns the lock
         pauseLock.lock();
         try {
             while (isPaused) {
+                // Wait until isPaused is set to False and the 
+                // unpaused Condition is sign to proceed
                 unpaused.await();
             }
         } catch (InterruptedException ie) {
@@ -67,6 +73,12 @@ public class PausableThreadPoolExecutor extends ThreadPoolExecutor {
         super.execute(command);
     }
 
+    /**
+     * This method is responsible for pausing the download process. 
+     * This method first adquires the pauseLock lock and then sets
+     * the isPaused to true so that all the Threads await until the 
+     * process is resumed
+     */
     public void pause() {
         pauseLock.lock();
         try {
@@ -76,6 +88,11 @@ public class PausableThreadPoolExecutor extends ThreadPoolExecutor {
         }
     }
 
+    /**
+     * This method is responsible for resuming the download process.
+     * This method first adquires the pauseLock lock and then calls
+     * signalAll to unlock all Threads awaiting
+     */
     public void resume() {
         pauseLock.lock();
         try {
