@@ -15,6 +15,7 @@ import java.util.logging.Logger;
  * @author Isaac
  */
 public class FileTypeMap {
+
     private static FileTypeMap instance;
     private static Map<String, Class> fileClassType = new HashMap<>(); // Available types of files
     private static Map<String, String> fileGenreType = new HashMap<>(); // Available types of files
@@ -36,44 +37,46 @@ public class FileTypeMap {
         fileClassType.put("js", DownloaderParseJs.class);
 
         // Init web file types
-        fileGenreType.put("html","web");
-        fileGenreType.put("css","web");
-        fileGenreType.put("js","web");
+        fileGenreType.put("html", "web");
+        fileGenreType.put("css", "web");
+        fileGenreType.put("js", "web");
         // Init image file types
-        fileGenreType.put("jpg","img");
-        fileGenreType.put("jpeg","img");
-        fileGenreType.put("svg","img");
-        fileGenreType.put("png","img");
-        fileGenreType.put("gif","img");
-        fileGenreType.put("ico","img");
-        fileGenreType.put("raw","img");
-        fileGenreType.put("tiff","img");
-        fileGenreType.put("bmp","img");
+        fileGenreType.put("jpg", "img");
+        fileGenreType.put("jpeg", "img");
+        fileGenreType.put("svg", "img");
+        fileGenreType.put("png", "img");
+        fileGenreType.put("gif", "img");
+        fileGenreType.put("ico", "img");
+        fileGenreType.put("raw", "img");
+        fileGenreType.put("tiff", "img");
+        fileGenreType.put("bmp", "img");
         // Init audio file types
-        fileGenreType.put("mp3","audio");
-        fileGenreType.put("wav","audio");
-        fileGenreType.put("au","audio");
-        fileGenreType.put("flac","audio");
+        fileGenreType.put("mp3", "audio");
+        fileGenreType.put("wav", "audio");
+        fileGenreType.put("au", "audio");
+        fileGenreType.put("flac", "audio");
         // Init video file types
-        fileGenreType.put("mp4","video");
-        fileGenreType.put("mpeg","video");
-        fileGenreType.put("mpg","video");
-        fileGenreType.put("m1s","video");
-        fileGenreType.put("mpa","video");
-        fileGenreType.put("avi","video");
-        fileGenreType.put("mov","video");
-        fileGenreType.put("qt","video");
-        fileGenreType.put("asf","video");
-        fileGenreType.put("asx","video");
-        fileGenreType.put("wmv","video");
-        fileGenreType.put("wma","video");
-        fileGenreType.put("wmx","video");
-        fileGenreType.put("ogm","video");
-        fileGenreType.put("mkv","video");
+        fileGenreType.put("mp4", "video");
+        fileGenreType.put("mpeg", "video");
+        fileGenreType.put("mpg", "video");
+        fileGenreType.put("m1s", "video");
+        fileGenreType.put("mpa", "video");
+        fileGenreType.put("avi", "video");
+        fileGenreType.put("mov", "video");
+        fileGenreType.put("qt", "video");
+        fileGenreType.put("asf", "video");
+        fileGenreType.put("asx", "video");
+        fileGenreType.put("wmv", "video");
+        fileGenreType.put("wma", "video");
+        fileGenreType.put("wmx", "video");
+        fileGenreType.put("ogm", "video");
+        fileGenreType.put("mkv", "video");
         // Init other file types
-        fileGenreType.put("docx","other");
-        fileGenreType.put("pdf","other");
-        fileGenreType.put("txt","other");
+        fileGenreType.put("docx", "other");
+        fileGenreType.put("pdf", "other");
+        fileGenreType.put("txt", "other");
+        fileGenreType.put("ttf", "other");
+        fileGenreType.put("otf", "other");
     }
 
     public static Map<String, Class> getFileClassType() {
@@ -99,7 +102,7 @@ public class FileTypeMap {
      * @return
      */
     public static Downloader getFileTypeClass(String fileName) {
-        if(!fileName.isEmpty()) {
+        if (!fileName.isEmpty()) {
             int index = fileName.lastIndexOf(".");
             Class c;
             if (index == -1) {

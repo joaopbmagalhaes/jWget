@@ -15,6 +15,8 @@ import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import jwget.Downloader;
 import jwget.jWget;
 
 /**
@@ -420,11 +422,13 @@ public class Index extends javax.swing.JFrame {
         btnPause.setVisible(false);
         btnResume.setVisible(false);
         btnCancel.setVisible(false);
+        btnDownload.setVisible(true);
     }//GEN-LAST:event_btnCancelActionPerformed
 
     public void downloadFinalyzed() {
         btnPause.setVisible(false);
         btnResume.setVisible(false);
+        btnCancel.setVisible(false);
         btnDownload.setVisible(true);
 
         JOptionPane.showMessageDialog(this, "Download finished.", "Simple wget", JOptionPane.OK_OPTION);
@@ -437,7 +441,8 @@ public class Index extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(Index.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         /* Create and display the form */

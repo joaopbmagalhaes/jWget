@@ -4,11 +4,14 @@
  */
 package jwget;
 
+import java.util.Objects;
+
 /**
  *
  * @author Joao
  */
 public class Webfile {
+
     private String fileName;    // Name of the file to save
     private String url;         // URL to download/parse
     private int level;          // Level of deepness relative to the starting page
@@ -57,28 +60,45 @@ public class Webfile {
     public void setLevel(int level) {
         this.level = level;
     }
+
     /**
      *
      * GETTERS AND SETTERS - END
      *
      */
-    
+
     /**
      * Compare 2 Webfiles
-     * 
+     *
      * @param other
-     * @return 
+     * @return
      */
     @Override
     public boolean equals(Object other) {
-        if (other == null) return false;
-        if (!(other instanceof Webfile)) return false;
-        
+        if (other == null) {
+            return false;
+        }
+        if (!(other instanceof Webfile)) {
+            return false;
+        }
+
         Webfile otherWebfile = (Webfile) other;
-        if(!this.fileName.equalsIgnoreCase(otherWebfile.getFileName())) return false;
-        if(this.level != otherWebfile.getLevel()) return false;
-        if(!this.url.equalsIgnoreCase(otherWebfile.getUrl())) return false;
-        
-        return true;
+        if (!this.fileName.equalsIgnoreCase(otherWebfile.getFileName())) {
+            return false;
+        }
+        if (this.level != otherWebfile.getLevel()) {
+            return false;
+        }
+
+        return this.url.equalsIgnoreCase(otherWebfile.getUrl());
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 23 * hash + Objects.hashCode(this.fileName);
+        hash = 23 * hash + Objects.hashCode(this.url);
+        hash = 23 * hash + this.level;
+        return hash;
     }
 }

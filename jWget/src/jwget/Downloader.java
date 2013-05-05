@@ -12,9 +12,12 @@ package jwget;
  */
 public abstract class Downloader implements Runnable {
 
+    protected int CONNECT_TIMEOUT_VALUE = 60 * 1000; // Connection Timeout - 60 Seconds
+    protected int READ_TIMEOUT_VALUE = 24 * 60 * 60 * 1000; // Connection Timeout - 1 day
     protected Webfile wf;             // Webfile to parse and download
     protected Config jConfig;         // Main class with all the info
     protected static final String[] PARSE_TAGS = {"link", "img", "script", "a"};     // HTML tags to be parsed
+    //protected static final String[] PARSE_TAGS = {"link"};     // HTML tags to be parsed
 
     public Downloader() {
     }

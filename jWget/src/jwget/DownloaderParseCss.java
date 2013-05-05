@@ -4,13 +4,12 @@
  */
 package jwget;
 
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
-import java.io.FileOutputStream;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.logging.Level;
@@ -45,24 +44,102 @@ public class DownloaderParseCss extends Downloader implements Runnable {
     public void run() {
         //Open a URL Stream
         try {
+            URL url = new URL(wf.getUrl());
+            URLConnection conn = url.openConnection();
 
-            String src = wf.getUrl();
-
-            System.out.println(this.wf.getFileName());
-
-            //Open a URL Stream
-            URL url = new URL(src);
-            try (InputStream in = url.openStream()) {
-                OutputStream out = new BufferedOutputStream(new FileOutputStream(this.wf.getFileName()));
-
-                for (int b; (b = in.read()) != -1;) {
-                    out.write(b);
+            // conn.setConnectTimeout(CONNECT_TIMEOUT_VALUE); // set Connect Timeout
+            //conn.setReadTimeout(READ_TIMEOUT_VALUE); // set Read Timeout
+            String content = "";
+            try (BufferedReader in = new BufferedReader(new InputStreamReader(
+                    conn.getInputStream()))) {
+                String inputLine;
+                while ((inputLine = in.readLine()) != null) {
+                    content += inputLine;
                 }
-                out.close();
             }
 
+            // Parse all Css Urls
+            Pattern p = Pattern.compile("url\\(\\s*(['" + '"' + "]?+)(.*?)\\1\\s*\\)");
+            Matcher m = p.matcher(content);
+
+            while (m.find()) {
+
+                String urlFound = m.group();
+                String goodUrl = url.toString();
+                goodUrl = goodUrl.substring(0, goodUrl.lastIndexOf("/") + 1);
+
+                urlFound = urlFound.substring(4, urlFound.length() - 1);
+                urlFound = urlFound.replace("\"", "");
+
+                String[] splitResource = urlFound.split("/");
+                if (splitResource.length != 0) {
+                    for (String split : splitResource) {
+                        if (!split.isEmpty()) {
+                            int index = goodUrl.indexOf("/" + split);
+                            if (index != -1) {
+                                goodUrl = goodUrl.substring(0, index);
+                                break;
+                            }
+                        }
+                    }
+                }
+                urlFound = goodUrl + urlFound;
+
+                String newPathAndFileName = null;
+                Webfile newWf = null;
+
+                // Create the new fileName and Path of the resource to be available offline
+                newPathAndFileName = Utils.getPathAndFileName(this.getConfig().getFolderPath(), this.getConfig().getRoot(), urlFound);
+                // Create the new Webfile to be downloaded
+                newWf = new Webfile(newPathAndFileName, this.jConfig.buildURI(urlFound).toString(), (this.wf.getLevel() + 1));
+
+                //Creates a new downloader object for the filetype in question
+                Downloader newDownloader = FileTypeMap.getFileTypeClass(newPathAndFileName);
+                // Get file type extension
+                String fileTypeExt = FileTypeMap.getFileExt(newPathAndFileName);
+
+                // Check if the new Resource should be downloded  or not
+                if (!this.jConfig.getControlQueue().contains(newWf)) {
+                    if (FileTypeMap.getFileTypeManager().canDownload(fileTypeExt)) {
+                        System.out.println("Next URL: " + urlFound);
+                        System.out.println("Next file name: " + newPathAndFileName);
+
+                        newDownloader.setConfig(this.jConfig);
+                        newDownloader.setWebfile(newWf);
+                        Utils.constructDirTree(this.getConfig().getFolderPath(), newPathAndFileName);
+                        this.jConfig.getExecutor().execute(newDownloader);
+                    }
+                }
+
+            }
+            // Saves the resource and updates the Control Queue
+            saveFile(content);
+        } catch (SocketTimeoutException ex) {
+            Logger.getLogger(DownloaderParseHtml.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    private void saveFile(String content) {
+        FileWriter fileWriter = null;
+        try {
+            fileWriter = new FileWriter(new File(this.wf.getFileName()));
+            fileWriter.write(content);
+            fileWriter.close();
+        } catch (IOException ex) {
+            Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                if (fileWriter != null) {
+                    fileWriter.close();
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(Downloader.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        // Add webfile to the control queue
+        this.jConfig.getControlQueue().add(wf);
     }
 }

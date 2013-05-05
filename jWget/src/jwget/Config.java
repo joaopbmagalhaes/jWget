@@ -158,11 +158,20 @@ public class Config {
      */
     public boolean isInDomain(Webfile wf) throws URISyntaxException {
         String wfDomain = extractDomain(wf.getUrl());
-        if (wfDomain.equalsIgnoreCase(this.domain)) {
-            return true;
-        } else {
-            return false;
+
+        String[] arr = wfDomain.split("\\.");
+        //should check the size of arr here
+        if (arr.length > 0 && arr.length - 1 > 0 && arr.length - 2 >= 0) {
+            wfDomain = arr[arr.length - 2] + '.' + arr[arr.length - 1];
         }
+
+        String[] arr2 = this.domain.split("\\.");
+        String domainTmp = "";
+        //should check the size of arr here
+        if (arr2.length > 0 && arr2.length - 1 > 0 && arr2.length - 2 >= 0) {
+            domainTmp = arr2[arr2.length - 2] + '.' + arr2[arr2.length - 1];
+        }
+        return wfDomain.equalsIgnoreCase(domainTmp);
     }
 
     /**
