@@ -20,7 +20,7 @@ public class PausableThreadPoolExecutor extends ThreadPoolExecutor {
     private boolean isPaused;
     private final ReentrantLock pauseLock = new ReentrantLock();
     private final Condition unpaused = pauseLock.newCondition();
-    private final static AtomicInteger countLinks = new AtomicInteger(0);  // Counter of the number of links to be downloaded
+    private static AtomicInteger countLinks;  // Counter of the number of links to be downloaded
 
     public PausableThreadPoolExecutor(int corePoolSize,
             int maximumPoolSize,
@@ -28,6 +28,7 @@ public class PausableThreadPoolExecutor extends ThreadPoolExecutor {
             TimeUnit unit,
             BlockingQueue<Runnable> workQueue) {
         super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue);
+        PausableThreadPoolExecutor.countLinks = new AtomicInteger(0);
     }
 
     @Override

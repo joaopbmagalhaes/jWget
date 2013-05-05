@@ -38,6 +38,7 @@ public class DownloaderDownloadFile extends Downloader implements Runnable {
     public void run() {
         //Open a URL Stream
         try {
+
             Connection.Response resultImageResponse = Jsoup.connect(wf.getUrl()).ignoreContentType(true).execute();
 
             System.out.println(this.wf.getFileName());

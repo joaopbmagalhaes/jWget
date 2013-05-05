@@ -26,8 +26,8 @@ public class Config {
     private int deepLevel;                // Level of deepness to crawl for websites
     private String dateTime;              // Date and time of the request
     private static final int NCORES = Runtime.getRuntime().availableProcessors();           // Number of cores the current computer has
-    private ConcurrentLinkedQueue<Webfile> controlQueue = new ConcurrentLinkedQueue();      // Concurrent queue for websites (already downloaded, control dups)
-    private final PausableThreadPoolExecutor executor = new PausableThreadPoolExecutor(NCORES + 1, NCORES + 1, 10, TimeUnit.SECONDS, new LinkedBlockingDeque<Runnable>());// Thread pool
+    private ConcurrentLinkedQueue<Webfile> controlQueue;      // Concurrent queue for websites (already downloaded, control dups)
+    private PausableThreadPoolExecutor executor; // Thread pool
 
     public Config() {
     }
@@ -42,6 +42,8 @@ public class Config {
      * @param dateTime
      */
     public Config(String root, String domain, String folderPath, int deepLevel, String dateTime) throws URISyntaxException {
+        this.controlQueue = new ConcurrentLinkedQueue();
+        executor = new PausableThreadPoolExecutor(NCORES + 1, NCORES + 1, 10, TimeUnit.SECONDS, new LinkedBlockingDeque<Runnable>());
         this.root = buildURI(root).toString();
         this.domain = extractDomain(domain).toString();
         this.folderPath = folderPath;

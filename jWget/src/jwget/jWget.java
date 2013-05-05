@@ -113,6 +113,8 @@ public class jWget {
         } catch (InterruptedException e) {
             System.out.println("Error Cancelling the download: " + e.getMessage());
         }
+        
+        
     }
 
     /**
