@@ -43,10 +43,8 @@ public class DownloaderParseJs extends Downloader implements Runnable {
         //Open a URL Stream
         try {
 
-            String src = wf.getUrl();
-
             //Open a URL Stream
-            URL url = new URL(src);
+            URL url = new URL(wf.getUrl());
             try (InputStream in = url.openStream()) {
                 OutputStream out = new BufferedOutputStream(new FileOutputStream(this.wf.getFileName()));
 
@@ -54,8 +52,6 @@ public class DownloaderParseJs extends Downloader implements Runnable {
                     out.write(b);
                 }
                 out.close();
-                // Add webfile to the control queue
-                this.jConfig.getControlQueue().add(wf);
             }
 
         } catch (IOException ex) {
